@@ -1,11 +1,25 @@
 ---
+interface Props {
+  coverImage?: { src: string } | string;
+  isPost?: boolean;
+}
+
+const { coverImage, isPost = false } = Astro.props;
+
+// 解析传入的图片路径
+const coverUrl = coverImage ? (typeof coverImage === 'string' ? coverImage : coverImage.src) : '';
 ---
 
-<div class="banner loadingComplete">
+<div class:list={["banner", "loadingComplete", { postViewer: isPost }]}>
   <slot />
 
   <canvas id="wave"></canvas>
-  <div class="bg-img"></div>
+  {/* 如果传入了文章封面，将只显示封面图片作为背景 */}
+  {coverUrl ? (
+    <div class="bg-img" style={`background-image: url(${coverUrl}) !important;`}></div>
+  ) : (
+    <div class="bg-img"></div>
+  )}
 </div>
 
 <script>
@@ -204,6 +218,10 @@ if (!document.startViewTransition) {
   }
 }
 
+.postViewer {
+  height: 50vh;
+}
+
 .bg-img {
   background-image: url(../assets/theme/banner/banner.webp);
   html[theme='dark'] & {
@@ -218,6 +236,11 @@ if (!document.startViewTransition) {
   filter: var(--img-brightness); 
   transition: filter 0.5s, background-image 0.5s;
   z-index: -1;
+}
+
+.custom-cover {
+  /* 对于自定义的文章封面，去除暗黑模式下自带的双层背景 */
+  background-image: none !important; 
 }
 
 #wave {

@@ -3,13 +3,19 @@ import { Image } from 'astro:assets';
 import navLogo from '../assets/theme/icon/navLogo.svg';
 import HeaderLink from './HeaderLink.astro';
 
+interface Props {
+  isPost?: boolean;
+}
+
+const { isPost = false } = Astro.props;
+
 const menuList = [
   { name: 'Home', url: '/' },
   { name: 'About', url: '/about' }
 ];
 ---
 
-<header class="container">
+<header class:list={["container", { postViewer: isPost }]}>
   <nav>
     <span class="logo">
       <a href="/">
@@ -29,6 +35,10 @@ const menuList = [
 </header>
 
 <style lang="less">
+.postViewer {
+  height: 50vh;
+}
+
 header {
   height: 75vh;
   position: relative;

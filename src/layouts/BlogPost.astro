@@ -57,28 +57,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body>
-		<Banner />
-		<Header />
+		<Banner isPost={true} coverImage={heroImage}>
+			<div class="post-banner">
+				<h1 class="title">{title}</h1>
+				<span class="status">
+					发布于 <FormattedDate date={pubDate} />
+					{updatedDate && <span> | 更新于 <FormattedDate date={updatedDate} /></span>}
+				</span>
+			</div>
+		</Banner>
+		<Header isPost={true} />
 		<main class="container">
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
+			<article class="view-box">
 				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
 					<slot />
 				</div>
 			</article>
@@ -86,3 +77,63 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Footer />
 	</body>
 </html>
+<style lang="less">
+.post-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--post-InnerBanner-color);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  transition: color 0.5s;
+
+  .title {
+    font-size: 4.5vw;
+    margin-bottom: 50px;
+    text-align: center;
+	margin-top: 0;
+	color: white;
+  }
+
+  .status {
+    font-size: 1vw;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    .title {
+      font-size: 5vh;
+    }
+    .status {
+      font-size: 1.5vh;
+    }
+  }
+}
+
+.view-box {
+  box-sizing: border-box;
+  position: relative;
+  padding: 36px;
+  border-radius: 32px;
+  border: solid 2px var(--foreground-color);
+  background: var(--foreground-color);
+  box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+  transition: opacity 0.5s ease-out, transform 1s cubic-bezier(0.61, 0.15, 0.26, 1), border 0.5s,
+    background 0.5s, box-shadow 0.5s;
+  margin-top: 50px;
+}
+
+.prose {
+  background-image: linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, transparent 0),
+    linear-gradient(1turn, rgba(159, 219, 252, 0.15) 3%, transparent 0);
+  background-size: 20px 20px;
+  background-position: 50%;
+  color: var(--font-color-grey);
+
+  html[theme='dark'] & {
+    background-image: linear-gradient(90deg, rgba(207, 198, 254, 0.08) 3%, transparent 0),
+      linear-gradient(1turn, rgba(207, 198, 254, 0.08) 3%, transparent 0);
+  }
+}
+</style>
