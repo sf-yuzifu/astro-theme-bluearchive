@@ -1,0 +1,290 @@
+---
+import { Image } from 'astro:assets';
+import avatarImage from '../assets/theme/banner/avatar.webp';
+
+// 可以在此处配置默认数据或通过 props 传入
+const name = "Astro Blog";
+const welcomeText = "Welcome to Astro Blog";
+const mottos = ["A simple, fast, and modern blog.", "Built with Astro & Less."];
+const social = [
+  { icon: "github", url: "https://github.com/withastro/astro" },
+  { icon: "twitter", url: "https://twitter.com/astrodotbuild" }
+];
+
+// 取一个随机格言的初始值，客户端水合时会重新执行打字机效果
+const initialMotto = mottos[0];
+---
+
+<div class="welcome-box-container" id="welcome-box-container">
+  <div class="welcome-box" id="welcome-box-el">
+    <span class="welcome-text">{welcomeText}</span>
+    <div class="info-box" id="info-box-el">
+      <Image src={avatarImage} alt="avatar" class="avatar" />
+      <span class="name">{name}</span>
+      <span class="motto">
+        <span id="motto-text-el"></span>
+        <span class="pointer"></span>
+      </span>
+      <ul>
+        {social.map((item) => (
+          <li>
+            <a href={item.url} target="_blank" rel="noopener noreferrer">
+              <i class={`iconfont icon-${item.icon} social`}></i>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ mottos }}>
+  function initWelcomeBox() {
+    const welcomeBoxContainer = document.getElementById('welcome-box-container');
+    const welcomeBox = document.getElementById('welcome-box-el');
+    const infoBox = document.getElementById('info-box-el');
+    const mottoTextEl = document.getElementById('motto-text-el');
+    
+    if (!welcomeBoxContainer || !welcomeBox || !infoBox || !mottoTextEl) return;
+
+    // 视差效果
+    const multiple = 30;
+    
+    function getMouseAngle(x, y) {
+      const radians = Math.atan2(y, x);
+      let angle = radians * (180 / Math.PI);
+      if (angle < 0) {
+        angle += 360;
+      }
+      return angle;
+    }
+
+    const handleMouseMove = (e) => {
+      window.requestAnimationFrame(() => {
+        const box = welcomeBox.getBoundingClientRect();
+        
+        // 使用原版的计算逻辑，直接取 e.clientX 和 e.clientY 与 box 的差值
+        const calcY = (e.clientX - box.left - box.width / 2) / multiple;
+        const calcX = -(e.clientY - box.top - box.height / 2) / multiple;
+        const angle = Math.floor(
+          getMouseAngle(e.clientY - box.top - box.height / 2, e.clientX - box.left - box.width / 2)
+        );
+        
+        welcomeBox.style.transform = `rotateY(${calcY}deg) rotateX(${calcX}deg)`;
+        infoBox.style.background = `linear-gradient(${angle}deg, var(--infobox-background-initial), var(--infobox-background-final))`;
+      });
+    };
+
+    const handleMouseLeave = () => {
+      // 恢复默认状态
+      welcomeBox.style.transform = `rotateY(0deg) rotateX(0deg)`;
+      infoBox.style.background = `linear-gradient(0deg, var(--infobox-background-initial), var(--infobox-background-final))`; 
+      // 恢复变量
+      calcX = 0;
+      calcY = 0;
+      angle = 0;
+    };
+
+    let calcX = 0;
+    let calcY = 0;
+    let angle = 0;
+    
+    // 我们把事件直接绑定到 window 上
+    window.addEventListener('mousemove', handleMouseMove);
+    // 当鼠标离开窗口时重置
+    document.addEventListener('mouseleave', handleMouseLeave);
+
+    // 打字机效果
+    let index = 0;
+    const randomMotto = mottos[Math.floor(Math.random() * mottos.length)];
+    mottoTextEl.textContent = ''; // 清空初始内容
+
+    const addNextCharacter = () => {
+      if (index < randomMotto.length) {
+        mottoTextEl.textContent += randomMotto[index];
+        index++;
+        setTimeout(addNextCharacter, Math.random() * 150 + 50);
+      }
+    };
+    
+    // 延迟一点开始打字机效果，等组件渲染完毕
+    setTimeout(addNextCharacter, 300);
+    
+    // 清理函数绑定到元素上以便于页面切换时清理
+    welcomeBoxContainer._cleanup = () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }
+
+  // 页面加载或切换时初始化
+  document.addEventListener('astro:page-load', () => {
+      initWelcomeBox();
+  });
+  
+  if (!document.startViewTransition) {
+      initWelcomeBox();
+  }
+</script>
+
+<style lang="less">
+.welcome-box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  perspective: 1000px;
+}
+
+.welcome-box {
+  margin-top: 4.2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.2s, color 0.5s, text-shadow 0.5s;
+}
+
+.welcome-text {
+  font-size: 4.5vw;
+  font-weight: bold;
+  color: var(--welcome-text-color);
+  text-shadow: var(--welcome-text-shadow);
+  text-align: center;
+  margin-bottom: 5vw;
+  user-select: none;
+}
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 6vh 2vw 3vh;
+  width: 40vw;
+  border-radius: 3vw;
+  box-shadow: var(--info-box-shadow);
+  backdrop-filter: var(--blur-val) saturate(120%);
+
+
+  .avatar {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7.5vw;
+    height: 7.5vw;
+    border-radius: 50%;
+    border: solid 3px var(--infobox-border-color);
+    transition: transform 0.6s ease, box-shadow 0.4s ease, filter 0.5s;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    user-select: none;
+    filter: var(--img-brightness);
+
+    &:hover {
+      transform: translate(-50%, -50%) rotate(1turn) scale(1.1);
+      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .name {
+    font-size: 1.5vw;
+    margin-top: 3vh;
+  }
+  .motto {
+    font-size: 1vw;
+    font-weight: bold;
+    animation: color-change 0.8s linear infinite;
+    margin-top: 3vh;
+    text-align: center;
+    .pointer {
+      display: inline-block;
+      margin: -0.5vh 0 0;
+      padding: 0;
+      vertical-align: middle;
+      width: 2px;
+      height: 1vw;
+      animation: color-change 0.8s linear infinite;
+      background-color: var(--pointerColor);
+    }
+    @keyframes color-change {
+      0%,
+      40% {
+        --pointerColor: var(--font-color-grey);
+      }
+
+      60%,
+      100% {
+        --pointerColor: transparent;
+      }
+    }
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3.5vh;
+    width: 12vw;
+    padding: 0;
+    list-style: none;
+
+    li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .social {
+      font-size: 1.5vw;
+      font-weight: 600;
+      transition: all 0.5s;
+      color: var(--font-color-grey);
+
+      &:hover {
+        filter: drop-shadow(0 0 5px var(--font-color-grey));
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-text {
+    font-size: 5vh;
+    margin-bottom: 10vh;
+  }
+
+  .info-box {
+    padding: 5vh 6vw 2vh;
+    width: 75vw;
+    border-radius: 4vh;
+
+    .avatar {
+      width: 10vh;
+      height: 10vh;
+    }
+
+    .name {
+      font-size: 2.5vh;
+      margin-top: 1.8vh;
+    }
+    .motto {
+      font-size: 1.5vh;
+      margin-top: 1.5vh;
+      .pointer {
+        height: 1.5vh;
+      }
+    }
+
+    ul {
+      margin-top: 1.8vh;
+      width: 32vw;
+
+      .social {
+        font-size: 2vh;
+      }
+    }
+  }
+}
+</style>
