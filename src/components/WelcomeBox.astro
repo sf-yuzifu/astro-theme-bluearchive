@@ -10,34 +10,30 @@ const social = [
   { icon: "github", url: "https://github.com/withastro/astro" },
   { icon: "twitter", url: "https://twitter.com/astrodotbuild" }
 ];
-
-// 取一个随机格言的初始值，客户端水合时会重新执行打字机效果
-const initialMotto = mottos[0];
 ---
 
 <div class="welcome-box-container" id="welcome-box-container">
-  <div class="welcome-box" id="welcome-box-el">
-    <span class="welcome-text">{welcomeText}</span>
+  <div class="welcome-box" id="welcome-box-el" style="transform: rotateY(0deg) rotateX(0deg);">
+  <span class="welcome-text">{welcomeText}</span>
     <div class="info-box" id="info-box-el">
-      <Image src={avatarImage} alt="avatar" class="avatar" />
-      <span class="name">{name}</span>
-      <span class="motto">
-        <span id="motto-text-el"></span>
-        <span class="pointer"></span>
-      </span>
-      <ul>
-        {social.map((item) => (
-          <li>
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
-              <i class={`iconfont icon-${item.icon} social`}></i>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Image src={avatarImage} alt="avatar" class="avatar" />
+    <span class="name">{name}</span>
+    <span class="motto">
+      <span id="motto-text-el"></span>
+      <span class="pointer"></span>
+    </span>
+    <ul>
+      {social.map((item) => (
+        <li>
+          <a href={item.url} target="_blank" rel="noopener noreferrer">
+            <i class={`iconfont icon-${item.icon} social`}></i>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
   </div>
 </div>
-
 <script define:vars={{ mottos }}>
   function initWelcomeBox() {
     const welcomeBoxContainer = document.getElementById('welcome-box-container');
@@ -47,7 +43,6 @@ const initialMotto = mottos[0];
     
     if (!welcomeBoxContainer || !welcomeBox || !infoBox || !mottoTextEl) return;
 
-    // 视差效果
     const multiple = 30;
     
     function getMouseAngle(x, y) {
@@ -59,15 +54,13 @@ const initialMotto = mottos[0];
       return angle;
     }
 
-    const handleMouseMove = (e) => {
+    const parallax = (e) => {
       window.requestAnimationFrame(() => {
         const box = welcomeBox.getBoundingClientRect();
-        
-        // 使用原版的计算逻辑，直接取 e.clientX 和 e.clientY 与 box 的差值
-        const calcY = (e.clientX - box.left - box.width / 2) / multiple;
-        const calcX = -(e.clientY - box.top - box.height / 2) / multiple;
+        const calcY = (e.clientX - box.x - box.width / 2) / multiple;
+        const calcX = -(e.clientY - box.y - box.height / 2) / multiple;
         const angle = Math.floor(
-          getMouseAngle(e.clientY - box.top - box.height / 2, e.clientX - box.left - box.width / 2)
+          getMouseAngle(e.clientY - box.y - box.height / 2, e.clientX - box.x - box.width / 2)
         );
         
         welcomeBox.style.transform = `rotateY(${calcY}deg) rotateX(${calcX}deg)`;
@@ -75,24 +68,13 @@ const initialMotto = mottos[0];
       });
     };
 
-    const handleMouseLeave = () => {
-      // 恢复默认状态
+    const reset = () => {
       welcomeBox.style.transform = `rotateY(0deg) rotateX(0deg)`;
       infoBox.style.background = `linear-gradient(0deg, var(--infobox-background-initial), var(--infobox-background-final))`; 
-      // 恢复变量
-      calcX = 0;
-      calcY = 0;
-      angle = 0;
     };
 
-    let calcX = 0;
-    let calcY = 0;
-    let angle = 0;
-    
-    // 我们把事件直接绑定到 window 上
-    window.addEventListener('mousemove', handleMouseMove);
-    // 当鼠标离开窗口时重置
-    document.addEventListener('mouseleave', handleMouseLeave);
+    welcomeBox.addEventListener('mousemove', parallax);
+    welcomeBox.addEventListener('mouseleave', reset);
 
     // 打字机效果
     let index = 0;
@@ -111,10 +93,11 @@ const initialMotto = mottos[0];
     setTimeout(addNextCharacter, 300);
     
     // 清理函数绑定到元素上以便于页面切换时清理
-    welcomeBoxContainer._cleanup = () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseleave', handleMouseLeave);
+    welcomeBox._cleanup = () => {
+        welcomeBox.removeEventListener('mousemove', parallax);
+        welcomeBox.removeEventListener('mouseleave', reset);
     };
+
   }
 
   // 页面加载或切换时初始化
@@ -133,6 +116,11 @@ const initialMotto = mottos[0];
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
   perspective: 1000px;
 }
 
