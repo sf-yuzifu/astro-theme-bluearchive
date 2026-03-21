@@ -12,10 +12,12 @@ const poweredList = [{ name: 'Astro', url: 'https://astro.build' }];
     <br />
     <span>Powered by
       {poweredList.map((obj, ind) => (
-        <span class="powered-list">
-          <a href={obj.url}>{obj.name}</a>
+        <>
+          <span class="powered-list">
+            <a href={obj.url}>{obj.name}</a>
+          </span>
           {ind < poweredList.length - 1 ? ' & ' : ''}
-        </span>
+        </>
       ))}
     </span>
   </div>
@@ -31,7 +33,7 @@ footer {
   justify-content: space-between;
   height: 72px;
   z-index: 100;
-  margin-top: 50px;
+  margin: 50px auto 0;
   padding: 0 16px;
   box-sizing: border-box;
   border-radius: 32px 32px 0 0;
@@ -45,14 +47,20 @@ footer {
 }
 
 .footer-info {
+  line-height: 1.5;
+  font-size: 14px;
   a {
     color: var(--color-blue);
+    text-decoration: none;
   }
 }
 
 .footer-logo {
+  display: flex;
+  align-items: center;
   img {
     height: 36px;
+    width: auto;
     filter: drop-shadow(0 0 8px #328cfa);
   }
 }
