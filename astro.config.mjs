@@ -39,7 +39,9 @@ export default defineConfig({
 				return `html:not([theme='dark'])`;
 			}
 		}),
-		mdx(), 
+		mdx({
+			remarkPlugins: [remarkReadingTime],
+		}), 
 		sitemap()
 	],
 });
