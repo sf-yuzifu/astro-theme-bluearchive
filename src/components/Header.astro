@@ -16,8 +16,8 @@ const menuList = [
 ];
 ---
 
-<header class:list={["container", { postViewer: isPost }]} style="view-transition-name: header;">
-  <nav>
+<header class:list={["container", { postViewer: isPost }]}>
+  <nav transition:persist>
     <span class="logo">
       <a href="/" class="nav-link">
         <Image src={navLogo} alt="Logo" />

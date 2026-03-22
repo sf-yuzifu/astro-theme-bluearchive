@@ -10,10 +10,14 @@ const { coverImage, isPost = false } = Astro.props;
 const coverUrl = coverImage ? (typeof coverImage === 'string' ? coverImage : coverImage.src) : '';
 ---
 
-<div class:list={["banner", "loadingComplete", { postViewer: isPost }]} style="view-transition-name: fade-banner;">
-  <slot />
+<div
+  class:list={["banner", { postViewer: isPost }]}
+>
+  <div class="banner-content" style="view-transition-name: fade-banner-content;">
+    <slot />
+  </div>
 
-  <canvas id="wave"></canvas>
+  <canvas id="wave" transition:persist></canvas>
   {/* 如果传入了文章封面，将只显示封面图片作为背景 */}
   {coverUrl ? (
     <div class="bg-img" style={`background-image: url(${coverUrl}) !important;`}></div>
@@ -38,7 +42,7 @@ class SiriWave {
   run: boolean
   animationFrameID: number | null
 
-  constructor() {
+  constructor(canvas: HTMLCanvasElement) {
     this.K = 1
     this.F = 15
     this.speed = 0.1
@@ -48,14 +52,11 @@ class SiriWave {
     this.width = this.devicePixelRatio * window.innerWidth
     this.height = this.devicePixelRatio * 100
     this.MAX = this.height / 2
-    this.canvas = document.getElementById('wave') as HTMLCanvasElement
-    this.canvas.width = this.width
-    this.canvas.height = this.height
-    this.canvas.style.width = this.width / this.devicePixelRatio + 'px'
-    this.canvas.style.height = this.height / this.devicePixelRatio + 'px'
+    this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')!
     this.run = false
     this.animationFrameID = null
+    this.resize()
   }
 
   _globalAttenuationFn(x: number) {
@@ -108,9 +109,9 @@ class SiriWave {
   }
 
   start() {
-    this.phase = 0;
-    this.run = true;
-    this._draw();
+    if (this.run) return
+    this.run = true
+    this._draw()
   }
 
   stop() {
@@ -134,17 +135,59 @@ class SiriWave {
     this.setNoise(noise)
     this.setSpeed(speed)
   }
+
+  resize() {
+    this.devicePixelRatio = window.devicePixelRatio || 1
+    this.width = this.devicePixelRatio * window.innerWidth
+    this.height = this.devicePixelRatio * 100
+    this.MAX = this.height / 2
+    this.canvas.width = this.width
+    this.canvas.height = this.height
+    this.canvas.style.width = this.width / this.devicePixelRatio + 'px'
+    this.canvas.style.height = this.height / this.devicePixelRatio + 'px'
+  }
+
+  attachCanvas(canvas: HTMLCanvasElement) {
+    this.canvas = canvas
+    this.ctx = this.canvas.getContext('2d')!
+    this.resize()
+  }
 }
 
-let currentWave: SiriWave | null = null
+type BannerWindow = Window & {
+  __bannerIntroPlayed?: boolean
+  __siriWave?: SiriWave
+  __siriWaveResizeBound?: boolean
+}
 
-function initAll() {
-  if (currentWave) {
-    currentWave.stop()
+const runtimeWindow = window as BannerWindow
+
+function applyIntroAnimation() {
+  const bannerEl = document.querySelector('.banner') as HTMLElement | null
+  if (!bannerEl) return
+
+  if (!runtimeWindow.__bannerIntroPlayed) {
+    bannerEl.classList.add('loadingComplete')
+    runtimeWindow.__bannerIntroPlayed = true
+  } else {
+    bannerEl.classList.remove('loadingComplete')
   }
-  currentWave = new SiriWave()
-  currentWave.setSpeed(0.01)
-  currentWave.start()
+}
+
+function initWave() {
+  const waveCanvas = document.getElementById('wave') as HTMLCanvasElement | null
+  if (!waveCanvas) return
+
+  if (runtimeWindow.__siriWave) {
+    runtimeWindow.__siriWave.attachCanvas(waveCanvas)
+    runtimeWindow.__siriWave.start()
+    return
+  }
+
+  const wave = new SiriWave(waveCanvas)
+  wave.setSpeed(0.01)
+  wave.start()
+  runtimeWindow.__siriWave = wave
 }
 
 function debounce(func: () => void, wait: number) {
@@ -157,46 +200,23 @@ function debounce(func: () => void, wait: number) {
   }
 }
 
-// Ensure initAll only runs once per page load cycle
-let isInitialized = false;
-
 document.addEventListener('astro:page-load', () => {
-  if (isInitialized) {
-    if (currentWave) {
-      currentWave.stop();
-    }
-  }
-  initAll();
-  isInitialized = true;
-  
+  applyIntroAnimation()
+  initWave()
+})
+
+if (!runtimeWindow.__siriWaveResizeBound) {
   window.addEventListener(
     'resize',
     debounce(() => {
-      if (currentWave) {
-        currentWave.stop()
-      }
-      initAll()
+      runtimeWindow.__siriWave?.resize()
     }, 100),
   )
-});
-// Fallback for non-ViewTransitions
-if (!document.startViewTransition && !isInitialized) {
-    initAll()
-    isInitialized = true;
-    window.addEventListener(
-        'resize',
-        debounce(() => {
-        if (currentWave) {
-            currentWave.stop()
-        }
-        initAll()
-        }, 100),
-    )
-} else if (!isInitialized) {
-    // Also run on first load before view transition happens
-    initAll()
-    isInitialized = true;
+  runtimeWindow.__siriWaveResizeBound = true
 }
+
+applyIntroAnimation()
+initWave()
 </script>
 
 <style lang="less">
@@ -236,6 +256,16 @@ if (!document.startViewTransition && !isInitialized) {
 
 .postViewer {
   height: 50vh;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .bg-img {

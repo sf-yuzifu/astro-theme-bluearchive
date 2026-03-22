@@ -19,22 +19,37 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 </a>
 
 <script>
-	// 在客户端拦截所有导航链接的点击事件
-	document.addEventListener('astro:page-load', () => {
-		const links = document.querySelectorAll('a.nav-link');
-		links.forEach(link => {
-			link.addEventListener('click', (e) => {
-				const target = e.currentTarget as HTMLAnchorElement;
-				const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
-				const targetPath = new URL(target.href).pathname.replace(/\/$/, '') || '/';
-				
-				// 如果目标路径和当前路径一致，则阻止跳转行为（包括 ViewTransitions 动画）
-				if (currentPath === targetPath) {
-					e.preventDefault();
-				}
-			});
+	const normalizePath = (path: string) => path.replace(/\/$/, '') || '/';
+
+	const updateActiveLinks = () => {
+		const currentPath = normalizePath(window.location.pathname);
+		const firstSegment = currentPath.split('/').filter(Boolean)[0] || '';
+		const sectionPath = firstSegment ? `/${firstSegment}` : '/';
+
+		const links = document.querySelectorAll('a.nav-link') as NodeListOf<HTMLAnchorElement>;
+		links.forEach((link) => {
+			const linkPath = normalizePath(new URL(link.href, window.location.origin).pathname);
+			const isActive = linkPath === currentPath || linkPath === sectionPath;
+			link.classList.toggle('active', isActive);
 		});
-	});
+	};
+
+	if (!(window as typeof window & { __astroNavLinkBound?: boolean }).__astroNavLinkBound) {
+		document.addEventListener('click', (event) => {
+			const target = (event.target as HTMLElement).closest('a.nav-link') as HTMLAnchorElement | null;
+			if (!target) return;
+
+			const currentPath = normalizePath(window.location.pathname);
+			const targetPath = normalizePath(new URL(target.href, window.location.origin).pathname);
+			if (currentPath === targetPath) {
+				event.preventDefault();
+			}
+		});
+		(window as typeof window & { __astroNavLinkBound?: boolean }).__astroNavLinkBound = true;
+	}
+
+	document.addEventListener('astro:page-load', updateActiveLinks);
+	updateActiveLinks();
 </script>
 
 <style>

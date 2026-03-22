@@ -6,7 +6,7 @@ const footerName = "Astro Blog";
 const poweredList = [{ name: 'Astro', url: 'https://astro.build' }];
 ---
 
-<footer class="container">
+<footer class="container" transition:persist>
   <div class="footer-info">
     <span>© {today.getFullYear()} {footerName} </span>
     <br />
