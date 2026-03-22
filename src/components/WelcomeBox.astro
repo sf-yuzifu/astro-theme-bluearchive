@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import avatarImage from '../assets/theme/banner/avatar.webp';
+import WelcomeBoxController from './WelcomeBoxController.vue';
 
 // 可以在此处配置默认数据或通过 props 传入
 const name = "Astro Blog";
@@ -34,107 +35,7 @@ const social = [
   </div>
   </div>
 </div>
-<script define:vars={{ mottos }} is:inline data-astro-rerun>
-  const runtimeWindow = window;
-
-  function bindWelcomeBox() {
-    const welcomeBox = document.getElementById('welcome-box-el');
-    const infoBox = document.getElementById('info-box-el');
-    const mottoTextEl = document.getElementById('motto-text-el');
-    if (!welcomeBox || !infoBox || !mottoTextEl) return false;
-
-    if (runtimeWindow.__welcomeBoxCleanup) {
-      runtimeWindow.__welcomeBoxCleanup();
-      runtimeWindow.__welcomeBoxCleanup = null;
-    }
-    if (runtimeWindow.__welcomeBoxTypingTimer) {
-      clearTimeout(runtimeWindow.__welcomeBoxTypingTimer);
-      runtimeWindow.__welcomeBoxTypingTimer = null;
-    }
-
-    const multiple = 30;
-
-    function getMouseAngle(x, y) {
-      const radians = Math.atan2(y, x);
-      let angle = radians * (180 / Math.PI);
-      if (angle < 0) {
-        angle += 360;
-      }
-      return angle;
-    }
-
-    const parallax = (e) => {
-      window.requestAnimationFrame(() => {
-        const box = welcomeBox.getBoundingClientRect();
-        const calcY = (e.clientX - box.x - box.width / 2) / multiple;
-        const calcX = -(e.clientY - box.y - box.height / 2) / multiple;
-        const angle = Math.floor(
-          getMouseAngle(e.clientY - box.y - box.height / 2, e.clientX - box.x - box.width / 2)
-        );
-        
-        welcomeBox.style.transform = `rotateY(${calcY}deg) rotateX(${calcX}deg)`;
-        infoBox.style.background = `linear-gradient(${angle}deg, var(--infobox-background-initial), var(--infobox-background-final))`;
-      });
-    };
-
-    const reset = () => {
-      welcomeBox.style.transform = `rotateY(0deg) rotateX(0deg)`;
-      infoBox.style.background = `linear-gradient(0deg, var(--infobox-background-initial), var(--infobox-background-final))`; 
-    };
-
-    welcomeBox.style.pointerEvents = 'auto';
-    welcomeBox.addEventListener('pointermove', parallax);
-    welcomeBox.addEventListener('mousemove', parallax);
-    welcomeBox.addEventListener('pointerleave', reset);
-    welcomeBox.addEventListener('mouseleave', reset);
-    runtimeWindow.__welcomeBoxCleanup = () => {
-      welcomeBox.removeEventListener('pointermove', parallax);
-      welcomeBox.removeEventListener('mousemove', parallax);
-      welcomeBox.removeEventListener('pointerleave', reset);
-      welcomeBox.removeEventListener('mouseleave', reset);
-    };
-
-    runtimeWindow.__welcomeBoxTypingToken = (runtimeWindow.__welcomeBoxTypingToken || 0) + 1;
-    const typingToken = runtimeWindow.__welcomeBoxTypingToken;
-    let index = 0;
-    const randomMotto = mottos[Math.floor(Math.random() * mottos.length)];
-    mottoTextEl.textContent = '';
-
-    const addNextCharacter = () => {
-      if (typingToken !== runtimeWindow.__welcomeBoxTypingToken) return;
-      if (index < randomMotto.length) {
-        mottoTextEl.textContent += randomMotto[index];
-        index++;
-        runtimeWindow.__welcomeBoxTypingTimer = setTimeout(addNextCharacter, Math.random() * 150 + 50);
-      }
-    };
-
-    runtimeWindow.__welcomeBoxTypewriterPlayed = true;
-    runtimeWindow.__welcomeBoxTypingTimer = setTimeout(addNextCharacter, 220);
-    return true;
-  }
-
-  function initWelcomeBox() {
-    bindWelcomeBox();
-  }
-
-  function scheduleWelcomeBoxInit(retry = 0) {
-    requestAnimationFrame(() => {
-      initWelcomeBox();
-      const isReady = Boolean(document.getElementById('welcome-box-el')) && Boolean(runtimeWindow.__welcomeBoxCleanup);
-      if (!isReady && retry < 20) {
-        setTimeout(() => scheduleWelcomeBoxInit(retry + 1), 80);
-      }
-    });
-  }
-
-  if (!runtimeWindow.__welcomeBoxNavBound) {
-    document.addEventListener('astro:page-load', () => scheduleWelcomeBoxInit());
-    document.addEventListener('astro:after-swap', () => scheduleWelcomeBoxInit());
-    runtimeWindow.__welcomeBoxNavBound = true;
-  }
-  scheduleWelcomeBoxInit();
-</script>
+<WelcomeBoxController client:load mottos={mottos} />
 
 <style lang="less">
 .welcome-box-container {

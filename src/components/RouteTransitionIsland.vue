@@ -10,6 +10,10 @@ const ENTER_MS = 560
 let isTransitioning = false
 
 const normalizePath = (path: string) => path.replace(/\/$/, '') || '/'
+const isTagRoute = (path: string) => {
+  const normalized = normalizePath(path)
+  return normalized === '/tags' || normalized.startsWith('/tags/')
+}
 
 const sameRouteGuard = (event: MouseEvent) => {
   if (event.defaultPrevented) return
@@ -36,9 +40,12 @@ const sameRouteGuard = (event: MouseEvent) => {
 }
 
 const beforeSwapHandler = (event: Event) => {
-  const transitionEvent = event as Event & { swap?: () => void }
+  const transitionEvent = event as Event & { swap?: () => void; from?: URL; to?: URL }
   if (!transitionEvent.swap) return
 
+  const fromPath = transitionEvent.from?.pathname || window.location.pathname
+  const toPath = transitionEvent.to?.pathname || fromPath
+  const skipBannerTransition = isTagRoute(fromPath) && isTagRoute(toPath)
   const originalSwap = transitionEvent.swap
   transitionEvent.swap = () => {
     if (isTransitioning) {
@@ -46,16 +53,19 @@ const beforeSwapHandler = (event: Event) => {
       return
     }
     isTransitioning = true
-    const root = document.documentElement
-    root.classList.remove('route-entering')
-    root.classList.add('route-leaving')
+    const leavingRoot = document.documentElement
+    leavingRoot.classList.remove('route-entering')
+    leavingRoot.classList.toggle('route-skip-banner', skipBannerTransition)
+    leavingRoot.classList.add('route-leaving')
 
     window.setTimeout(() => {
       originalSwap()
-      root.classList.remove('route-leaving')
-      root.classList.add('route-entering')
+      const enteringRoot = document.documentElement
+      enteringRoot.classList.toggle('route-skip-banner', skipBannerTransition)
+      enteringRoot.classList.add('route-entering')
       window.setTimeout(() => {
-        root.classList.remove('route-entering')
+        enteringRoot.classList.remove('route-entering')
+        enteringRoot.classList.remove('route-skip-banner')
         isTransitioning = false
       }, ENTER_MS)
     }, LEAVE_MS)

@@ -201,6 +201,11 @@ html.route-entering .banner-content {
   animation: route-in 0.56s cubic-bezier(0, 0, 0.2, 1) both;
 }
 
+html.route-skip-banner.route-leaving .banner-content,
+html.route-skip-banner.route-entering .banner-content {
+  animation: none;
+}
+
 @keyframes route-out {
   from {
     opacity: 1;
