@@ -70,7 +70,7 @@ const postsWithReadingTime = await Promise.all(
                   ))}
                 </ul>
               )}
-              <div class="excerpt">
+              <div class:list={["excerpt", { "has-tags": post.data.tags && post.data.tags.length > 0 }]}>
                 <p>{post.data.description}</p>
               </div>
             </div>
@@ -265,6 +265,9 @@ const postsWithReadingTime = await Promise.all(
             align-items: flex-end;
             p {
               margin-bottom: 0;
+            }
+            &.has-tags p {
+              margin-top: 0;
             }
           }
         }
