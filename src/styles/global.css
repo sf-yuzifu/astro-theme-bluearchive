@@ -175,13 +175,6 @@ html[theme="dark"] .expressive-code figure.frame .copy button:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-@media (max-width: 768px) {
-  .expressive-code figure.frame .copy button {
-    width: 36px !important;
-    height: 36px !important;
-  }
-}
-
 .expressive-code pre {
   background-color: transparent !important;
   margin: 0 !important;
