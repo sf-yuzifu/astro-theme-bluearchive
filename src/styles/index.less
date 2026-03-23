@@ -32,12 +32,21 @@ button {
 
 // 引用块样式
 blockquote {
-  border-left: var(--gitalk-border-left);
-  background: var(--gitalk-background);
-  padding: 1rem 1.5rem;
-  margin: 1rem 0;
-  border-radius: 0 8px 8px 0;
-  box-shadow: var(--gitalk-shadow);
+  margin: 16px 0 !important;
+  border-left: 3px solid #5cd3ff !important;
+  padding-left: 16px !important;
+  background-color: rgba(92, 212, 255, 0.15) !important;
+  border-radius: 8px !important;
+  
+  html[theme='dark'] & {
+    background-color: rgba(157, 124, 216, 0.1) !important;
+    border-left: 3px solid #9d7cd8 !important;
+  }
+
+  p {
+    margin: 0 !important;
+    font-size: 16px !important;
+  }
 }
 
 // 列表样式
