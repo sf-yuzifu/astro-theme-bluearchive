@@ -21,7 +21,7 @@ export default defineConfig({
 	},
 	integrations: [
 		astroExpressiveCode({
-			themes: ['github-light', 'github-dark'],
+			themes: ['material-theme-lighter', 'material-theme-darker'],
 			useThemedScrollbars: false,
 			defaultProps: {
 				showLineNumbers: true,
@@ -41,20 +41,15 @@ export default defineConfig({
 				}),
 			], 
 			styleOverrides: {
-				borderRadius: '16px',
+				borderRadius: '12px',
 				frames: {
 					frameBoxShadowCssValue: '0px 0px 5px #c1c1c1',
-					editorTabBarBackground: 'rgb(239, 242, 244)',
-					editorActiveTabBackground: 'transparent',
-					editorActiveTabBorderColor: 'transparent',
 					editorActiveTabIndicatorBottomColor: 'var(--font-color-gold)',
-					editorActiveTabIndicatorHeight: '5px',
-					copyIcon,
+					editorActiveTabIndicatorHeight: '3px',
 				},
-				codeBackground: '#efefef',
 			},
 			themeCssSelector: (theme) => {
-				if (theme.name === 'github-dark') return `html[theme='dark']`;
+				if (theme.name === 'material-theme-darker') return `html[theme='dark']`;
 				return `html:not([theme='dark'])`;
 			}
 		}),

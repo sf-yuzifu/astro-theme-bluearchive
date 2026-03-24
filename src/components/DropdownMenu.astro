@@ -1,0 +1,159 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+---
+
+<div class="dropdown-menu" id="dropdown-menu">
+  <div class="menu-content">
+    <ThemeToggle />
+  </div>
+</div>
+
+<script>
+  type DropdownMenu = HTMLElement | null;
+
+  let isOpen = false;
+  let hamburgerClickHandler: ((e: Event) => void) | null = null;
+
+  function getElements() {
+    return {
+      dropdown: document.getElementById("dropdown-menu") as DropdownMenu,
+      hamburger: document.querySelector(".hamburger") as HTMLElement | null,
+    };
+  }
+
+  function updateMenuState(open: boolean) {
+    isOpen = open;
+    const { dropdown, hamburger } = getElements();
+
+    if (dropdown) {
+      dropdown.setAttribute("showmenu", isOpen.toString());
+    }
+    if (hamburger) {
+      hamburger.classList.toggle("active", isOpen);
+    }
+  }
+
+  function toggleMenu() {
+    updateMenuState(!isOpen);
+  }
+
+  function closeMenu() {
+    updateMenuState(false);
+  }
+
+  function handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const { dropdown, hamburger } = getElements();
+
+    // 避免与展开按钮冲突
+    if (hamburger && hamburger.contains(target)) {
+      return;
+    }
+
+    if (dropdown && !dropdown.contains(target) && isOpen) {
+      closeMenu();
+    }
+  }
+
+  function init() {
+    const { dropdown, hamburger } = getElements();
+
+    // 初始化状态
+    if (dropdown) {
+      dropdown.setAttribute("showmenu", "false");
+    }
+
+    // 移除旧的事件监听器（如果存在）
+    if (hamburger && hamburgerClickHandler) {
+      hamburger.removeEventListener("click", hamburgerClickHandler);
+    }
+
+    // 创建新的事件处理函数
+    hamburgerClickHandler = (e: Event) => {
+      e.stopPropagation();
+      toggleMenu();
+    };
+
+    // 绑定汉堡按钮点击事件
+    hamburger?.addEventListener("click", hamburgerClickHandler);
+
+    // 点击外部关闭
+    document.addEventListener("click", handleClickOutside);
+  }
+
+  function cleanup() {
+    document.removeEventListener("click", handleClickOutside);
+    const { hamburger } = getElements();
+    if (hamburger && hamburgerClickHandler) {
+      hamburger.removeEventListener("click", hamburgerClickHandler);
+    }
+  }
+
+  // 初始化
+  init();
+
+  // 路由切换后重新初始化
+  document.addEventListener("astro:after-swap", () => {
+    cleanup();
+    isOpen = false;
+    init();
+  });
+</script>
+
+<style lang="less">
+  .dropdown-menu {
+    position: absolute;
+    z-index: 50;
+    top: 100%;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .menu-content {
+      position: relative;
+      background-color: var(--foreground-color);
+      border-radius: 2vw;
+      padding: 1.2vw;
+      gap: 0.8vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .dropdown-menu[showmenu="true"] {
+    opacity: 1;
+    transform: translateY(15px);
+    .menu-content {
+      box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+      transition: box-shadow 0.3s;
+    }
+    transition:
+      opacity 0.1s ease-in-out,
+      transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .dropdown-menu[showmenu="false"] {
+    opacity: 0;
+    transform: translateY(2px);
+    .menu-content {
+      box-shadow: none;
+      transition: box-shadow 0.3s;
+    }
+    transition:
+      opacity 0.2s ease-in-out,
+      transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .dropdown-menu {
+      .menu-content {
+        border-radius: 3vh;
+        padding: 2vh;
+        gap: 1vh;
+      }
+    }
+  }
+</style>

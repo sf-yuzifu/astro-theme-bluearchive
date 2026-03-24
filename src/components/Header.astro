@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import navLogo from '../assets/theme/icon/navLogo.svg';
 import HeaderLink from './HeaderLink.astro';
+import DropdownMenu from './DropdownMenu.astro';
 
 interface Props {
   isPost?: boolean;
@@ -37,6 +38,7 @@ const menuList = [
       <span class="line"></span>
       <span class="line"></span>
     </div>
+    <DropdownMenu />
   </nav>
 </header>
 
@@ -141,6 +143,16 @@ header {
     margin-bottom: 4px;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+  }
+
+  .hamburger.active .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .line:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
   }
 }
 

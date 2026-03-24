@@ -1,12 +1,12 @@
 ---
 // 基础布局 - 所有页面共享的外壳结构
 // 参考vitepress-theme-bluearchive的Layout.vue设计
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Banner from '../components/Banner.astro';
-import Splash from '../components/Splash.astro';
-import '../styles/index.less';
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Banner from "../components/Banner.astro";
+import Splash from "../components/Splash.astro";
+import "../styles/index.less";
 
 interface Props {
   title: string;
@@ -17,32 +17,70 @@ interface Props {
 
 const { title, description, isPost = false, coverImage } = Astro.props;
 
-const coverUrl = coverImage ? (typeof coverImage === 'string' ? coverImage : coverImage.src) : '';
+const coverUrl = coverImage
+  ? typeof coverImage === "string"
+    ? coverImage
+    : coverImage.src
+  : "";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
+    <script is:inline>
+      (function () {
+        function getEffectiveTheme() {
+          const theme = localStorage.getItem("theme") || "system";
+          return theme === "system"
+            ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+            : theme;
+        }
+
+        function applyTheme() {
+          document.documentElement.setAttribute("theme", getEffectiveTheme());
+        }
+
+        // 在交换前就将主题应用到新文档
+        document.addEventListener("astro:before-swap", (ev) => {
+          ev.newDocument.documentElement.setAttribute(
+            "theme",
+            getEffectiveTheme(),
+          );
+        });
+
+        // 交换后也应用一次（保险）
+        document.addEventListener("astro:after-swap", applyTheme);
+
+        // 初始应用
+        applyTheme();
+      })();
+    </script>
   </head>
   <body data-cover-url={coverUrl}>
     <!-- <Splash /> -->
-    
+
     <!-- Banner区域 - 保持持久化 -->
     <Banner isPost={isPost} coverImage={coverImage} transition:persist="banner">
       <div id="banner-content" class="banner-content-wrapper">
         <slot name="banner-content" />
       </div>
     </Banner>
-    
+
     <!-- Header导航 - 保持持久化 -->
     <Header isPost={isPost} transition:persist="header" />
-    
+
     <!-- 主要内容区域 - 切换时带动画 -->
-    <main id="main-content" class="main-content-wrapper" transition:animate="fade">
+    <main
+      id="main-content"
+      class="main-content-wrapper"
+      transition:animate="fade"
+    >
       <slot />
     </main>
-    
+
     <!-- Footer - 保持持久化 -->
     <Footer transition:persist="footer" />
   </body>
@@ -50,7 +88,7 @@ const coverUrl = coverImage ? (typeof coverImage === 'string' ? coverImage : cov
 
 <style is:global>
   /* ===== 页面切换动画 - 类似Vue的fade过渡 ===== */
-  
+
   /* 默认的fade动画覆盖 */
   ::view-transition-old(root),
   ::view-transition-new(root) {
