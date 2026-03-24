@@ -16,12 +16,7 @@ const { coverImage, isPost = false } = Astro.props;
 
   {/* 双背景图片层，实现平滑切换 */}
   <div id="bg-layer-current" class="bg-layer" transition:persist></div>
-  <div
-    id="bg-layer-next"
-    class="bg-layer"
-    transition:persist
-  >
-  </div>
+  <div id="bg-layer-next" class="bg-layer" transition:persist></div>
 </div>
 
 <script>
@@ -168,6 +163,7 @@ const { coverImage, isPost = false } = Astro.props;
     __siriWaveResizeBound?: boolean;
     __currentBgUrl?: string;
     __isBgTransitioning?: boolean;
+    __bgTransitionTimeout?: ReturnType<typeof setTimeout>;
   };
 
   const runtimeWindow = window as BannerWindow;
@@ -232,8 +228,16 @@ const { coverImage, isPost = false } = Astro.props;
     ) as HTMLElement;
     const nextLayer = document.getElementById("bg-layer-next") as HTMLElement;
 
-    if (!currentLayer || !nextLayer || runtimeWindow.__isBgTransitioning)
-      return;
+    if (!currentLayer || !nextLayer) return;
+
+    if (runtimeWindow.__bgTransitionTimeout) {
+      clearTimeout(runtimeWindow.__bgTransitionTimeout);
+      runtimeWindow.__bgTransitionTimeout = undefined;
+    }
+
+    if (runtimeWindow.__isBgTransitioning) {
+      nextLayer.classList.remove("transitioning-in");
+    }
 
     const currentUrl = runtimeWindow.__currentBgUrl || getBannerBackgroundUrl();
 
@@ -246,13 +250,20 @@ const { coverImage, isPost = false } = Astro.props;
     nextLayer.style.backgroundImage = `url(${newUrl})`;
     nextLayer.classList.add("transitioning-in");
 
-    setTimeout(() => {
-      currentLayer.style.backgroundImage = `url(${newUrl})`;
-      runtimeWindow.__currentBgUrl = newUrl;
-      runtimeWindow.__isBgTransitioning = false;
+    const timeoutId = setTimeout(() => {
+      const expectedUrl = getBannerBackgroundUrl();
 
+      if (expectedUrl === newUrl) {
+        currentLayer.style.backgroundImage = `url(${newUrl})`;
+        runtimeWindow.__currentBgUrl = newUrl;
+      }
+
+      runtimeWindow.__isBgTransitioning = false;
       nextLayer.classList.remove("transitioning-in");
+      runtimeWindow.__bgTransitionTimeout = undefined;
     }, 500);
+
+    runtimeWindow.__bgTransitionTimeout = timeoutId;
   }
 
   async function checkAndUpdateBackground() {
