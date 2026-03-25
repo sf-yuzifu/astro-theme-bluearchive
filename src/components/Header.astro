@@ -1,8 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import navLogo from '../assets/theme/icon/navLogo.svg';
-import HeaderLink from './HeaderLink.astro';
-import DropdownMenu from './DropdownMenu.astro';
+import { Image } from "astro:assets";
+import navLogo from "../assets/theme/icon/navLogo.svg";
+import HeaderLink from "./HeaderLink.astro";
+import DropdownMenu from "./DropdownMenu.astro";
 
 interface Props {
   isPost?: boolean;
@@ -11,11 +11,11 @@ interface Props {
 const { isPost = false } = Astro.props;
 
 const menuList = [
-  { name: 'Home', url: '/' },
-  { name: 'Tags', url: '/tags' },
-  { name: 'Friends', url: '/friends' },
-  { name: 'Projects', url: '/project' },
-  { name: 'About', url: '/about' }
+  { name: "Home", url: "/" },
+  { name: "Tags", url: "/tags" },
+  { name: "Friends", url: "/friends" },
+  { name: "Projects", url: "/project" },
+  { name: "About", url: "/about" },
 ];
 ---
 
@@ -28,11 +28,13 @@ const menuList = [
     </span>
     <span class="menu">
       <ul>
-        {menuList.map((item) => (
-          <li>
-            <HeaderLink href={item.url}>{item.name}</HeaderLink>
-          </li>
-        ))}
+        {
+          menuList.map((item) => (
+            <li>
+              <HeaderLink href={item.url}>{item.name}</HeaderLink>
+            </li>
+          ))
+        }
       </ul>
     </span>
     <div class="hamburger">
@@ -45,39 +47,40 @@ const menuList = [
 </header>
 
 <style lang="less">
-.postViewer {
-  height: 50vh;
-}
-
-header {
-  height: 75vh;
-  width: 100%;
-  position: relative;
-  z-index: 100;
-  pointer-events: none; /* 让 Header 所在的 75vh 区域不要阻挡下方 Banner 的鼠标事件 */
-  
-  nav {
-    pointer-events: auto; /* 恢复导航栏自身的鼠标事件 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    height: 72px;
-    z-index: 100;
-    box-sizing: border-box;
-    padding: 0 16px;
-    border-radius: 0 0 32px 32px;
-    border-bottom: solid 2px var(--foreground-color);
-    border-left: solid 2px var(--foreground-color);
-    border-right: solid 2px var(--foreground-color);
-    background: linear-gradient(0.25turn, transparent, var(--foreground-color) 25%),
-      var(--triangle-background);
-    backdrop-filter: var(--blur-val);
-    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+  .postViewer {
+    height: 50vh;
   }
 
-  .logo {
+  header {
+    height: 75vh;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+    pointer-events: none; /* 让 Header 所在的 75vh 区域不要阻挡下方 Banner 的鼠标事件 */
+
+    nav {
+      pointer-events: auto; /* 恢复导航栏自身的鼠标事件 */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 72px;
+      z-index: 100;
+      box-sizing: border-box;
+      padding: 0 16px;
+      border-radius: 0 0 32px 32px;
+      border-bottom: solid 2px var(--foreground-color);
+      border-left: solid 2px var(--foreground-color);
+      border-right: solid 2px var(--foreground-color);
+      background:
+        linear-gradient(0.25turn, transparent, var(--foreground-color) 25%),
+        var(--triangle-background);
+      backdrop-filter: var(--blur-val);
+      box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    }
+
+    .logo {
       display: flex;
       align-items: center;
       height: 100%;
@@ -90,123 +93,125 @@ header {
       img {
         height: 32px;
         width: auto;
+        min-width: 32px;
         filter: drop-shadow(0 0 8px #328cfa);
       }
     }
 
-  .menu {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    max-width: 800px;
-    margin: 0 auto;
-    
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    
-    ul {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 32px;
-      margin: 0;
-      list-style: none;
-      white-space: nowrap;
-
-      li {
-        margin: 0 32px;
-        flex-shrink: 0;
-        a {
-          display: block;
-          padding: 10px 16px;
-          border-radius: 8px;
-          font-size: 20px;
-          font-weight: 600;
-          color: var(--font-color-grey);
-          transition: all 0.5s, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-          text-decoration: none;
-
-          &:hover {
-            color: var(--font-color-gold);
-            background-color: var(--btn-background);
-            transform: translateY(-2px);
-          }
-        }
-      }
-    }
-  }
-
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-  }
-
-  .hamburger .line {
-    display: block;
-    width: 80%;
-    height: 4px;
-    border-radius: 4px;
-    background-color: var(--font-color-grey);
-    margin-bottom: 4px;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .hamburger.active .line:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  .hamburger.active .line:nth-child(2) {
-    opacity: 0;
-  }
-  .hamburger.active .line:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-}
-
-@media (max-width: 768px) {
-  header {
-    nav {
-      height: 64px;
-    }
-
-    .logo {
-      img {
-        height: 32px;
-      }
-    }
-
     .menu {
-      flex: 1;
-      max-width: none;
-      margin: 0 12px;
-      mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent);
-      
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      margin: 0 24px;
+      padding: 0;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
       ul {
+        width: 100%;
+        display: flex;
+        align-items: center;
         justify-content: flex-start;
-        padding: 0 8px;
-        
+        padding-left: 0;
+        margin: 0;
+        list-style: none;
+        white-space: nowrap;
+        gap: clamp(16px, 4vw, 64px);
+
         li {
-          margin: 0 6px;
+          margin: 0;
+          flex-shrink: 0;
           a {
-            font-size: 14px;
-            padding: 8px 10px;
+            display: block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--font-color-grey);
+            transition:
+              all 0.5s,
+              transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            text-decoration: none;
+
+            &:hover {
+              color: var(--font-color-gold);
+              background-color: var(--btn-background);
+              transform: translateY(-2px);
+            }
           }
         }
       }
     }
 
     .hamburger {
-      width: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    .hamburger .line {
+      display: block;
+      width: 80%;
+      height: 4px;
+      border-radius: 4px;
+      background-color: var(--font-color-grey);
+      margin-bottom: 4px;
+      -webkit-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .hamburger.active .line:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active .line:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active .line:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
     }
   }
-}
+
+  @media (max-width: 768px) {
+    header {
+      nav {
+        height: 64px;
+      }
+
+      .logo {
+        img {
+          height: 32px;
+        }
+      }
+
+      .menu {
+        flex: 1;
+        max-width: none;
+        margin: 0 clamp(8px, 3vw, 16px);
+        padding: 0;
+
+        ul {
+          justify-content: flex-start;
+          gap: clamp(8px, 2vw, 16px);
+
+          li {
+            a {
+              font-size: 14px;
+              padding: 8px 10px;
+            }
+          }
+        }
+      }
+
+      .hamburger {
+        width: 32px;
+      }
+    }
+  }
 </style>
