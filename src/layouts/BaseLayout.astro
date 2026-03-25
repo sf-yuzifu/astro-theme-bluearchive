@@ -6,6 +6,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import Banner from "../components/Banner.astro";
 import Splash from "../components/Splash.astro";
+import BackToTop from "../components/BackToTop.astro";
 import "../styles/index.less";
 
 interface Props {
@@ -83,6 +84,9 @@ const coverUrl = coverImage
 
     <!-- Footer - 保持持久化 -->
     <Footer transition:persist="footer" />
+
+    <!-- 回到顶部按钮 - 保持持久化 -->
+    <BackToTop transition:persist="totop" />
   </body>
 </html>
 
