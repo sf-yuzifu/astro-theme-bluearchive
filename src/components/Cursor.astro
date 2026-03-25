@@ -2,10 +2,11 @@
 // 点击特效组件 - 基于 Cursor.vue 转换，仅保留点击特效
 ---
 
-<canvas id="click-canvas" class="click-canvas" transition:persist="click-canvas"></canvas>
+<canvas id="click-canvas" class="click-canvas" transition:persist="click-canvas"
+></canvas>
 
 <script is:inline>
-  (function() {
+  (function () {
     // 防止重复初始化
     if (window.__clickEffectInitialized) return;
     window.__clickEffectInitialized = true;
@@ -15,6 +16,27 @@
     let ctx = null;
     let animationId = null;
     const effects = [];
+
+    // 获取当前主题
+    function getCurrentTheme() {
+      const theme = document.documentElement.getAttribute("theme");
+      if (theme === "dark" || theme === "light") return theme;
+      // 如果没有设置主题，检测系统偏好
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+
+    // 获取主题颜色配置
+    function getThemeColors() {
+      const isDark = getCurrentTheme() === "dark";
+      return {
+        primary: isDark ? "#9d7bff" : "#77deff", // 暗色: 紫色, 亮色: 蓝色
+        secondary: isDark ? "#1a1a2e" : "#ffffff", // 暗色: 深黑紫, 亮色: 白色
+        outerCircle: isDark ? "157, 123, 255" : "74, 144, 217", // 外圈渐变颜色
+        shadow: isDark ? "#9d7bff" : "#77deff", // 阴影颜色
+      };
+    }
 
     // 响应式配置
     function getEffectConfig() {
@@ -35,7 +57,7 @@
         innerShadowBlur: 20 * Math.max(1, scale),
         offset: 8 * Math.max(1, scale),
         outerRadiusOffset: 8 * Math.max(1, scale),
-        radiusGrowth: 6 * Math.max(1, scale)
+        radiusGrowth: 6 * Math.max(1, scale),
       };
     }
 
@@ -58,6 +80,7 @@
 
       createTriangles(config) {
         const triangleCount = 3 + Math.floor(Math.random() * 4);
+        const colors = getThemeColors();
 
         for (let i = 0; i < triangleCount; i++) {
           const angle = Math.random() * Math.PI * 2;
@@ -68,8 +91,8 @@
             delay: delay,
             size: config.sizeMin + Math.random() * config.sizeMax,
             speed: config.speedMin + Math.random() * config.speedMax,
-            color: Math.random() > 0.5 ? '#77deff' : '#ffffff',
-            rotationSpeed: (Math.random() - 0.5) * 0.1
+            color: Math.random() > 0.5 ? colors.primary : colors.secondary,
+            rotationSpeed: (Math.random() - 0.5) * 0.1,
           });
         }
       }
@@ -84,7 +107,10 @@
 
         const scale = 1 + progress * 0.3;
         const alpha = Math.pow(1 - progress, 1.5);
-        const currentRadius = this.radius + config.outerRadiusOffset + progress * config.radiusGrowth;
+        const currentRadius =
+          this.radius +
+          config.outerRadiusOffset +
+          progress * config.radiusGrowth;
 
         ctx.globalAlpha = alpha;
         ctx.scale(scale, scale);
@@ -100,17 +126,21 @@
 
       drawOuterCircle(ctx, alpha, currentRadius, config) {
         const centerRadius = currentRadius + config.outerRadiusOffset;
+        const colors = getThemeColors();
 
         ctx.beginPath();
         ctx.arc(0, 0, centerRadius, 0, Math.PI * 2);
 
         const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, centerRadius);
-        gradient.addColorStop(0, `rgba(195, 235, 255, ${alpha * 0.8})`);
-        gradient.addColorStop(0.7, `rgba(195, 235, 255, ${alpha * 0.4})`);
-        gradient.addColorStop(1, `rgba(195, 235, 255, 0)`);
+        gradient.addColorStop(0, `rgba(${colors.outerCircle}, ${alpha * 0.8})`);
+        gradient.addColorStop(
+          0.7,
+          `rgba(${colors.outerCircle}, ${alpha * 0.4})`,
+        );
+        gradient.addColorStop(1, `rgba(${colors.outerCircle}, 0)`);
 
         ctx.fillStyle = gradient;
-        ctx.shadowColor = '#c3ebff';
+        ctx.shadowColor = colors.shadow;
         ctx.shadowBlur = config.shadowBlur;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -127,21 +157,24 @@
         const tail1Angle = this.rotation1 - tailProgress * 2;
         const tail2Angle = this.rotation2 + Math.PI - tailProgress * 2;
 
+        const colors = getThemeColors();
+
         for (let i = 0; i < 8; i++) {
           const offset = i * config.offset;
           const alpha = (1 - progress) * (1 - i * 0.12);
 
           ctx.save();
           ctx.globalAlpha = alpha;
-          ctx.strokeStyle = '#77deff';
+          ctx.strokeStyle = colors.primary;
           ctx.lineWidth = Math.max(1, 3 - i * 0.3);
-          ctx.lineCap = 'round';
+          ctx.lineCap = "round";
 
-          ctx.shadowColor = '#77deff';
+          ctx.shadowColor = colors.primary;
           ctx.shadowBlur = config.tailShadowBlur - i;
 
-          const startAngle = tail1Angle - (offset * Math.PI / 180);
-          const endAngle = tail1Angle + Math.PI * 0.6 - (offset * Math.PI / 180);
+          const startAngle = tail1Angle - (offset * Math.PI) / 180;
+          const endAngle =
+            tail1Angle + Math.PI * 0.6 - (offset * Math.PI) / 180;
           ctx.beginPath();
           ctx.arc(0, 0, currentRadius, startAngle, endAngle);
           ctx.stroke();
@@ -155,15 +188,16 @@
 
           ctx.save();
           ctx.globalAlpha = alpha;
-          ctx.strokeStyle = '#ffffff';
+          ctx.strokeStyle = colors.secondary;
           ctx.lineWidth = Math.max(1, 3 - i * 0.3);
-          ctx.lineCap = 'round';
+          ctx.lineCap = "round";
 
-          ctx.shadowColor = '#ffffff';
+          ctx.shadowColor = colors.secondary;
           ctx.shadowBlur = config.tailShadowBlur - i;
 
-          const startAngle = tail2Angle - (offset * Math.PI / 180);
-          const endAngle = tail2Angle + Math.PI * 0.4 - (offset * Math.PI / 180);
+          const startAngle = tail2Angle - (offset * Math.PI) / 180;
+          const endAngle =
+            tail2Angle + Math.PI * 0.4 - (offset * Math.PI) / 180;
           ctx.beginPath();
           ctx.arc(0, 0, currentRadius, startAngle, endAngle);
           ctx.stroke();
@@ -176,21 +210,27 @@
 
       drawTriangles(ctx, elapsed, config) {
         this.triangles.forEach((triangle) => {
-          const triangleProgress = Math.max(0, (elapsed - triangle.delay) / (this.duration - triangle.delay));
+          const triangleProgress = Math.max(
+            0,
+            (elapsed - triangle.delay) / (this.duration - triangle.delay),
+          );
 
           if (triangleProgress <= 0 || triangleProgress >= 1) return;
 
           const distance = triangle.speed * triangleProgress;
           const size = triangle.size * (1 - triangleProgress * 0.8);
-          const brightness = Math.sin(triangleProgress * Math.PI * 6) * 0.4 + 0.8;
+          const brightness =
+            Math.sin(triangleProgress * Math.PI * 6) * 0.4 + 0.8;
 
           ctx.save();
           ctx.translate(
             Math.cos(triangle.angle) * (this.radius + distance),
-            Math.sin(triangle.angle) * (this.radius + distance)
+            Math.sin(triangle.angle) * (this.radius + distance),
           );
 
-          ctx.rotate(triangle.angle + elapsed * triangle.rotationSpeed / 1000);
+          ctx.rotate(
+            triangle.angle + (elapsed * triangle.rotationSpeed) / 1000,
+          );
 
           ctx.globalAlpha = 1 - triangleProgress;
 
@@ -205,7 +245,7 @@
           ctx.closePath();
           ctx.fill();
 
-          ctx.globalCompositeOperation = 'lighter';
+          ctx.globalCompositeOperation = "lighter";
           ctx.fillStyle = triangle.color;
           ctx.globalAlpha = brightness * 0.3;
           ctx.shadowBlur = config.innerShadowBlur;
@@ -224,7 +264,7 @@
 
     // Canvas相关函数
     function initCanvas() {
-      canvas = document.getElementById('click-canvas');
+      canvas = document.getElementById("click-canvas");
       if (!canvas) return;
 
       const width = window.innerWidth;
@@ -233,7 +273,7 @@
       canvas.width = width;
       canvas.height = height;
 
-      ctx = canvas.getContext('2d');
+      ctx = canvas.getContext("2d");
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     }
 
@@ -286,32 +326,32 @@
     // 初始化函数
     function init() {
       // 清理旧的事件监听
-      document.removeEventListener('click', handleClickEvent);
-      window.removeEventListener('resize', handleResize);
+      document.removeEventListener("click", handleClickEvent);
+      window.removeEventListener("resize", handleResize);
 
       // 延迟初始化
       setTimeout(() => {
         initCanvas();
 
-        document.addEventListener('click', handleClickEvent, { passive: true });
-        window.addEventListener('resize', handleResize);
+        document.addEventListener("click", handleClickEvent, { passive: true });
+        window.addEventListener("resize", handleResize);
       }, 0);
     }
 
     // 初始加载
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
     } else {
       init();
     }
 
     // 路由切换后重新初始化
-    document.addEventListener('astro:page-load', init);
+    document.addEventListener("astro:page-load", init);
 
     // 页面卸载前清理（保留特效继续播放）
-    document.addEventListener('astro:before-swap', () => {
-      document.removeEventListener('click', handleClickEvent);
-      window.removeEventListener('resize', handleResize);
+    document.addEventListener("astro:before-swap", () => {
+      document.removeEventListener("click", handleClickEvent);
+      window.removeEventListener("resize", handleResize);
 
       // 注意：不取消动画和不清空 effects，让特效继续播放直到自然结束
     });
