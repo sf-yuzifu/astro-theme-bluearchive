@@ -1,0 +1,295 @@
+---
+import { Icon } from "astro-icon/components";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_TITLE, SITE_DESCRIPTION, FRIENDS } from "../consts";
+---
+
+<BaseLayout title={`Friends | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+  <!-- Banner内容 -->
+  <div slot="banner-content" class="friends-banner">
+    <h1 class="title">友情链接</h1>
+    <span class="status">与优秀的开发者们互相连接</span>
+  </div>
+
+  <!-- 友链列表 -->
+  <div class="friends-container">
+    <ul class="friends-list">
+      {
+        FRIENDS.map((friend) => (
+          <li class="friend-card">
+            <a href={friend.url} target="_blank" rel="noopener noreferrer">
+              <div class="friend-avatar">
+                <Icon name="ph:user-circle-bold" class="avatar-icon" />
+              </div>
+              <div class="friend-info">
+                <h3>{friend.name}</h3>
+                <p>{friend.description}</p>
+              </div>
+              <Icon name="ph:arrow-right-bold" class="arrow-icon" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- 申请友链提示 -->
+    <div class="apply-section">
+      <h2>
+        <Icon name="ph:hand-waving-bold" class="wave-icon" />
+        交换友链
+      </h2>
+      <p>欢迎申请友链！请通过 About 页面的联系方式与我联系。</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style lang="less">
+  .friends-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--post-InnerBanner-color);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    transition: color 0.5s;
+
+    .title {
+      font-size: 4.5vw;
+      margin-bottom: 50px;
+      text-align: center;
+      margin-top: 0;
+      color: var(--post-InnerBanner-color);
+      transition: color 0.5s;
+    }
+
+    .status {
+      font-size: 1vw;
+      font-weight: bold;
+      color: var(--post-InnerBanner-color);
+      transition: color 0.5s;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 5vh;
+        margin-bottom: 30px;
+      }
+      .status {
+        font-size: 1.5vh;
+      }
+    }
+  }
+
+  .friends-container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1200px;
+    position: relative;
+    padding: 36px;
+    border-radius: 32px;
+    border: solid 2px var(--foreground-color);
+    background: var(--foreground-color);
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    transition:
+      opacity 0.5s ease-out,
+      transform 1s cubic-bezier(0.61, 0.15, 0.26, 1),
+      border 0.5s,
+      background 0.5s,
+      box-shadow 0.5s;
+    background-image:
+      linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, transparent 0),
+      linear-gradient(1turn, rgba(159, 219, 252, 0.15) 3%, transparent 0);
+    background-size: 20px 20px;
+    background-position: 50%;
+
+    html[theme="dark"] & {
+      background-image:
+        linear-gradient(90deg, rgba(207, 198, 254, 0.08) 3%, transparent 0),
+        linear-gradient(1turn, rgba(207, 198, 254, 0.08) 3%, transparent 0);
+    }
+  }
+
+  .friends-list {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 48px 0;
+    display: grid;
+    gap: 16px;
+
+    .friend-card {
+      width: 100%;
+      min-width: 0;
+      background-color: var(--foreground-color);
+      border-radius: 16px;
+      border: solid 2px var(--foreground-color);
+      transition: all 0.3s ease;
+      box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.3);
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 0px 15px rgb(var(--blue-shadow-color), 0.5);
+        border-color: var(--font-color-gold);
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 24px;
+        text-decoration: none;
+        color: inherit;
+        min-width: 0;
+      }
+
+      .friend-avatar {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--btn-background);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .avatar-icon {
+          width: 32px;
+          height: 32px;
+          color: var(--font-color-gold);
+        }
+      }
+
+      .friend-info {
+        flex: 1;
+        min-width: 0;
+
+        h3 {
+          margin: 0 0 6px 0;
+          font-size: 18px;
+          color: var(--font-color-grey);
+          display: -webkit-box;
+          word-break: break-word;
+          text-overflow: ellipsis;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        p {
+          margin: 0;
+          font-size: 14px;
+          color: var(--font-color-grey);
+          opacity: 0.7;
+          display: -webkit-box;
+          word-break: break-word;
+          text-overflow: ellipsis;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      }
+
+      .arrow-icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        color: var(--font-color-grey);
+        opacity: 0.5;
+        transition: all 0.3s ease;
+      }
+
+      &:hover .arrow-icon {
+        opacity: 1;
+        color: var(--font-color-gold);
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  .apply-section {
+    text-align: center;
+    padding: 32px;
+    background-color: var(--infobox-background-initial);
+    border-radius: 16px;
+    border: dashed 2px var(--foreground-color);
+
+    h2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 0 0 12px 0;
+      font-size: 20px;
+      color: var(--font-color-grey);
+
+      .wave-icon {
+        width: 24px;
+        height: 24px;
+        color: var(--font-color-gold);
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--font-color-grey);
+      opacity: 0.8;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .friends-container {
+      padding: 24px 16px;
+      margin: 0 12px;
+    }
+
+    .friends-list {
+      .friend-card {
+        a {
+          padding: 14px 16px;
+          gap: 12px;
+        }
+
+        .friend-avatar {
+          width: 44px;
+          height: 44px;
+
+          .avatar-icon {
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        .friend-info {
+          h3 {
+            font-size: 15px;
+            margin-bottom: 4px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
+
+        .arrow-icon {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .apply-section {
+      padding: 24px 16px;
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+    }
+  }
+</style>
