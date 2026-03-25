@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getCollection } from "astro:content";
@@ -11,7 +11,11 @@ const allTags = [
 ];
 ---
 
-<BaseLayout title={`Tags | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+<BaseLayout
+  title={`Tags | ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
+  isPost={true}
+>
   <!-- Banner内容 - Tags列表 -->
   <ul slot="banner-content" class="tags-container">
     {
@@ -77,12 +81,12 @@ const allTags = [
       li {
         margin: 4px;
         a {
-        font-size: 12px;
-        .tag-icon {
-          width: 12px;
-          height: 12px;
+          font-size: 12px;
+          .tag-icon {
+            width: 12px;
+            height: 12px;
+          }
         }
-      }
       }
     }
   }

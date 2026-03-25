@@ -4,7 +4,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION, FRIENDS } from "../consts";
 ---
 
-<BaseLayout title={`Friends | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+<BaseLayout
+  title={`Friends | ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
+  isPost={true}
+>
   <!-- Banner内容 -->
   <div slot="banner-content" class="friends-banner">
     <h1 class="title">友情链接</h1>

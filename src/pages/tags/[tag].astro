@@ -1,5 +1,5 @@
 ---
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostsList from "../../components/PostsList.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
@@ -7,18 +7,18 @@ import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  
+
   // 提取所有唯一的 tag
   const tags = [...new Set(posts.map((post) => post.data.tags || []).flat())];
-  
+
   return tags.map((tag) => ({
     params: { tag },
     props: {
       // 过滤出包含当前 tag 的文章
-      posts: posts.filter((post) => post.data.tags?.includes(tag)).sort(
-        (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-      )
-    }
+      posts: posts
+        .filter((post) => post.data.tags?.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
   }));
 }
 
@@ -27,85 +27,95 @@ const { posts } = Astro.props;
 
 // 为了在 Banner 里面渲染所有的 tags，我们需要再次获取全量 tags
 const allPosts = await getCollection("blog");
-const allTags = [...new Set(allPosts.map((post) => post.data.tags || []).flat())];
+const allTags = [
+  ...new Set(allPosts.map((post) => post.data.tags || []).flat()),
+];
 ---
 
-<BaseLayout title={`Tag: ${tag} | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+<BaseLayout
+  title={`Tag: ${tag} | ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
+  isPost={true}
+>
   <!-- Banner内容 - Tags列表（带active状态） -->
   <ul slot="banner-content" class="tags-container">
-    {allTags.map((t) => (
-      <li class:list={['item', { active: t === tag }]}>
-        <a href={`/tags/${t}`}><Icon name="ph:tag-fill" class="tag-icon" /> {t}</a>
-      </li>
-    ))}
+    {
+      allTags.map((t) => (
+        <li class:list={["item", { active: t === tag }]}>
+          <a href={`/tags/${t}`}>
+            <Icon name="ph:tag-fill" class="tag-icon" /> {t}
+          </a>
+        </li>
+      ))
+    }
   </ul>
-  
+
   <!-- 主内容 - 该标签下的文章列表 -->
   <PostsList posts={posts} />
 </BaseLayout>
 
 <style lang="less">
-.tags-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  padding: 16px;
-  background-color: var(--infobox-background-initial);
-  border-radius: 32px;
-  border: solid 2px var(--foreground-color);
-  backdrop-filter: var(--blur-val);
-  width: 768px;
-  z-index: 100;
-  list-style: none;
-  margin: 0;
+  .tags-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: 16px;
+    background-color: var(--infobox-background-initial);
+    border-radius: 32px;
+    border: solid 2px var(--foreground-color);
+    backdrop-filter: var(--blur-val);
+    width: 768px;
+    z-index: 100;
+    list-style: none;
+    margin: 0;
 
-  li {
-    margin: 8px;
+    li {
+      margin: 8px;
 
-    a {
-      color: var(--font-color-grey);
-      padding: 3px 5px;
-      color: var(--font-color-gold);
-      background-color: var(--btn-background);
-      border-radius: 5px;
-      transition: background-color 0.5s;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      a {
+        color: var(--font-color-grey);
+        padding: 3px 5px;
+        color: var(--font-color-gold);
+        background-color: var(--btn-background);
+        border-radius: 5px;
+        transition: background-color 0.5s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
 
-      &:hover {
-        background-color: var(--btn-hover);
+        &:hover {
+          background-color: var(--btn-hover);
+        }
+
+        .tag-icon {
+          width: 16px;
+          height: 16px;
+          vertical-align: middle;
+        }
       }
 
-      .tag-icon {
-        width: 16px;
-        height: 16px;
-        vertical-align: middle;
+      &.active a {
+        background-color: var(--btn-hover) !important;
       }
-    }
-
-    &.active a {
-      background-color: var(--btn-hover) !important;
     }
   }
-}
 
-@media (max-width: 768px) {
-  .tags-container {
-    width: auto;
-    li {
-      margin: 4px;
-      a {
-        font-size: 12px;
-        .tag-icon {
-          width: 12px;
-          height: 12px;
+  @media (max-width: 768px) {
+    .tags-container {
+      width: auto;
+      li {
+        margin: 4px;
+        a {
+          font-size: 12px;
+          .tag-icon {
+            width: 12px;
+            height: 12px;
+          }
         }
       }
     }
   }
-}
 </style>
