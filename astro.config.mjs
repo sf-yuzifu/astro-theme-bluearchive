@@ -8,6 +8,7 @@ import astroExpressiveCode from 'astro-expressive-code';
 import { createInlineSvgUrl, definePlugin } from '@expressive-code/core';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 import { remarkReadingTime } from './src/utils/remarkReadingTime.mjs';
+import icon from 'astro-icon';
 
 const copyIcon = createInlineSvgUrl(
 	`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.75'><path d='M3 19a2 2 0 0 1-1-2V2a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1'/><rect x='6' y='5' width='16' height='18' rx='1.5' ry='1.5'/></svg>`
@@ -57,6 +58,7 @@ export default defineConfig({
 			remarkPlugins: [remarkReadingTime],
 		}),
 		vue(),
-		sitemap()
+		sitemap(),
+		icon()
 	],
 });

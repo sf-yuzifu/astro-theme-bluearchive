@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
 
@@ -53,17 +54,19 @@ const postsWithReadingTime = await Promise.all(
                 </h1>
               </div>
               <div class="meta-info-bar">
-                <span class="iconfont icon-time time" />
+                <Icon name="ph:clock-bold" class="time" />
                 <div class="time-info">
-                  发布于 <FormattedDate date={post.data.pubDate} />
+                  <FormattedDate date={post.data.pubDate} />
                 </div>
                 <div class="seperator" />
                 {post.remarkPluginFrontmatter.wordCount && (
                   <>
+                    <Icon name="ph:file-text-bold" class="meta-icon" />
                     <div class="time-info">
-                      约 {post.remarkPluginFrontmatter.wordCount} 字
+                      {post.remarkPluginFrontmatter.wordCount} 字
                     </div>
                     <div class="seperator" />
+                    <Icon name="ph:coffee-bold" class="meta-icon" />
                     <div class="time-info">
                       {post.remarkPluginFrontmatter.minutesRead}
                     </div>
@@ -74,7 +77,10 @@ const postsWithReadingTime = await Promise.all(
                 <ul class="tags">
                   {post.data.tags.map((tag: string) => (
                     <li>
-                      <a href={`/tags/${tag}`}>{tag}</a>
+                      <a href={`/tags/${tag}`}>
+                        <Icon name="ph:tag-fill" class="tags-icon" />
+                        {tag}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -217,11 +223,13 @@ const postsWithReadingTime = await Promise.all(
             opacity: 0.75;
             font-size: 16px;
 
-            .time {
-              font-size: 13px;
+            .time,
+            .meta-icon {
+              width: 16px;
+              height: 16px;
               color: var(--font-color-grey);
-              margin: 3px 2px 0 0;
-              font-weight: bold;
+              margin-right: 4px;
+              vertical-align: middle;
             }
 
             .seperator {
@@ -245,7 +253,7 @@ const postsWithReadingTime = await Promise.all(
             align-items: center;
             flex-wrap: wrap;
             padding: 0;
-            margin-bottom: 6px;
+            margin: 0 0 6px 0;
             list-style: none;
 
             li {
@@ -253,9 +261,12 @@ const postsWithReadingTime = await Promise.all(
               justify-content: center;
               align-items: center;
               padding-top: 6px;
-              margin-right: 16px;
+              margin-right: 12px;
 
               a {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
                 color: var(--font-color-grey);
                 padding: 3px 5px;
                 color: var(--font-color-gold);
@@ -264,6 +275,13 @@ const postsWithReadingTime = await Promise.all(
                 transition: all 0.5s;
                 text-decoration: none;
                 font-size: 16px;
+
+                .tags-icon {
+                  width: 16px;
+                  height: 16px;
+                  color: var(--font-color-gold);
+                  vertical-align: middle;
+                }
 
                 &:hover {
                   background-color: var(--btn-hover);

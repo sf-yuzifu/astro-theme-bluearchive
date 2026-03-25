@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostsList from "../../components/PostsList.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
@@ -34,7 +35,7 @@ const allTags = [...new Set(allPosts.map((post) => post.data.tags || []).flat())
   <ul slot="banner-content" class="tags-container">
     {allTags.map((t) => (
       <li class:list={['item', { active: t === tag }]}>
-        <a href={`/tags/${t}`}><i class="iconfont icon-tag"></i> {t}</a>
+        <a href={`/tags/${t}`}><Icon name="ph:tag-fill" class="tag-icon" /> {t}</a>
       </li>
     ))}
   </ul>
@@ -71,12 +72,21 @@ const allTags = [...new Set(allPosts.map((post) => post.data.tags || []).flat())
       border-radius: 5px;
       transition: background-color 0.5s;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
 
       &:hover {
         background-color: var(--btn-hover);
       }
+
+      .tag-icon {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
     }
-    
+
     &.active a {
       background-color: var(--btn-hover) !important;
     }
@@ -90,8 +100,9 @@ const allTags = [...new Set(allPosts.map((post) => post.data.tags || []).flat())
       margin: 4px;
       a {
         font-size: 12px;
-        .icon-tag {
-          font-size: 12px;
+        .tag-icon {
+          width: 12px;
+          height: 12px;
         }
       }
     }

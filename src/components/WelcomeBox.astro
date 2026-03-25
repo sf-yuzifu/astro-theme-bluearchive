@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import avatarImage from '../assets/theme/banner/avatar.webp';
 import WelcomeBoxController from './WelcomeBoxController.vue';
 
@@ -27,7 +28,7 @@ const social = [
       {social.map((item) => (
         <li>
           <a href={item.url} target="_blank" rel="noopener noreferrer">
-            <i class={`iconfont icon-${item.icon} social`}></i>
+            <Icon name={`ph:${item.icon}-logo-bold`} class="social" />
           </a>
         </li>
       ))}
@@ -153,10 +154,11 @@ const social = [
     }
 
     .social {
-      font-size: 1.5vw;
-      font-weight: 600;
+      width: 1.5vw;
+      height: 1.5vw;
       transition: all 0.5s;
       color: var(--font-color-grey);
+      vertical-align: middle;
 
       &:hover {
         filter: drop-shadow(0 0 5px var(--font-color-grey));
@@ -198,7 +200,8 @@ const social = [
       width: 32vw;
 
       .social {
-        font-size: 2vh;
+        width: 2vh;
+        height: 2vh;
       }
     }
   }
