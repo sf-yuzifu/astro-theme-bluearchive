@@ -1,8 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import { Icon } from 'astro-icon/components';
-import avatarImage from '../assets/theme/banner/avatar.webp';
-import WelcomeBoxController from './WelcomeBoxController.vue';
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import avatarImage from "../assets/theme/banner/avatar.webp";
+import WelcomeBoxController from "./WelcomeBoxController.vue";
 
 // 可以在此处配置默认数据或通过 props 传入
 const name = "Astro Blog";
@@ -10,200 +10,215 @@ const welcomeText = "Welcome to Astro Blog";
 const mottos = ["A simple, fast, and modern blog.", "Built with Astro & Less."];
 const social = [
   { icon: "github", url: "https://github.com/withastro/astro" },
-  { icon: "twitter", url: "https://twitter.com/astrodotbuild" }
+  { icon: "twitter", url: "https://twitter.com/astrodotbuild" },
 ];
 ---
 
 <div class="welcome-box-container" id="welcome-box-container">
-  <div class="welcome-box" id="welcome-box-el" style="transform: rotateY(0deg) rotateX(0deg);">
-  <span class="welcome-text">{welcomeText}</span>
+  <div
+    class="welcome-box"
+    id="welcome-box-el"
+    style="transform: rotateY(0deg) rotateX(0deg);"
+  >
+    <span class="welcome-text">{welcomeText}</span>
     <div class="info-box" id="info-box-el">
-    <Image src={avatarImage} alt="avatar" class="avatar" />
-    <span class="name">{name}</span>
-    <span class="motto">
-      <span id="motto-text-el"></span>
-      <span class="pointer"></span>
-    </span>
-    <ul>
-      {social.map((item) => (
-        <li>
-          <a href={item.url} target="_blank" rel="noopener noreferrer">
-            <Icon name={`ph:${item.icon}-logo-bold`} class="social" />
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
+      <Image src={avatarImage} alt="avatar" class="avatar" />
+      <span class="name">{name}</span>
+      <span class="motto">
+        <span id="motto-text-el"></span>
+        <span class="pointer"></span>
+      </span>
+      <ul>
+        {
+          social.map((item) => (
+            <li>
+              <a href={item.url} target="_blank" rel="noopener noreferrer">
+                <Icon name={`ph:${item.icon}-logo-bold`} class="social" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </div>
 <WelcomeBoxController client:load mottos={mottos} />
 
 <style lang="less">
-.welcome-box-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5;
-  perspective: 1000px;
-}
-
-.welcome-box {
-  margin-top: 4.2vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  transition: transform 0.2s, color 0.5s, text-shadow 0.5s;
-}
-
-.welcome-text {
-  font-size: 4.5vw;
-  font-weight: bold;
-  color: var(--welcome-text-color);
-  text-shadow: var(--welcome-text-shadow);
-  text-align: center;
-  margin-bottom: 5vw;
-  user-select: none;
-}
-
-.info-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 6vh 2vw 3vh;
-  width: 40vw;
-  border-radius: 3vw;
-  box-shadow: var(--info-box-shadow);
-  backdrop-filter: var(--blur-val) saturate(120%);
-  background: linear-gradient(0deg, var(--infobox-background-initial), var(--infobox-background-final));
-
-
-  .avatar {
+  .welcome-box-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 7.5vw;
-    height: 7.5vw;
-    border-radius: 50%;
-    border: solid 3px var(--infobox-border-color);
-    transition: transform 0.6s ease, box-shadow 0.4s ease, filter 0.5s;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-    user-select: none;
-    filter: var(--img-brightness);
-
-    &:hover {
-      transform: translate(-50%, -50%) rotate(1turn) scale(1.1);
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-    }
+    left: 0;
+    z-index: 5;
+    perspective: 1000px;
   }
 
-  .name {
-    font-size: 1.5vw;
-    margin-top: 3vh;
-  }
-  .motto {
-    font-size: 1vw;
-    font-weight: bold;
-    animation: color-change 0.8s linear infinite;
-    margin-top: 3vh;
-    text-align: center;
-    .pointer {
-      display: inline-block;
-      margin: -0.5vh 0 0;
-      padding: 0;
-      vertical-align: middle;
-      width: 2px;
-      height: 1vw;
-      animation: color-change 0.8s linear infinite;
-      background-color: var(--pointerColor);
-    }
-    @keyframes color-change {
-      0%,
-      40% {
-        --pointerColor: var(--font-color-grey);
-      }
-
-      60%,
-      100% {
-        --pointerColor: transparent;
-      }
-    }
-  }
-
-  ul {
+  .welcome-box {
+    margin-top: 4.2vw;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 3.5vh;
-    width: 12vw;
-    padding: 0;
-    list-style: none;
-
-    li {
-        margin: 0;
-        padding: 0;
-    }
-
-    .social {
-      width: 1.5vw;
-      height: 1.5vw;
-      transition: all 0.5s;
-      color: var(--font-color-grey);
-      vertical-align: middle;
-
-      &:hover {
-        filter: drop-shadow(0 0 5px var(--font-color-grey));
-      }
-    }
+    justify-content: center;
+    z-index: 100;
+    transition:
+      transform 0.2s,
+      color 0.5s,
+      text-shadow 0.5s;
   }
-}
 
-@media (max-width: 768px) {
   .welcome-text {
-    font-size: 5vh;
-    margin-bottom: 10vh;
+    font-size: max(64px, 4.5vw);
+    font-weight: bold;
+    color: var(--welcome-text-color);
+    text-shadow: var(--welcome-text-shadow);
+    text-align: center;
+    margin-bottom: max(128px, 5vw);
+    user-select: none;
   }
 
   .info-box {
-    padding: 5vh 6vw 2vh;
-    width: 75vw;
-    border-radius: 4vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 6vh 2vw 3vh;
+    width: max(576px, 40vw);
+    border-radius: 3vw;
+    box-shadow: var(--info-box-shadow);
+    backdrop-filter: var(--blur-val) saturate(120%);
+    background: linear-gradient(
+      0deg,
+      var(--infobox-background-initial),
+      var(--infobox-background-final)
+    );
 
     .avatar {
-      width: 10vh;
-      height: 10vh;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: max(128px, 7.5vw);
+      height: max(128px, 7.5vw);
+      border-radius: 50%;
+      border: solid 3px var(--infobox-border-color);
+      transition:
+        transform 0.6s ease,
+        box-shadow 0.4s ease,
+        filter 0.5s;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      user-select: none;
+      filter: var(--img-brightness);
+
+      &:hover {
+        transform: translate(-50%, -50%) rotate(1turn) scale(1.1);
+        box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+      }
     }
 
     .name {
-      font-size: 2.5vh;
-      margin-top: 1.8vh;
+      font-size: max(32px, 1.5vw);
+      margin-top: 3vh;
     }
     .motto {
-      font-size: 1.5vh;
-      margin-top: 1.5vh;
+      font-size: max(18px, 1vw);
+      font-weight: bold;
+      animation: color-change 0.8s linear infinite;
+      margin-top: 3vh;
+      text-align: center;
       .pointer {
-        height: 1.5vh;
+        display: inline-block;
+        margin: -0.5vh 0 0;
+        padding: 0;
+        vertical-align: middle;
+        width: 2px;
+        height: max(18px, 1vw);
+        animation: color-change 0.8s linear infinite;
+        background-color: var(--pointerColor);
+      }
+      @keyframes color-change {
+        0%,
+        40% {
+          --pointerColor: var(--font-color-grey);
+        }
+
+        60%,
+        100% {
+          --pointerColor: transparent;
+        }
       }
     }
 
     ul {
-      margin-top: 1.8vh;
-      width: 32vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 3.5vh;
+      width: 12vw;
+      padding: 0;
+      list-style: none;
+
+      li {
+        margin: 0;
+        padding: 0;
+      }
 
       .social {
-        width: 2vh;
-        height: 2vh;
+        width: max(32px, 1.5vw);
+        height: max(32px, 1.5vw);
+        transition: all 0.5s;
+        color: var(--font-color-grey);
+        vertical-align: middle;
+
+        &:hover {
+          filter: drop-shadow(0 0 5px var(--font-color-grey));
+        }
       }
     }
   }
-}
+
+  @media (max-width: 768px) {
+    .welcome-text {
+      font-size: 5vh;
+      margin-bottom: 10vh;
+    }
+
+    .info-box {
+      padding: 5vh 6vw 2vh;
+      width: 75vw;
+      border-radius: 4vh;
+
+      .avatar {
+        width: 10vh;
+        height: 10vh;
+      }
+
+      .name {
+        font-size: 2.5vh;
+        margin-top: 1.8vh;
+      }
+      .motto {
+        font-size: 1.5vh;
+        margin-top: 1.5vh;
+        .pointer {
+          height: 1.5vh;
+        }
+      }
+
+      ul {
+        margin-top: 1.8vh;
+        width: 32vw;
+
+        .social {
+          width: 2vh;
+          height: 2vh;
+        }
+      }
+    }
+  }
 </style>
