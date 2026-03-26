@@ -1,20 +1,39 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+  const posts = await getCollection("blog");
+  const sortedPosts = posts.sort(
+    (a, b) =>
+      new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+  );
+  return sortedPosts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prevPost: sortedPosts[index - 1] || null,
+      nextPost: sortedPosts[index + 1] || null,
+    },
+  }));
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
+type Props = {
+  post: CollectionEntry<"blog">;
+  prevPost: CollectionEntry<"blog"> | null;
+  nextPost: CollectionEntry<"blog"> | null;
+};
+
+const { post, prevPost, nextPost } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 ---
 
-<BlogPost {...post.data} minutesRead={remarkPluginFrontmatter.minutesRead} wordCount={remarkPluginFrontmatter.wordCount}>
-	<Content />
+<BlogPost
+  {...post.data}
+  minutesRead={remarkPluginFrontmatter.minutesRead}
+  wordCount={remarkPluginFrontmatter.wordCount}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
+  <Content />
 </BlogPost>
