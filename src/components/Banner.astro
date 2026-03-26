@@ -159,6 +159,7 @@ const { coverImage, isPost = false } = Astro.props;
 
   type BannerWindow = Window & {
     __bannerIntroPlayed?: boolean;
+    __bannerInitialLoad?: boolean;
     __siriWave?: SiriWave;
     __siriWaveResizeBound?: boolean;
     __currentBgUrl?: string;
@@ -230,13 +231,24 @@ const { coverImage, isPost = false } = Astro.props;
 
     if (!currentLayer || !nextLayer) return;
 
+    // 清除之前的超时
     if (runtimeWindow.__bgTransitionTimeout) {
       clearTimeout(runtimeWindow.__bgTransitionTimeout);
       runtimeWindow.__bgTransitionTimeout = undefined;
     }
 
+    // 如果正在过渡，先完成之前的过渡
     if (runtimeWindow.__isBgTransitioning) {
       nextLayer.classList.remove("transitioning-in");
+      // 强制完成之前的过渡
+      const tempUrl = nextLayer.style.backgroundImage;
+      if (tempUrl) {
+        currentLayer.style.backgroundImage = tempUrl;
+        runtimeWindow.__currentBgUrl = tempUrl
+          .slice(4, -1)
+          .replace(/["']/g, "");
+      }
+      runtimeWindow.__isBgTransitioning = false;
     }
 
     const currentUrl = runtimeWindow.__currentBgUrl || getBannerBackgroundUrl();
@@ -248,6 +260,8 @@ const { coverImage, isPost = false } = Astro.props;
     await preloadImage(newUrl);
 
     nextLayer.style.backgroundImage = `url(${newUrl})`;
+    // 强制重绘以确保过渡动画触发
+    nextLayer.offsetHeight;
     nextLayer.classList.add("transitioning-in");
 
     const timeoutId = setTimeout(() => {
@@ -307,7 +321,14 @@ const { coverImage, isPost = false } = Astro.props;
   }
 
   document.addEventListener("astro:page-load", () => {
-    applyIntroAnimation();
+    // 只在路由切换时（非首次加载）移除入场动画类
+    if (runtimeWindow.__bannerInitialLoad) {
+      const bannerEl = document.querySelector(".banner") as HTMLElement | null;
+      if (bannerEl) {
+        bannerEl.classList.remove("loadingComplete");
+      }
+    }
+    runtimeWindow.__bannerInitialLoad = true;
     initWave();
     checkAndUpdateBackground();
     setupThemeObserver();
@@ -327,6 +348,7 @@ const { coverImage, isPost = false } = Astro.props;
     runtimeWindow.__siriWaveResizeBound = true;
   }
 
+  // 首次加载时播放入场动画
   applyIntroAnimation();
   initWave();
   checkAndUpdateBackground().catch((err) => {

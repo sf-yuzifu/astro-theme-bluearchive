@@ -57,4 +57,13 @@ export default defineConfig({
     sitemap(),
     icon(),
   ],
+  vite: {
+    optimizeDeps: {
+      include: [
+        "@waline/client",
+        "photoswipe/lightbox",
+        "photoswipe",
+      ],
+    },
+  },
 });
