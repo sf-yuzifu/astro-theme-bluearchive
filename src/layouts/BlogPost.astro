@@ -4,6 +4,7 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import { Icon } from "astro-icon/components";
+import WalineComment from "../components/WalineComment.astro";
 
 type Props = CollectionEntry<"blog">["data"] & {
   minutesRead?: string;
@@ -129,6 +130,9 @@ const {
       }
     </div>
   </nav>
+
+  <!-- 评论区 -->
+  <WalineComment />
 </BaseLayout>
 
 <style lang="less" is:global>

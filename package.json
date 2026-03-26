@@ -19,6 +19,7 @@
     "@astrojs/vue": "^6.0.1",
     "@expressive-code/plugin-line-numbers": "^0.41.7",
     "@iconify-json/ph": "^1.2.2",
+    "@waline/client": "^2.15.8",
     "astro": "^6.0.8",
     "astro-expressive-code": "^0.41.7",
     "astro-icon": "^1.1.5",

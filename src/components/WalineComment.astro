@@ -1,0 +1,129 @@
+---
+interface Props {
+  path?: string;
+}
+
+const { path } = Astro.props;
+---
+
+<div id="waline" class="waline-comment" data-path={path}></div>
+
+<script>
+  import { init } from "@waline/client";
+  import "@waline/client/dist/waline.css";
+
+  const walineContainer = document.getElementById("waline");
+  if (walineContainer && !walineContainer.dataset.loaded) {
+    const path = walineContainer.dataset.path || window.location.pathname;
+
+    init({
+      el: "#waline",
+      serverURL: "https://your-waline-server.vercel.app", // 替换为你的 Waline 服务地址
+      path: path,
+      dark: 'html[theme="dark"]',
+      lang: "zh-CN",
+      requiredMeta: ["nick", "mail"],
+      pageview: true,
+      comment: true,
+    });
+    walineContainer.dataset.loaded = "true";
+  }
+</script>
+
+<style is:global>
+  /* Waline 基础变量覆盖 - 使用更高优先级 */
+  .waline-comment {
+    --waline-font-size: 16px;
+    --waline-white: var(--foreground-color);
+    --waline-light-grey: var(--font-color-grey);
+    --waline-dark-grey: var(--font-color-grey);
+    --waline-theme-color: var(--color-blue);
+    --waline-active-color: var(--btn-hover);
+    --waline-color: var(--font-color-grey);
+    --waline-bgcolor: var(--foreground-color);
+    --waline-bgcolor-light: var(--background-color);
+    --waline-bgcolor-hover: var(--background-color);
+    --waline-border-color: var(--border-color);
+    --waline-disable-bgcolor: var(--background-color);
+    --waline-disable-color: var(--font-color-grey);
+    --waline-code-bgcolor: var(--background-color);
+    --waline-bq-color: var(--background-color);
+    --waline-info-bgcolor: var(--background-color);
+    --waline-info-color: var(--font-color-grey);
+    --waline-badge-color: var(--color-blue);
+    --waline-box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    --waline-avatar-radius: 50%;
+  }
+
+  /* 暗色模式变量 */
+  html[theme="dark"] .waline-comment {
+    --waline-white: var(--foreground-color);
+    --waline-light-grey: var(--font-color-grey);
+    --waline-dark-grey: var(--font-color-grey);
+    --waline-color: var(--font-color-grey);
+    --waline-bgcolor: var(--foreground-color);
+    --waline-bgcolor-light: var(--background-color);
+    --waline-bgcolor-hover: var(--background-color);
+    --waline-border-color: var(--border-color);
+    --waline-disable-bgcolor: var(--background-color);
+    --waline-disable-color: var(--font-color-grey);
+    --waline-code-bgcolor: var(--background-color);
+    --waline-bq-color: var(--background-color);
+    --waline-info-bgcolor: var(--background-color);
+    --waline-info-color: var(--font-color-grey);
+  }
+
+  /* Waline 容器样式 */
+  .waline-comment {
+    box-sizing: border-box;
+    margin: 32px auto 0;
+    max-width: 1200px;
+  }
+
+  /* 评论框面板 */
+  .waline-comment .wl-panel {
+    border-radius: 32px;
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    margin: 0;
+    margin-bottom: 16px;
+    padding: 8px;
+  }
+
+  /* 评论卡片 */
+  .waline-comment .wl-card {
+    border-radius: 16px;
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+
+  /* 头像样式 */
+  .waline-comment .wl-user-avatar img {
+    border-radius: 50%;
+  }
+
+  /* 按钮样式 */
+  .waline-comment .wl-btn {
+    border-radius: 8px;
+    transition: opacity 0.2s ease;
+  }
+
+  .waline-comment .wl-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* 输入框样式 */
+  .waline-comment .wl-input,
+  .waline-comment .wl-textarea {
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .waline-comment .wl-editor {
+    font-size: 16px;
+  }
+
+  /* 移动端适配 */
+  @media (max-width: 768px) {
+  }
+</style>
