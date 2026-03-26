@@ -10,13 +10,22 @@ const { path } = Astro.props;
 
 <script>
   import { init } from "@waline/client";
-  import "@waline/client/dist/waline.css";
 
-  const walineContainer = document.getElementById("waline");
-  if (walineContainer && !walineContainer.dataset.loaded) {
+  let walineInstance: any = null;
+
+  function initWaline() {
+    const walineContainer = document.getElementById("waline");
+    if (!walineContainer) return;
+
+    // 清理旧实例
+    if (walineInstance) {
+      walineInstance.destroy();
+      walineInstance = null;
+    }
+
     const path = walineContainer.dataset.path || window.location.pathname;
 
-    init({
+    walineInstance = init({
       el: "#waline",
       serverURL: "https://your-waline-server.vercel.app", // 替换为你的 Waline 服务地址
       path: path,
@@ -26,8 +35,25 @@ const { path } = Astro.props;
       pageview: true,
       comment: true,
     });
-    walineContainer.dataset.loaded = "true";
   }
+
+  // 页面加载完成后初始化
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWaline);
+  } else {
+    initWaline();
+  }
+
+  // Astro 页面切换后重新初始化
+  document.addEventListener("astro:page-load", initWaline);
+
+  // 清理旧实例
+  document.addEventListener("astro:before-swap", () => {
+    if (walineInstance) {
+      walineInstance.destroy();
+      walineInstance = null;
+    }
+  });
 </script>
 
 <style is:global>
