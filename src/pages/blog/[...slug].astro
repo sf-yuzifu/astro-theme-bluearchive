@@ -26,6 +26,10 @@ type Props = {
 
 const { post, prevPost, nextPost } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
+
+// Get enable flags from frontmatter with defaults
+const enableDonation = post.data.enableDonation ?? true;
+const enableNavigation = post.data.enableNavigation ?? true;
 ---
 
 <BlogPost
@@ -34,6 +38,8 @@ const { Content, remarkPluginFrontmatter } = await render(post);
   wordCount={remarkPluginFrontmatter.wordCount}
   prevPost={prevPost}
   nextPost={nextPost}
+  enableDonation={enableDonation}
+  enableNavigation={enableNavigation}
 >
   <Content />
 </BlogPost>

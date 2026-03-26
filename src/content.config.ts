@@ -18,6 +18,9 @@ const blog = defineCollection({
 		minutesRead: z.string().optional(),
 		wordCount: z.number().optional(),
 		tags: z.array(z.string()).optional(),
+		// Enable/disable donation section and post navigation
+		enableDonation: z.boolean().optional().default(true),
+		enableNavigation: z.boolean().optional().default(true),
 	}),
 });
 
