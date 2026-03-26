@@ -26,7 +26,7 @@ const searchData = posts.map((post) => ({
       autocomplete="off"
     />
     <ul class="search-list" id="search-list">
-      <span class="status" id="search-status">这里空空的</span>
+      <span class="empty" id="search-empty">这里空空的</span>
     </ul>
   </div>
 </div>
@@ -51,7 +51,7 @@ const searchData = posts.map((post) => ({
       const closeBtn = document.getElementById("close-btn");
       const searchInput = document.getElementById("search-input");
       const searchList = document.getElementById("search-list");
-      const statusEl = document.getElementById("search-status");
+      const emptyEl = document.getElementById("search-empty");
 
       if (!dialog) return;
 
@@ -88,7 +88,7 @@ const searchData = posts.map((post) => ({
       // 渲染搜索结果
       function renderResults(results) {
         if (results.length === 0) {
-          searchList.innerHTML = '<span class="status">这里空空的</span>';
+          searchList.innerHTML = '<span class="empty">这里空空的</span>';
           return;
         }
 
@@ -96,7 +96,21 @@ const searchData = posts.map((post) => ({
           .map(
             (post) => `
           <li class="search-item">
-            <a href="${post.href}">${escapeHtml(post.title)}</a>
+            <a href="${post.href}">
+              <div class="item-content">
+                <svg class="item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <div class="item-text">
+                  <span class="item-title">${escapeHtml(post.title)}</span>
+                  <span class="item-desc">${escapeHtml(post.description || "")}</span>
+                </div>
+              </div>
+            </a>
           </li>
         `,
           )
@@ -115,7 +129,7 @@ const searchData = posts.map((post) => ({
       // 搜索处理
       function handleSearch() {
         const query = searchInput.value;
-        statusEl.textContent = "搜索中……";
+        emptyEl.textContent = "搜索中……";
 
         if (timerId) {
           clearTimeout(timerId);
@@ -124,9 +138,9 @@ const searchData = posts.map((post) => ({
         timerId = setTimeout(() => {
           const results = performSearch(query);
           if (results.length > 0) {
-            statusEl.textContent = "搜到了~";
+            emptyEl.textContent = "搜到了~";
           } else {
-            statusEl.textContent = "这里空空的";
+            emptyEl.textContent = "这里空空的";
           }
           renderResults(results);
         }, 500);
@@ -154,7 +168,7 @@ const searchData = posts.map((post) => ({
 
       // 点击搜索结果关闭对话框（事件委托）
       function handleSearchListClick(e) {
-        const link = e.target.closest('a');
+        const link = e.target.closest("a");
         if (link) {
           closeDialog();
         }
@@ -230,7 +244,7 @@ const searchData = posts.map((post) => ({
   }
 
   .dialog-content::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -269,6 +283,13 @@ const searchData = posts.map((post) => ({
     justify-content: center;
     padding: 0;
     line-height: 1;
+    color: var(--font-color-grey);
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    color: var(--color-blue);
+    transform: scale(1.1);
   }
 
   #search-input {
@@ -279,7 +300,7 @@ const searchData = posts.map((post) => ({
     padding: 0 16px;
     background-color: var(--search-input-bg);
     border: 3px solid var(--search-input-border);
-    border-radius: 5px;
+    border-radius: 6px;
     box-sizing: border-box;
     font-size: 16px;
   }
@@ -296,40 +317,110 @@ const searchData = posts.map((post) => ({
   .search-list {
     width: 100%;
     min-height: 100px;
+    max-height: 400px;
+    overflow-y: auto;
     box-sizing: border-box;
     background-color: var(--search-list-bg);
-    border-radius: 8px;
-    padding: 10px;
+    border-radius: 6px 6px 16px 16px;
+    padding: 20px;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
     list-style: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
-  .status {
+  :global(.empty) {
     text-align: center;
     color: var(--font-color-grey);
-    opacity: 0.6;
-    padding: 20px;
+    opacity: 0.7;
+    padding: 40px 20px;
+    font-size: 14px;
   }
 
-  .search-item {
+  :global(.search-item) {
     background-color: var(--search-item-bg);
-    border-radius: 5px;
-    box-shadow: 3px 3px 3px var(--search-item-shadow);
-    padding: 0 10px;
-    height: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    border-radius: 20px;
+    border-left: solid 6px var(--pot-border-left);
+    background-image: var(--deco1);
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.6);
+    padding: 0;
+    transition: all 0.5s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
   }
 
-  .search-item a {
-    height: 50px;
-    line-height: 50px;
+  :global(.search-item:hover) {
+    box-shadow: 0px 0px 15px rgb(var(--blue-shadow-color), 0.8);
+    transform: translateY(-2px);
+  }
+
+  :global(.search-item a) {
     color: var(--font-color-grey);
     text-decoration: none;
+    display: block;
+    padding: 20px 24px;
+  }
+
+  :global(.item-content) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  :global(.item-icon) {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: var(--font-color-grey);
+    opacity: 0.75;
+    transition: all 0.5s;
+    padding: 6px;
+    background: rgba(var(--blue-shadow-color), 0.1);
+    border-radius: 8px;
+  }
+
+  :global(.search-item:hover .item-icon) {
+    color: var(--pot-border-left);
+    opacity: 1;
+    background: rgba(var(--blue-shadow-color), 0.2);
+  }
+
+  :global(.item-text) {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.item-title) {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--font-color-grey);
+    transition: all 0.5s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+
+  :global(.search-item:hover .item-title) {
+    text-shadow: 0 0 3px var(--font-color-grey);
+  }
+
+  :global(.item-desc) {
+    font-size: 13px;
+    color: var(--font-color-grey);
+    opacity: 0.65;
+    line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -339,6 +430,25 @@ const searchData = posts.map((post) => ({
     .dialog-content {
       top: 5%;
     }
+  }
+
+  /* 搜索列表滚动条样式 */
+  .search-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .search-list::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 8px 0;
+  }
+
+  .search-list::-webkit-scrollbar-thumb {
+    background: rgba(var(--blue-shadow-color), 0.4);
+    border-radius: 10px;
+  }
+
+  .search-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--blue-shadow-color), 0.6);
   }
 
   /* 动画 */
