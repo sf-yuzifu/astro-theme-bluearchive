@@ -71,11 +71,12 @@ projects:
       url: "https://github.com/withastro/astro"
       description: "使用 Astro 构建的个人博客网站，支持 Markdown 和 MDX"
       tags: ["Astro", "TypeScript", "Less"]
-      image: "/blog-placeholder-1.jpg"
+      icon: "ph:rocket-launch-bold"
     - name: "Example Project"
       url: "https://example.com"
       description: "一个示例项目用于演示"
       tags: ["React", "Node.js"]
+      icon: "ph:code-bold"
 
 # 评论系统配置
 comments:

@@ -1,11 +1,17 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION, PROJECTS, PROJECTS_TITLE, PROJECTS_DESCRIPTION, PROJECTS_ENABLE } from "../consts";
 
 // 从配置文件读取项目配置
 const projectsTitle = PROJECTS_TITLE || "我的项目";
 const projectsDescription = PROJECTS_DESCRIPTION || "开源作品与个人项目展示";
+
+// 判断是否是外部链接
+function isExternalUrl(url: string): boolean {
+  return url?.startsWith('http://') || url?.startsWith('https://');
+}
 ---
 
 {PROJECTS_ENABLE && (
@@ -28,7 +34,15 @@ const projectsDescription = PROJECTS_DESCRIPTION || "开源作品与个人项目
           <li class="project-card">
             <a href={project.url} target="_blank" rel="noopener noreferrer">
               <div class="project-icon">
-                <Icon name="ph:folder-open-bold" class="folder-icon" />
+                {project.image ? (
+                  isExternalUrl(project.image) ? (
+                    <img src={project.image} alt={project.name} class="project-img" />
+                  ) : (
+                    <Image src={project.image} alt={project.name} class="project-img" width={64} height={64} />
+                  )
+                ) : (
+                  <Icon name={project.icon || "ph:folder-open-bold"} class="folder-icon" />
+                )}
               </div>
               <div class="project-info">
                 <h3>{project.name}</h3>
@@ -161,11 +175,18 @@ const projectsDescription = PROJECTS_DESCRIPTION || "开源作品与个人项目
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
 
         .folder-icon {
           width: 32px;
           height: 32px;
           color: var(--font-color-gold);
+        }
+
+        .project-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
 

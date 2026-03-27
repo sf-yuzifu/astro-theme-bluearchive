@@ -53,6 +53,7 @@ export interface Project {
   description: string;
   tags?: string[];
   image?: string;
+  icon?: string;
 }
 
 export interface ProjectsConfig {
