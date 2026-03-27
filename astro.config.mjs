@@ -10,10 +10,14 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { remarkReadingTime } from "./src/utils/remarkReadingTime.mjs";
 import icon from "astro-icon";
 import { configReloadIntegration } from "./src/integrations/configReload.ts";
+import { loadConfig } from "./src/config/index.ts";
+
+// 加载配置文件
+const config = loadConfig();
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: config.site.url,
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover',
