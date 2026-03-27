@@ -14,6 +14,10 @@ import { configReloadIntegration } from "./src/integrations/configReload.ts";
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com",
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   markdown: {
     remarkPlugins: [remarkReadingTime],
   },
