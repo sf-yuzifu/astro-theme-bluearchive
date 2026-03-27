@@ -113,10 +113,10 @@ sponsor:
 footer:
   # 页脚链接
   links:
-    - name: "GitHub"
-      url: "https://github.com"
-    - name: "RSS"
-      url: "/rss.xml"
+    - name: "Astro"
+      url: "https://astro.build/"
+    - name: "BlogArchive"
+      url: "https://github.com/sf-yuzifu/astro-theme-bluearchive"
 
 # SEO 相关
 seo:
