@@ -3,9 +3,14 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import WalineComment from "../components/WalineComment.astro";
+import WalinePageView from "../components/WalinePageView.astro";
 import PostFooter from "../components/PostFooter.astro";
 import PhotoSwipe from "../components/PhotoSwipe.astro";
-import { FEATURE_READING_TIME } from "../consts";
+import {
+  FEATURE_READING_TIME,
+  COMMENTS_ENABLE,
+  COMMENTS_TYPE,
+} from "../consts";
 
 type Props = CollectionEntry<"blog">["data"] & {
   minutesRead?: string;
@@ -27,6 +32,9 @@ const {
   enableDonation,
   enableNavigation,
 } = Astro.props;
+
+// 是否启用 Waline 阅读量
+const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
 ---
 
 <BaseLayout
@@ -53,6 +61,7 @@ const {
           ),
           FEATURE_READING_TIME && wordCount && <>约 {wordCount} 字</>,
           FEATURE_READING_TIME && minutesRead && <>{minutesRead}</>,
+          enableWalinePageView && <WalinePageView />,
         ]
           .filter(Boolean)
           .map((item, index, arr) => (

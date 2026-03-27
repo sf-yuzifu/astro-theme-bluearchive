@@ -1,0 +1,76 @@
+---
+import {
+  COMMENTS_ENABLE,
+  COMMENTS_TYPE,
+  COMMENTS_WALINE_SERVER_URL,
+} from "../consts";
+
+interface Props {
+  path?: string;
+}
+
+const { path } = Astro.props;
+
+// 从配置文件读取评论配置
+const enable = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
+const serverURL = COMMENTS_WALINE_SERVER_URL;
+---
+
+{
+  enable && serverURL && (
+    <span class="waline-pageview" data-path={path} data-server-url={serverURL}>
+      <span class="waline-pageview-count" data-path={path}>
+        ?
+      </span>{" "}
+      次阅读
+    </span>
+  )
+}
+
+<script>
+  import { pageviewCount } from "@waline/client";
+
+  function initPageView() {
+    const containers = document.querySelectorAll(".waline-pageview");
+
+    containers.forEach((container) => {
+      const serverURL = container.dataset.serverUrl;
+      const path = container.dataset.path || window.location.pathname;
+
+      if (!serverURL) return;
+
+      // 使用 Waline 的 pageviewCount API
+      pageviewCount({
+        serverURL: serverURL,
+        path: path,
+      }).then((count: number) => {
+        const countEl = container.querySelector(".waline-pageview-count");
+        if (countEl) {
+          countEl.textContent = String(count || 0);
+        }
+      });
+    });
+  }
+
+  // 页面加载完成后初始化
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPageView);
+  } else {
+    initPageView();
+  }
+
+  // Astro 页面切换后重新初始化
+  document.addEventListener("astro:page-load", initPageView);
+</script>
+
+<style>
+  .waline-pageview {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .waline-pageview-count {
+    font-weight: 500;
+  }
+</style>
