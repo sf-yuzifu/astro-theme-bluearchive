@@ -7,9 +7,11 @@ import { FEATURE_READING_TIME } from "../consts";
 
 interface Props {
   posts?: any[];
+  pageSize?: number;
 }
 
 let posts = Astro.props.posts;
+const pageSize = Astro.props.pageSize || 10;
 
 // 如果没有传入 posts，则默认获取全部 blog 集合
 if (!posts) {
@@ -28,80 +30,279 @@ const postsWithReadingTime = await Promise.all(
     };
   }),
 );
+
+const totalPosts = postsWithReadingTime.length;
+const totalPages = Math.ceil(totalPosts / pageSize);
+const hasPagination = totalPages > 1;
 ---
 
-<div class="container posts-content">
-  <div class="posts-list">
+<div
+  class="container posts-content"
+  data-total-pages={totalPages}
+  data-page-size={pageSize}
+>
+  <div class="posts-list" id="posts-list">
     {
-      postsWithReadingTime.map((post) => (
-        <article class="post">
-          <header class="post-header">
-            {post.data.heroImage && (
-              <div class="cover-container">
-                <Image
-                  src={post.data.heroImage}
-                  class="cover-image"
-                  alt={`${post.data.title}-cover`}
-                  width={720}
-                  height={360}
-                />
-              </div>
-            )}
-            <div class="header-content">
-              <div class="title">
-                {!post.data.heroImage && <div class="title-dot" />}
-                <h1 class="name">
-                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-                </h1>
-              </div>
-              <div class="meta-info-bar">
-                <Icon name="ph:clock-bold" class="time" />
-                <div class="time-info">
-                  <FormattedDate date={post.data.pubDate} />
+      postsWithReadingTime.map((post, index) => {
+        const pageNum = Math.floor(index / pageSize) + 1;
+        const isVisible = pageNum === 1;
+        return (
+          <article
+            class="post"
+            data-post-id={post.id}
+            data-page={pageNum}
+            style={isVisible ? "" : "display: none;"}
+          >
+            <header class="post-header">
+              {post.data.heroImage && (
+                <div class="cover-container">
+                  <Image
+                    src={post.data.heroImage}
+                    class="cover-image"
+                    alt={`${post.data.title}-cover`}
+                    width={720}
+                    height={360}
+                  />
                 </div>
-                <div class="seperator" />
-                {FEATURE_READING_TIME &&
-                  post.remarkPluginFrontmatter.wordCount && (
-                    <>
-                      <Icon name="ph:file-text-bold" class="meta-icon" />
-                      <div class="time-info">
-                        {post.remarkPluginFrontmatter.wordCount} 字
-                      </div>
-                      <div class="seperator" />
-                      <Icon name="ph:coffee-bold" class="meta-icon" />
-                      <div class="time-info">
-                        {post.remarkPluginFrontmatter.minutesRead}
-                      </div>
-                    </>
-                  )}
-              </div>
-              {post.data.tags && post.data.tags.length > 0 && (
-                <ul class="tags">
-                  {post.data.tags.map((tag: string) => (
-                    <li>
-                      <a href={`/tags/${tag}`}>
-                        <Icon name="ph:tag-fill" class="tags-icon" />
-                        {tag}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               )}
-              <div
-                class:list={[
-                  "excerpt",
-                  { "has-tags": post.data.tags && post.data.tags.length > 0 },
-                ]}
-              >
-                <p>{post.data.description}</p>
+              <div class="header-content">
+                <div class="title">
+                  {!post.data.heroImage && <div class="title-dot" />}
+                  <h1 class="name">
+                    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                  </h1>
+                </div>
+                <div class="meta-info-bar">
+                  <Icon name="ph:clock-bold" class="time" />
+                  <div class="time-info">
+                    <FormattedDate date={post.data.pubDate} />
+                  </div>
+                  <div class="seperator" />
+                  {FEATURE_READING_TIME &&
+                    post.remarkPluginFrontmatter.wordCount && (
+                      <>
+                        <Icon name="ph:file-text-bold" class="meta-icon" />
+                        <div class="time-info">
+                          {post.remarkPluginFrontmatter.wordCount} 字
+                        </div>
+                        <div class="seperator" />
+                        <Icon name="ph:coffee-bold" class="meta-icon" />
+                        <div class="time-info">
+                          {post.remarkPluginFrontmatter.minutesRead}
+                        </div>
+                      </>
+                    )}
+                </div>
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <ul class="tags">
+                    {post.data.tags.map((tag: string) => (
+                      <li>
+                        <a href={`/tags/${tag}`}>
+                          <Icon name="ph:tag-fill" class="tags-icon" />
+                          {tag}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div
+                  class:list={[
+                    "excerpt",
+                    { "has-tags": post.data.tags && post.data.tags.length > 0 },
+                  ]}
+                >
+                  <p>{post.data.description}</p>
+                </div>
               </div>
-            </div>
-          </header>
-        </article>
-      ))
+            </header>
+          </article>
+        );
+      })
     }
   </div>
+
+  {
+    hasPagination && (
+      <div class="pagination" id="pagination">
+        <button class="page-btn prev-btn" id="prev-btn" disabled>
+          <Icon name="ph:caret-left-bold" class="arrow-icon" />
+        </button>
+
+        <div class="page-numbers" id="page-numbers">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              class={`page-number ${page === 1 ? "active" : ""}`}
+              data-page={page}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+
+        <button class="page-btn next-btn" id="next-btn">
+          <Icon name="ph:caret-right-bold" class="arrow-icon" />
+        </button>
+      </div>
+    )
+  }
 </div>
+
+<script>
+  function initPagination() {
+    const container = document.querySelector(".posts-content") as HTMLElement;
+    if (!container) return;
+
+    const totalPages = parseInt(container.dataset.totalPages || "1");
+    const pageSize = parseInt(container.dataset.pageSize || "10");
+
+    if (totalPages <= 1) return;
+
+    const posts = container.querySelectorAll(
+      ".post",
+    ) as NodeListOf<HTMLElement>;
+    const prevBtn = container.querySelector("#prev-btn") as HTMLButtonElement;
+    const nextBtn = container.querySelector("#next-btn") as HTMLButtonElement;
+    const pageNumbersContainer = container.querySelector(
+      "#page-numbers",
+    ) as HTMLElement;
+
+    let currentPage = 1;
+
+    // 显示/隐藏文章
+    function showPage(page: number) {
+      posts.forEach((post) => {
+        const postPage = parseInt(post.dataset.page || "1");
+        post.style.display = postPage === page ? "" : "none";
+      });
+    }
+
+    // 更新分页按钮状态
+    function updatePaginationButtons() {
+      if (prevBtn) {
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.style.opacity = currentPage === 1 ? "0" : "1";
+      }
+      if (nextBtn) {
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.style.opacity = currentPage === totalPages ? "0" : "1";
+      }
+    }
+
+    // 渲染页码
+    function renderPageNumbers() {
+      if (!pageNumbersContainer) return;
+
+      if (totalPages <= 7) {
+        // 页数较少时，显示所有页码
+        const buttons = pageNumbersContainer.querySelectorAll(".page-number");
+        buttons.forEach((btn) => {
+          const page = parseInt((btn as HTMLElement).dataset.page || "1");
+          if (page === currentPage) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      } else {
+        // 页数较多时，显示省略号
+        let pages: (number | string)[] = [1];
+
+        if (currentPage > 3) {
+          pages.push("...");
+        }
+
+        const startPage = Math.max(2, currentPage - 1);
+        const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(i);
+        }
+
+        if (currentPage < totalPages - 2) {
+          pages.push("...");
+        }
+
+        pages.push(totalPages);
+
+        pageNumbersContainer.innerHTML = pages
+          .map((page) => {
+            if (page === "...") {
+              return '<span class="ellipsis">...</span>';
+            }
+            return `<button class="page-number ${page === currentPage ? "active" : ""}" data-page="${page}">${page}</button>`;
+          })
+          .join("");
+      }
+    }
+
+    // 跳转到指定页
+    function goToPage(page: number) {
+      if (page < 1 || page > totalPages || page === currentPage) return;
+
+      currentPage = page;
+      showPage(currentPage);
+      renderPageNumbers();
+      updatePaginationButtons();
+
+      // 滚动到列表顶部
+      container.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // 更新 URL
+      const url = new URL(window.location.href);
+      if (currentPage > 1) {
+        url.searchParams.set("page", currentPage.toString());
+      } else {
+        url.searchParams.delete("page");
+      }
+      window.history.pushState({}, "", url.toString());
+    }
+
+    // 事件监听
+    prevBtn?.addEventListener("click", () => goToPage(currentPage - 1));
+    nextBtn?.addEventListener("click", () => goToPage(currentPage + 1));
+
+    pageNumbersContainer?.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("page-number")) {
+        const page = parseInt(target.dataset.page || "1");
+        goToPage(page);
+      }
+    });
+
+    // 监听浏览器前进后退
+    window.addEventListener("popstate", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageParam = urlParams.get("page");
+      const page = pageParam ? parseInt(pageParam) : 1;
+      if (page >= 1 && page <= totalPages && page !== currentPage) {
+        currentPage = page;
+        showPage(currentPage);
+        renderPageNumbers();
+        updatePaginationButtons();
+      }
+    });
+
+    // 初始化 URL 页码
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = urlParams.get("page");
+    if (pageParam) {
+      const page = parseInt(pageParam);
+      if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        showPage(currentPage);
+        renderPageNumbers();
+        updatePaginationButtons();
+      }
+    }
+  }
+
+  // 初始化
+  initPagination();
+
+  // Astro 视图过渡后重新初始化
+  document.addEventListener("astro:page-load", initPagination);
+  document.addEventListener("astro:after-swap", initPagination);
+</script>
 
 <style lang="less">
   .posts-content {
@@ -356,6 +557,125 @@ const postsWithReadingTime = await Promise.all(
             }
           }
         }
+      }
+    }
+  }
+
+  // 分页样式
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 50px;
+    padding: 0;
+
+    .page-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      transition: all 0.3s;
+      opacity: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:disabled {
+        cursor: default;
+        opacity: 0;
+      }
+
+      .arrow-icon {
+        width: 36px;
+        height: 36px;
+        color: var(--icon-color);
+      }
+    }
+
+    .prev-btn {
+      animation: arrow-pre 1s ease-in-out infinite alternate;
+    }
+
+    .next-btn {
+      animation: arrow-next 1s ease-in-out infinite alternate;
+    }
+
+    .page-numbers {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      border-radius: 6px;
+      color: var(--icon-color);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: var(--btn-hover);
+        color: var(--font-color-gold);
+      }
+
+      &.active {
+        background-color: var(--btn-hover);
+        color: var(--font-color-gold);
+        font-weight: bold;
+      }
+    }
+
+    .ellipsis {
+      margin: 0 4px;
+      color: var(--icon-color);
+      font-size: 16px;
+    }
+  }
+
+  @keyframes arrow-pre {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-10px);
+    }
+  }
+
+  @keyframes arrow-next {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(10px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pagination {
+      margin-top: 32px;
+
+      .page-btn {
+        .arrow-icon {
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      .page-number {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+
+      .page-numbers {
+        gap: 4px;
       }
     }
   }
