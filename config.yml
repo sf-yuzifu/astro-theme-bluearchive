@@ -15,11 +15,11 @@ site:
   lang: "zh-CN"
   # 备案号（可选）
   # 支持单个字符串或数组格式
-  # icp: "萌ICP备20225266号"
+  # icp: "萌ICP备114514号"
   # 或带自定义链接：
   icp:
-    - text: "萌ICP备20225266号"
-      url: "https://icp.gov.moe/?keyword=20225266"
+    - text: "萌ICP备114514号"
+      url: "https://icp.gov.moe/"
     # 可以添加多个备案号
     # - text: "京ICP备12345678号"
     #   url: "https://beian.miit.gov.cn/"
