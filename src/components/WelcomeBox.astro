@@ -3,15 +3,37 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import avatarImage from "../assets/theme/banner/avatar.webp";
 import WelcomeBoxController from "./WelcomeBoxController.vue";
+import {
+  SITE_TITLE,
+  SITE_AVATAR,
+  SITE_DESCRIPTION,
+  SITE_SOCIAL,
+  HITOKOTO_ENABLE,
+  HITOKOTO_LIST,
+} from "../consts";
 
-// 可以在此处配置默认数据或通过 props 传入
-const name = "Astro Blog";
-const welcomeText = "Welcome to Astro Blog";
-const mottos = ["A simple, fast, and modern blog.", "Built with Astro & Less."];
-const social = [
-  { icon: "github", url: "https://github.com/withastro/astro" },
-  { icon: "twitter", url: "https://twitter.com/astrodotbuild" },
-];
+// 从配置文件读取站点信息
+const name = SITE_TITLE;
+const welcomeText = SITE_DESCRIPTION;
+// 一言/座右铭：优先使用配置的一言列表，否则使用默认
+const mottos =
+  HITOKOTO_ENABLE && HITOKOTO_LIST.length > 0
+    ? HITOKOTO_LIST
+    : [SITE_DESCRIPTION, "Built with Astro & Less."];
+// 优先使用配置的社交链接，否则使用默认值
+const social =
+  SITE_SOCIAL.length > 0
+    ? SITE_SOCIAL
+    : [
+        { icon: "github", url: "https://github.com/withastro/astro" },
+        { icon: "twitter", url: "https://twitter.com/astrodotbuild" },
+      ];
+
+// 检查是否使用外部 URL 或本地图片
+const isExternalAvatar =
+  SITE_AVATAR?.startsWith("http") || SITE_AVATAR?.startsWith("//");
+// 如果是外部链接，直接使用；否则使用本地默认图片
+const avatarSrc = isExternalAvatar ? SITE_AVATAR : null;
 ---
 
 <div class="welcome-box-container" id="welcome-box-container">
@@ -22,7 +44,13 @@ const social = [
   >
     <span class="welcome-text">{welcomeText}</span>
     <div class="info-box" id="info-box-el">
-      <Image src={avatarImage} alt="avatar" class="avatar" />
+      {
+        avatarSrc ? (
+          <img src={avatarSrc} alt="avatar" class="avatar" />
+        ) : (
+          <Image src={avatarImage} alt="avatar" class="avatar" />
+        )
+      }
       <span class="name">{name}</span>
       <span class="motto">
         <span id="motto-text-el"></span>
@@ -33,7 +61,7 @@ const social = [
           social.map((item) => (
             <li>
               <a href={item.url} target="_blank" rel="noopener noreferrer">
-                <Icon name={`ph:${item.icon}-logo-bold`} class="social" />
+                <Icon name={`fa-brands:${item.icon}`} class="social" />
               </a>
             </li>
           ))

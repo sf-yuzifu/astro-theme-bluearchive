@@ -1,25 +1,61 @@
 ---
-import { Image } from 'astro:assets';
-import footLogo from '../assets/theme/icon/footLogo.svg';
+import { Image } from "astro:assets";
+import footLogo from "../assets/theme/icon/footLogo.svg";
+import { FOOTER_LINKS, SITE_TITLE, SITE_AUTHOR, SITE_ICP } from "../consts";
+import type { ICPRecord } from "../consts";
+
 const today = new Date();
-const footerName = "Astro Blog";
-const poweredList = [{ name: 'Astro', url: 'https://astro.build' }];
+// 从配置文件读取页脚信息
+const footerName = SITE_AUTHOR || SITE_TITLE;
+const poweredList =
+  FOOTER_LINKS.length > 0
+    ? FOOTER_LINKS
+    : [{ name: "Astro", url: "https://astro.build" }];
+
+// 处理 ICP 配置：支持字符串或数组格式
+const icpList: ICPRecord[] = (() => {
+  if (!SITE_ICP) return [];
+  if (typeof SITE_ICP === "string") {
+    return [{ text: SITE_ICP, url: "" }];
+  }
+  return SITE_ICP;
+})();
 ---
 
 <footer class="container" transition:persist>
   <div class="footer-info">
-    <span>© {today.getFullYear()} {footerName} </span>
-    <br />
-    <span>Powered by
-      {poweredList.map((obj, ind) => (
-        <>
-          <span class="powered-list">
-            <a href={obj.url}>{obj.name}</a>
-          </span>
-          {ind < poweredList.length - 1 ? ' & ' : ''}
-        </>
-      ))}
-    </span>
+    <span>© {today.getFullYear()} {footerName}</span>
+    <div class="footer-line">
+      <span
+        >Powered by
+        {
+          poweredList.map((obj, ind) => (
+            <>
+              <span class="powered-list">
+                <a href={obj.url}>{obj.name}</a>
+              </span>
+              {ind < poweredList.length - 1 ? " & " : ""}
+            </>
+          ))
+        }
+      </span>
+      {
+        icpList.map((icp, ind) => (
+          <>
+            <span class="separator">|</span>
+            <span class="icp">
+              {icp.url ? (
+                <a href={icp.url} target="_blank" rel="noopener noreferrer">
+                  {icp.text}
+                </a>
+              ) : (
+                <span>{icp.text}</span>
+              )}
+            </span>
+          </>
+        ))
+      }
+    </div>
   </div>
   <div class="footer-logo">
     <Image src={footLogo} alt="logo-vitepress" />
@@ -27,53 +63,66 @@ const poweredList = [{ name: 'Astro', url: 'https://astro.build' }];
 </footer>
 
 <style lang="less">
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 72px;
-  width: 100%;
-  z-index: 100;
-  margin: 50px auto 0;
-  padding: 0 16px;
-  box-sizing: border-box;
-  border-radius: 32px 32px 0 0;
-  border-top: solid 2px var(--foreground-color);
-  border-left: solid 2px var(--foreground-color);
-  border-right: solid 2px var(--foreground-color);
-  background: linear-gradient(0.75turn, transparent, var(--foreground-color) 25%),
-    var(--triangle-background);
-  backdrop-filter: var(--blur-val);
-  box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
-}
-
-.footer-info {
-  line-height: 1.5;
-  font-size: 14px;
-  a {
-    color: var(--color-blue);
-    text-decoration: none;
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    width: 100%;
+    z-index: 100;
+    margin: 50px auto 0;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border-radius: 32px 32px 0 0;
+    border-top: solid 2px var(--foreground-color);
+    border-left: solid 2px var(--foreground-color);
+    border-right: solid 2px var(--foreground-color);
+    background:
+      linear-gradient(0.75turn, transparent, var(--foreground-color) 25%),
+      var(--triangle-background);
+    backdrop-filter: var(--blur-val);
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
   }
-}
 
-.footer-logo {
-  display: flex;
-  align-items: center;
-  img {
-    height: 36px;
-    width: auto;
-    filter: drop-shadow(0 0 8px #328cfa);
-  }
-}
-
-@media (max-width: 768px) {
   .footer-info {
-    font-size: 12px;
-  }
-  .footer-logo {
-    img {
-      height: 26px;
+    line-height: 1.5;
+    font-size: 14px;
+
+    .footer-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0 8px;
+    }
+
+    .separator {
+      opacity: 0.5;
+    }
+
+    a {
+      color: var(--color-blue);
+      text-decoration: none;
     }
   }
-}
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    img {
+      height: 36px;
+      width: auto;
+      filter: drop-shadow(0 0 8px #328cfa);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer-info {
+      font-size: 12px;
+    }
+    .footer-logo {
+      img {
+        height: 26px;
+      }
+    }
+  }
 </style>

@@ -1,18 +1,23 @@
 ---
 import { Icon } from "astro-icon/components";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { SITE_TITLE, SITE_DESCRIPTION, PROJECTS } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION, PROJECTS, PROJECTS_TITLE, PROJECTS_DESCRIPTION, PROJECTS_ENABLE } from "../consts";
+
+// 从配置文件读取项目配置
+const projectsTitle = PROJECTS_TITLE || "我的项目";
+const projectsDescription = PROJECTS_DESCRIPTION || "开源作品与个人项目展示";
 ---
 
+{PROJECTS_ENABLE && (
 <BaseLayout
-  title={`Projects | ${SITE_TITLE}`}
+  title={`${projectsTitle} | ${SITE_TITLE}`}
   description={SITE_DESCRIPTION}
   isPost={true}
 >
   <!-- Banner内容 -->
   <div slot="banner-content" class="projects-banner">
-    <h1 class="title">我的项目</h1>
-    <span class="status">开源作品与个人项目展示</span>
+    <h1 class="title">{projectsTitle}</h1>
+    <span class="status">{projectsDescription}</span>
   </div>
 
   <!-- 项目列表 -->
@@ -44,6 +49,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, PROJECTS } from "../consts";
     </ul>
   </div>
 </BaseLayout>
+)}
 
 <style lang="less">
   .projects-banner {

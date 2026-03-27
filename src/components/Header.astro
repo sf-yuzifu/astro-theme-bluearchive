@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import navLogo from "../assets/theme/icon/navLogo.svg";
 import HeaderLink from "./HeaderLink.astro";
 import DropdownMenu from "./DropdownMenu.astro";
+import { NAV_ITEMS, FEATURE_SEARCH } from "../consts";
 
 interface Props {
   isPost?: boolean;
@@ -10,13 +11,8 @@ interface Props {
 
 const { isPost = false } = Astro.props;
 
-const menuList = [
-  { name: "Home", url: "/" },
-  { name: "Tags", url: "/tags" },
-  { name: "Friends", url: "/friends" },
-  { name: "Projects", url: "/project" },
-  { name: "About", url: "/about" },
-];
+// 从配置文件读取导航菜单
+const menuList = NAV_ITEMS;
 ---
 
 <header class:list={["container", { postViewer: isPost }]}>

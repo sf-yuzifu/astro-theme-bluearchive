@@ -1,48 +1,67 @@
 ---
 // all pages through the use of the <BaseHead /> component.
-import '../styles/index.less';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE } from '../consts';
-import { ClientRouter } from 'astro:transitions';
-import PageTransition from './PageTransition.astro';
+import "../styles/index.less";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/blog-placeholder-1.jpg";
+import { SITE_TITLE, SITE_FAVICON, SITE_LANG, SEO_OG_IMAGE, SEO_KEYWORDS, SEO_TWITTER, FEATURE_PAGE_TRANSITION } from "../consts";
+import { ClientRouter } from "astro:transitions";
+import PageTransition from "./PageTransition.astro";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
+  title: string;
+  description: string;
+  image?: ImageMetadata;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+// 使用配置的 OG 图片或默认图片
+const ogImageUrl = SEO_OG_IMAGE || FallbackImage;
+
+const { title, description, image } = Astro.props;
+// 优先使用传入的图片，否则使用配置的 OG 图片
+const finalImage = image || ogImageUrl;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" href="/favicon.ico" />
+{SITE_LANG && <html lang={SITE_LANG} />}
+{SEO_KEYWORDS && <meta name="keywords" content={SEO_KEYWORDS.join(", ")} />}
+<link rel="icon" href={SITE_FAVICON || "/favicon.ico"} />
+<link rel="icon" type="image/svg+xml" href={SITE_FAVICON || "/favicon.svg"} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Add ViewTransitions -->
-<ClientRouter fallback="swap" />
+{FEATURE_PAGE_TRANSITION && <ClientRouter fallback="swap" />}
 
 <!-- Add Custom Page Transition -->
-<PageTransition />
+{FEATURE_PAGE_TRANSITION && <PageTransition />}
 
 <!-- Font preloads -->
 <link rel="stylesheet" href="/font/Blueaka/Blueaka.css" />
 <link rel="stylesheet" href="/font/Blueaka_Bold/Blueaka_Bold.css" />
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<link
+  rel="preload"
+  href="/fonts/atkinson-regular.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/atkinson-bold.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -57,79 +76,92 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta
+  property="og:image"
+  content={new URL(
+    typeof finalImage === "string" ? finalImage : finalImage.src,
+    Astro.url,
+  )}
+/>
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+{SEO_TWITTER && <meta property="twitter:site" content={SEO_TWITTER} />}
+<meta
+  property="twitter:image"
+  content={new URL(
+    typeof finalImage === "string" ? finalImage : finalImage.src,
+    Astro.url,
+  )}
+/>
 
 <script is:inline>
-	(() => {
-		if (window.__ecCopyDelegateBound) return
-		window.__ecCopyDelegateBound = true
+  (() => {
+    if (window.__ecCopyDelegateBound) return;
+    window.__ecCopyDelegateBound = true;
 
-		const fallbackCopy = (text) => {
-			const pre = document.createElement('pre')
-			Object.assign(pre.style, {
-				opacity: '0',
-				pointerEvents: 'none',
-				position: 'absolute',
-				overflow: 'hidden',
-				left: '0',
-				top: '0',
-				width: '20px',
-				height: '20px',
-				webkitUserSelect: 'auto',
-				userSelect: 'all',
-			})
-			pre.ariaHidden = 'true'
-			pre.textContent = text
-			document.body.appendChild(pre)
-			const range = document.createRange()
-			range.selectNode(pre)
-			const selection = getSelection()
-			if (!selection) {
-				document.body.removeChild(pre)
-				return false
-			}
-			selection.removeAllRanges()
-			selection.addRange(range)
-			let copied = false
-			try {
-				copied = document.execCommand('copy')
-			} finally {
-				selection.removeAllRanges()
-				document.body.removeChild(pre)
-			}
-			return copied
-		}
+    const fallbackCopy = (text) => {
+      const pre = document.createElement("pre");
+      Object.assign(pre.style, {
+        opacity: "0",
+        pointerEvents: "none",
+        position: "absolute",
+        overflow: "hidden",
+        left: "0",
+        top: "0",
+        width: "20px",
+        height: "20px",
+        webkitUserSelect: "auto",
+        userSelect: "all",
+      });
+      pre.ariaHidden = "true";
+      pre.textContent = text;
+      document.body.appendChild(pre);
+      const range = document.createRange();
+      range.selectNode(pre);
+      const selection = getSelection();
+      if (!selection) {
+        document.body.removeChild(pre);
+        return false;
+      }
+      selection.removeAllRanges();
+      selection.addRange(range);
+      let copied = false;
+      try {
+        copied = document.execCommand("copy");
+      } finally {
+        selection.removeAllRanges();
+        document.body.removeChild(pre);
+      }
+      return copied;
+    };
 
-		const showFeedback = (button) => {
-			button.classList.add('copied')
-			const clearCopied = () => button.classList.remove('copied')
-			setTimeout(clearCopied, 1500)
-			button.addEventListener('blur', clearCopied, { once: true })
-		}
+    const showFeedback = (button) => {
+      button.classList.add("copied");
+      const clearCopied = () => button.classList.remove("copied");
+      setTimeout(clearCopied, 1500);
+      button.addEventListener("blur", clearCopied, { once: true });
+    };
 
-		document.addEventListener('click', async (event) => {
-			const target = event.target
-			if (!(target instanceof Element)) return
-			const button = target.closest('.expressive-code .copy button')
-			if (!(button instanceof HTMLButtonElement)) return
-			const code = (button.dataset.code || '').replace(/\u007f/g, '\n')
-			if (!code) return
+    document.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const button = target.closest(".expressive-code .copy button");
+      if (!(button instanceof HTMLButtonElement)) return;
+      const code = (button.dataset.code || "").replace(/\u007f/g, "\n");
+      if (!code) return;
 
-			let copied = false
-			try {
-				await navigator.clipboard.writeText(code)
-				copied = true
-			} catch {
-				copied = fallbackCopy(code)
-			}
-			if (copied) showFeedback(button)
-		})
-	})()
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(code);
+        copied = true;
+      } catch {
+        copied = fallbackCopy(code);
+      }
+      if (copied) showFeedback(button);
+    });
+  })();
 </script>

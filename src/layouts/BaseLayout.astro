@@ -9,6 +9,7 @@ import Splash from "../components/Splash.astro";
 import BackToTop from "../components/BackToTop.astro";
 import Cursor from "../components/Cursor.astro";
 import SearchDialog from "../components/SearchDialog.astro";
+import { FEATURE_BACK_TO_TOP, FEATURE_SEARCH } from "../consts";
 import "../styles/index.less";
 import "photoswipe/style.css";
 import "@waline/client/dist/waline.css";
@@ -90,13 +91,13 @@ const coverUrl = coverImage
     <Footer transition:persist="footer" />
 
     <!-- 回到顶部按钮 - 保持持久化 -->
-    <BackToTop transition:persist="totop" />
+    {FEATURE_BACK_TO_TOP && <BackToTop transition:persist="totop" />}
 
     <!-- 点击特效 - 保持持久化 -->
     <Cursor transition:persist="click-canvas" />
 
     <!-- 搜索对话框 -->
-    <SearchDialog />
+    {FEATURE_SEARCH && <SearchDialog />}
   </body>
 </html>
 

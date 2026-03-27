@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import { getCollection, render } from "astro:content";
 import FormattedDate from "./FormattedDate.astro";
+import { FEATURE_READING_TIME } from "../consts";
 
 interface Props {
   posts?: any[];
@@ -13,7 +14,7 @@ let posts = Astro.props.posts;
 // 如果没有传入 posts，则默认获取全部 blog 集合
 if (!posts) {
   posts = (await getCollection("blog")).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    (a, b) => b.data.pubDate!.valueOf() - a.data.pubDate!.valueOf(),
   );
 }
 
@@ -59,19 +60,20 @@ const postsWithReadingTime = await Promise.all(
                   <FormattedDate date={post.data.pubDate} />
                 </div>
                 <div class="seperator" />
-                {post.remarkPluginFrontmatter.wordCount && (
-                  <>
-                    <Icon name="ph:file-text-bold" class="meta-icon" />
-                    <div class="time-info">
-                      {post.remarkPluginFrontmatter.wordCount} 字
-                    </div>
-                    <div class="seperator" />
-                    <Icon name="ph:coffee-bold" class="meta-icon" />
-                    <div class="time-info">
-                      {post.remarkPluginFrontmatter.minutesRead}
-                    </div>
-                  </>
-                )}
+                {FEATURE_READING_TIME &&
+                  post.remarkPluginFrontmatter.wordCount && (
+                    <>
+                      <Icon name="ph:file-text-bold" class="meta-icon" />
+                      <div class="time-info">
+                        {post.remarkPluginFrontmatter.wordCount} 字
+                      </div>
+                      <div class="seperator" />
+                      <Icon name="ph:coffee-bold" class="meta-icon" />
+                      <div class="time-info">
+                        {post.remarkPluginFrontmatter.minutesRead}
+                      </div>
+                    </>
+                  )}
               </div>
               {post.data.tags && post.data.tags.length > 0 && (
                 <ul class="tags">

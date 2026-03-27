@@ -1,18 +1,23 @@
 ---
 import { Icon } from "astro-icon/components";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { SITE_TITLE, SITE_DESCRIPTION, FRIENDS } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION, FRIENDS, FRIENDS_TITLE, FRIENDS_DESCRIPTION, FRIENDS_ENABLE } from "../consts";
+
+// 从配置文件读取友链配置
+const friendsTitle = FRIENDS_TITLE || "友情链接";
+const friendsDescription = FRIENDS_DESCRIPTION || "与优秀的开发者们互相连接";
 ---
 
+{FRIENDS_ENABLE && (
 <BaseLayout
-  title={`Friends | ${SITE_TITLE}`}
+  title={`${friendsTitle} | ${SITE_TITLE}`}
   description={SITE_DESCRIPTION}
   isPost={true}
 >
   <!-- Banner内容 -->
   <div slot="banner-content" class="friends-banner">
-    <h1 class="title">友情链接</h1>
-    <span class="status">与优秀的开发者们互相连接</span>
+    <h1 class="title">{friendsTitle}</h1>
+    <span class="status">{friendsDescription}</span>
   </div>
 
   <!-- 友链列表 -->
@@ -46,6 +51,7 @@ import { SITE_TITLE, SITE_DESCRIPTION, FRIENDS } from "../consts";
     </div>
   </div>
 </BaseLayout>
+)}
 
 <style lang="less">
   .friends-banner {

@@ -1,12 +1,31 @@
 ---
+import {
+  COMMENTS_ENABLE,
+  COMMENTS_TYPE,
+  COMMENTS_WALINE_SERVER_URL,
+} from "../consts";
+
 interface Props {
   path?: string;
 }
 
 const { path } = Astro.props;
+
+// 从配置文件读取评论配置
+const enable = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
+const serverURL = COMMENTS_WALINE_SERVER_URL;
 ---
 
-<div id="waline" class="waline-comment" data-path={path}></div>
+{
+  enable && serverURL && (
+    <div
+      id="waline"
+      class="waline-comment"
+      data-path={path}
+      data-server-url={serverURL}
+    />
+  )
+}
 
 <script>
   import { init } from "@waline/client";
@@ -24,10 +43,13 @@ const { path } = Astro.props;
     }
 
     const path = walineContainer.dataset.path || window.location.pathname;
+    const serverURL = walineContainer.dataset.serverUrl;
+
+    if (!serverURL) return;
 
     walineInstance = init({
       el: "#waline",
-      serverURL: "https://your-waline-server.vercel.app", // 替换为你的 Waline 服务地址
+      serverURL: serverURL,
       path: path,
       dark: 'html[theme="dark"]',
       lang: "zh-CN",

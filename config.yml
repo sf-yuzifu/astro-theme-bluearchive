@@ -1,0 +1,151 @@
+# ============================================
+# 站点全局配置文件
+# ============================================
+
+# 站点基本信息
+site:
+  title: "Astro Blog"
+  description: "Welcome to my website!"
+  author: "Your Name"
+  avatar: "/theme/banner/avatar.webp"
+  favicon: "/favicon.svg"
+  # 站点 URL，用于 RSS 和 SEO
+  url: "https://example.com"
+  # 语言设置
+  lang: "zh-CN"
+  # 备案号（可选）
+  # 支持单个字符串或数组格式
+  # icp: "萌ICP备20225266号"
+  # 或带自定义链接：
+  icp:
+    - text: "萌ICP备20225266号"
+      url: "https://icp.gov.moe/?keyword=20225266"
+    # 可以添加多个备案号
+    # - text: "京ICP备12345678号"
+    #   url: "https://beian.miit.gov.cn/"
+  # 社交链接（用于首页欢迎框）
+  # 使用 Font Awesome 品牌图标名称（不含 fa-brands: 前缀）
+  social:
+    - icon: "github"
+      url: "https://github.com/withastro/astro"
+    - icon: "twitter"
+      url: "https://twitter.com/astrodotbuild"
+    - icon: "qq"
+      url: "https://qq.qq.com/"
+    # 其他常用图标：discord, youtube, bilibili, weixin, qq, telegram, instagram, etc.
+
+# 导航菜单
+nav:
+  - name: "首页"
+    url: "/"
+  - name: "标签"
+    url: "/tags"
+  - name: "项目"
+    url: "/project"
+  - name: "友链"
+    url: "/friends"
+  - name: "关于"
+    url: "/about"
+
+# 友链配置
+friends:
+  enable: true
+  title: "友情链接"
+  description: "与优秀的开发者们互相连接"
+  list:
+    - name: "Astro"
+      url: "https://astro.build"
+      description: "The web framework for content-driven websites"
+      avatar: "https://astro.build/favicon.svg"
+    - name: "Example Blog"
+      url: "https://example.com"
+      description: "An example blog for demonstration"
+
+# 项目展示配置
+projects:
+  enable: true
+  title: "我的项目"
+  description: "开源作品与个人项目展示"
+  list:
+    - name: "Astro Blog"
+      url: "https://github.com/withastro/astro"
+      description: "使用 Astro 构建的个人博客网站，支持 Markdown 和 MDX"
+      tags: ["Astro", "TypeScript", "Less"]
+      image: "/blog-placeholder-1.jpg"
+    - name: "Example Project"
+      url: "https://example.com"
+      description: "一个示例项目用于演示"
+      tags: ["React", "Node.js"]
+
+# 评论系统配置
+comments:
+  enable: true
+  # 支持: waline, giscus, twikoo
+  type: "waline"
+  waline:
+    serverURL: "https://your-waline-server.vercel.app"
+    # 必填，Waline 的服务端地址
+    # 其他可选配置
+    # placeholder: "欢迎评论..."
+    # dark: 'html[theme="dark"]'
+
+# 捐赠/赞助配置
+sponsor:
+  enable: true
+  title: "喜欢这篇文章？打赏一下作者吧"
+  description: "如果我的文章对你有帮助，欢迎赞赏支持"
+  methods:
+    - name: "微信"
+      image: "/images/donate-wechat.png"
+      icon: "ph:wechat-logo-bold"
+      color: "#07c160"
+    - name: "支付宝"
+      image: "/images/donate-alipay.png"
+      icon: "ph:wallet-bold"
+      color: "#1677ff"
+    - name: "爱发电"
+      url: "https://afdian.net/"
+      icon: "ph:lightning-bold"
+      color: "#946ce6"
+
+# 页脚配置
+footer:
+  # 页脚链接
+  links:
+    - name: "GitHub"
+      url: "https://github.com"
+    - name: "RSS"
+      url: "/rss.xml"
+
+# SEO 相关
+seo:
+  # 默认 OG 图片
+  ogImage: "/blog-placeholder-about.jpg"
+  # 关键词
+  keywords: ["blog", "astro", "个人博客"]
+  # Twitter 账号（可选）
+  # twitter: "@yourname"
+
+# 功能开关
+features:
+  # 搜索功能
+  search: true
+  # 返回顶部
+  backToTop: true
+  # 主题切换
+  themeToggle: true
+  # 页面过渡动画
+  pageTransition: true
+  # 阅读时间估算
+  readingTime: true
+
+# 一言/座右铭配置
+hitokoto:
+  # 是否启用一言
+  enable: true
+  # 自定义一言列表（为空则使用默认）
+  list:
+    - "生活不止眼前的苟且，还有诗和远方。"
+    - "Stay hungry, stay foolish."
+    - "Talk is cheap. Show me the code."
+    - "The journey of a thousand miles begins with one step."

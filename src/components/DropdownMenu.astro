@@ -1,14 +1,17 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
 import SearchButton from "./SearchButton.astro";
+import { FEATURE_SEARCH, FEATURE_THEME_TOGGLE } from "../consts";
 ---
 
 <div class="dropdown-menu" id="dropdown-menu">
   <div class="menu-content">
-    <div class="first-row">
-      <SearchButton />
-    </div>
-    <ThemeToggle />
+    {
+      (FEATURE_SEARCH || FEATURE_THEME_TOGGLE) && (
+        <div class="first-row">{FEATURE_SEARCH && <SearchButton />}</div>
+      )
+    }
+    {FEATURE_THEME_TOGGLE && <ThemeToggle />}
   </div>
 </div>
 

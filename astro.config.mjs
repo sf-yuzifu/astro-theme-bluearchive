@@ -9,6 +9,7 @@ import { definePlugin } from "@expressive-code/core";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { remarkReadingTime } from "./src/utils/remarkReadingTime.mjs";
 import icon from "astro-icon";
+import { configReloadIntegration } from "./src/integrations/configReload.ts";
 
 // https://astro.build/config
 export default defineConfig({
@@ -56,14 +57,11 @@ export default defineConfig({
     vue(),
     sitemap(),
     icon(),
+    configReloadIntegration(),
   ],
   vite: {
     optimizeDeps: {
-      include: [
-        "@waline/client",
-        "photoswipe/lightbox",
-        "photoswipe",
-      ],
+      include: ["@waline/client", "photoswipe/lightbox", "photoswipe"],
     },
   },
 });
