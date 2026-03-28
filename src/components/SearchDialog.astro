@@ -9,7 +9,7 @@ const searchData = posts.map((post) => ({
   title: post.data.title,
   description: post.data.description,
   href: `/blog/${post.id}/`,
-  pubDate: post.data.pubDate.toISOString(),
+  pubDate: post.data.pubDate!.toISOString(),
   tags: post.data.tags || [],
 }));
 ---
@@ -82,7 +82,7 @@ const searchData = posts.map((post) => ({
           }
         });
 
-        return results.sort((a, b) => b.score - a.score).slice(0, 5);
+        return results.sort((a, b) => b.score - a.score);
       }
 
       // 渲染搜索结果
