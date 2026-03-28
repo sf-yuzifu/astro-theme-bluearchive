@@ -3,7 +3,15 @@
 import "../styles/index.less";
 import type { ImageMetadata } from "astro";
 import FallbackImage from "../assets/blog-placeholder-1.jpg";
-import { SITE_TITLE, SITE_FAVICON, SITE_LANG, SEO_OG_IMAGE, SEO_KEYWORDS, SEO_TWITTER, FEATURE_PAGE_TRANSITION } from "../consts";
+import {
+  SITE_TITLE,
+  SITE_FAVICON,
+  SITE_LANG,
+  SEO_OG_IMAGE,
+  SEO_KEYWORDS,
+  SEO_TWITTER,
+  FEATURE_PAGE_TRANSITION,
+} from "../consts";
 import { ClientRouter } from "astro:transitions";
 import PageTransition from "./PageTransition.astro";
 
@@ -48,20 +56,6 @@ const finalImage = image || ogImageUrl;
 <!-- Font preloads -->
 <link rel="stylesheet" href="/font/Blueaka/Blueaka.css" />
 <link rel="stylesheet" href="/font/Blueaka_Bold/Blueaka_Bold.css" />
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
