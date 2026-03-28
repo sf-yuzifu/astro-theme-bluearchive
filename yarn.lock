@@ -645,6 +645,25 @@
   resolved "https://registry.npmmirror.com/@esbuild/win32-x64/-/win32-x64-0.27.4.tgz"
   integrity sha512-+knoa0BDoeXgkNvvV1vvbZX4+hizelrkwmGJBdT17t8FNPwG2lKemmuMZlmaNQ3ws3DKKCxpb4zRZEIp3UxFCg==
 
+"@esotericsoftware/spine-canvas@4.2.108":
+  version "4.2.108"
+  resolved "https://registry.npmmirror.com/@esotericsoftware/spine-canvas/-/spine-canvas-4.2.108.tgz#6ddd2a4a18c4d800c1de54094fe1bcd48211f934"
+  integrity sha512-3OZwHa+i7H/UxxlqU75Xln93YpwSPOXX5emsKQLDW1Y+m/em2qYqVQjhqNfK5AbOr0bz36QSOEKSq7pCBnrDbA==
+  dependencies:
+    "@esotericsoftware/spine-core" "4.2.108"
+
+"@esotericsoftware/spine-core@4.2.108":
+  version "4.2.108"
+  resolved "https://registry.npmmirror.com/@esotericsoftware/spine-core/-/spine-core-4.2.108.tgz#1fce79e27d1a80d8a6754215d6640e725f564fde"
+  integrity sha512-pU/0KO1RqMRcg5ncwHVuCOjanGGNB1bzp8x6/hBoCH04mYLwF8QyxhFUQD+4/SrLipK6Wychj3PFaiyzK/mjnw==
+
+"@esotericsoftware/spine-pixi-v8@^4.2.108":
+  version "4.2.108"
+  resolved "https://registry.npmmirror.com/@esotericsoftware/spine-pixi-v8/-/spine-pixi-v8-4.2.108.tgz#4c78659fd46907d5c9d85596557829624092d06c"
+  integrity sha512-j2Hog/RyMyOEPiglVK6dzRph2PbaYNlGJdJ9OCp4EDt5x6iWg70AE6BInMfF2yVSMnQc0G+swPhAxMF5ihj38w==
+  dependencies:
+    "@esotericsoftware/spine-canvas" "4.2.108"
+
 "@expressive-code/core@^0.41.7":
   version "0.41.7"
   resolved "https://registry.npmjs.org/@expressive-code/core/-/core-0.41.7.tgz"
@@ -973,6 +992,11 @@
   resolved "https://registry.npmmirror.com/@oslojs/encoding/-/encoding-1.1.0.tgz"
   integrity sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==
 
+"@pixi/colord@^2.9.6":
+  version "2.9.6"
+  resolved "https://registry.npmmirror.com/@pixi/colord/-/colord-2.9.6.tgz#7e4e7851480da6fd3cef4e331f008d60be7e1204"
+  integrity sha512-nezytU2pw587fQstUu1AsJZDVEynjskwOL+kibwcdxsMBFqPsFFNA7xl0ii/gXuDi6M0xj3mfRJj8pBSc2jCfA==
+
 "@polka/url@^1.0.0-next.24":
   version "1.0.0-next.29"
   resolved "https://registry.npmjs.org/@polka/url/-/url-1.0.0-next.29.tgz"
@@ -1296,6 +1320,11 @@
   integrity sha512-KSVgmQmzMwPlmtljOomayoR89W4FynCAi3E8PPs7vmDVPe84hT+vGPKkJfThkmXs0x0jAaa9U8uW8bbfyS2fWw==
   dependencies:
     "@types/ms" "*"
+
+"@types/earcut@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmmirror.com/@types/earcut/-/earcut-3.0.0.tgz#c21ab8372c47f8af1bec63cb36eecb6917b6c5b6"
+  integrity sha512-k/9fOUGO39yd2sCjrbAJvGDEQvRwRnQIZlBz43roGwUZo5SHAmyVvSFyaVVZkicRVCaDXPKlbxrUcBuJoSWunQ==
 
 "@types/estree-jsx@^1.0.0":
   version "1.0.5"
@@ -1685,6 +1714,16 @@
     autosize "^6.0.1"
     marked "^4.3.0"
     vue "^3.3.4"
+
+"@webgpu/types@^0.1.69":
+  version "0.1.69"
+  resolved "https://registry.npmmirror.com/@webgpu/types/-/types-0.1.69.tgz#6b849bf370a1f29c78bd3aeba8e84c1150b237f2"
+  integrity sha512-RPmm6kgRbI8e98zSD3RVACvnuktIja5+yLgDAkTmxLr90BEwdTXRQWNLF3ETTTyH/8mKhznZuN5AveXYFEsMGQ==
+
+"@xmldom/xmldom@^0.8.11":
+  version "0.8.11"
+  resolved "https://registry.npmmirror.com/@xmldom/xmldom/-/xmldom-0.8.11.tgz#b79de2d67389734c57c52595f7a7305e30c2d608"
+  integrity sha512-cQzWCtO6C8TQiYl1ruKNn2U6Ao4o4WBBcbL61yJl84x+j5sOWWFU9X7DpND8XZG3daDppSsigMdfAIl2upQBRw==
 
 acorn-jsx@^5.0.0:
   version "5.3.2"
@@ -2350,6 +2389,11 @@ dset@^3.1.4:
   resolved "https://registry.npmmirror.com/dset/-/dset-3.1.4.tgz"
   integrity sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==
 
+earcut@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.npmmirror.com/earcut/-/earcut-3.0.2.tgz#d478a29aaf99acf418151493048aa197d0512248"
+  integrity sha512-X7hshQbLyMJ/3RPhyObLARM2sNxxmRALLKx1+NVFFnQ9gKzmCrxm9+uLIAdBcvc8FNLpctqlQ2V6AE92Ol9UDQ==
+
 electron-to-chromium@^1.5.263:
   version "1.5.321"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.321.tgz"
@@ -2708,6 +2752,13 @@ get-stream@^5.1.0:
   integrity sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==
   dependencies:
     pump "^3.0.0"
+
+gifuct-js@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.npmmirror.com/gifuct-js/-/gifuct-js-2.1.2.tgz#06152437ba30ec914db8398bd838bd0fbc8a6ecd"
+  integrity sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==
+  dependencies:
+    js-binary-schema-parser "^2.0.3"
 
 github-slugger@^2.0.0:
   version "2.0.0"
@@ -3101,6 +3152,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmmirror.com/isexe/-/isexe-2.0.0.tgz"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+ismobilejs@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmmirror.com/ismobilejs/-/ismobilejs-1.1.1.tgz#c56ca0ae8e52b24ca0f22ba5ef3215a2ddbbaa0e"
+  integrity sha512-VaFW53yt8QO61k2WJui0dHf4SlL8lxBofUuUmwBo0ljPk0Drz2TiuDW4jo3wDcv41qy/SxrJ+VAzJ/qYqsmzRw==
+
 isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmmirror.com/isobject/-/isobject-3.0.1.tgz"
@@ -3112,6 +3168,11 @@ jackspeak@^4.1.1:
   integrity sha512-ykkVRwrYvFm1nb2AJfKKYPr0emF6IiXDYUaFx4Zn9ZuIH7MrzEZ3sD5RlqGXNRpHtvUHJyOnCEFxOlNDtGo7wg==
   dependencies:
     "@isaacs/cliui" "^9.0.0"
+
+js-binary-schema-parser@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npmmirror.com/js-binary-schema-parser/-/js-binary-schema-parser-2.0.3.tgz#3d7848748e8586e63b34e8911b643f59cfb6396e"
+  integrity sha512-xezGJmOb4lk/M1ZZLTR/jaBHQ4gG/lqQnJqdIv4721DMggsa1bDVlHXNeHYogaIEHD9vCRv0fcL4hMA+Coarkg==
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -4124,6 +4185,11 @@ parse-node-version@^1.0.1:
   resolved "https://registry.npmjs.org/parse-node-version/-/parse-node-version-1.0.1.tgz"
   integrity sha512-3YHlOa/JgH6Mnpr05jP9eDG254US9ek25LyIxZlDItp2iJtwyaXQb57lBYLdT3MowkUFYEV2XXNAYIPlESvJlA==
 
+parse-svg-path@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmmirror.com/parse-svg-path/-/parse-svg-path-0.1.2.tgz#7a7ec0d1eb06fa5325c7d3e009b859a09b5d49eb"
+  integrity sha512-JyPSBnkTJ0AI8GGJLfMXvKq42cj5c006fnLz6fXy6zfoVjJizi8BNTpu8on8ziI1cKy9d9DGNuY17Ce7wuejpQ==
+
 parse5-htmlparser2-tree-adapter@^7.1.0:
   version "7.1.0"
   resolved "https://registry.npmjs.org/parse5-htmlparser2-tree-adapter/-/parse5-htmlparser2-tree-adapter-7.1.0.tgz"
@@ -4218,6 +4284,22 @@ pify@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
+
+pixi.js@^8.17.1:
+  version "8.17.1"
+  resolved "https://registry.npmmirror.com/pixi.js/-/pixi.js-8.17.1.tgz#57881d7e7015e523fc1bc12d8f62010ec82d4588"
+  integrity sha512-OB4TpZHrP5RYy+7FqmFrAc0IHRhfOoNIfF4sVeinvK3aG1r2pYrSMneJAKi9+WvGKC70Dj7GEpZ2OZGB6o/xdg==
+  dependencies:
+    "@pixi/colord" "^2.9.6"
+    "@types/earcut" "^3.0.0"
+    "@webgpu/types" "^0.1.69"
+    "@xmldom/xmldom" "^0.8.11"
+    earcut "^3.0.2"
+    eventemitter3 "^5.0.1"
+    gifuct-js "^2.1.2"
+    ismobilejs "^1.1.1"
+    parse-svg-path "^0.1.2"
+    tiny-lru "^11.4.7"
 
 pkg-types@^1.3.1:
   version "1.3.1"
@@ -4893,6 +4975,11 @@ tiny-inflate@^1.0.0, tiny-inflate@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmmirror.com/tiny-inflate/-/tiny-inflate-1.0.3.tgz"
   integrity sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==
+
+tiny-lru@^11.4.7:
+  version "11.4.7"
+  resolved "https://registry.npmmirror.com/tiny-lru/-/tiny-lru-11.4.7.tgz#7ddfabe22720c98f7e48b2806d9d9a71a93ee0d6"
+  integrity sha512-w/Te7uMUVeH0CR8vZIjr+XiN41V+30lkDdK+NRIDCUYKKuL9VcmaUEmaPISuwGhLlrTGh5yu18lENtR9axSxYw==
 
 tinyclip@^0.1.6:
   version "0.1.12"

@@ -120,6 +120,36 @@ export interface HitokotoConfig {
   list: string[];
 }
 
+export interface SpineVoiceConfig {
+  audio: string;
+  animation: string;
+  text: string;
+}
+
+export interface SpineCharacterConfig {
+  skelUrl: string;
+  atlasUrl: string;
+  idleAnimationName: string;
+  eyeCloseAnimationName: string;
+  rightEyeBone: string;
+  leftEyeBone: string;
+  frontHeadBone: string;
+  backHeadBone: string;
+  eyeRotationAngle: number;
+  voiceConfig: SpineVoiceConfig[];
+}
+
+export interface SpineCharactersConfig {
+  arona: SpineCharacterConfig;
+  plana: SpineCharacterConfig;
+}
+
+export interface SpineConfig {
+  enable: boolean;
+  voiceLang: "zh" | "jp";
+  characters: SpineCharactersConfig;
+}
+
 export interface Config {
   site: SiteConfig;
   nav: NavItem[];
@@ -131,6 +161,7 @@ export interface Config {
   seo: SEOConfig;
   features: FeaturesConfig;
   hitokoto: HitokotoConfig;
+  spine: SpineConfig;
 }
 
 /**
@@ -215,6 +246,14 @@ export function getFeaturesConfig(): FeaturesConfig {
  */
 export function getHitokotoConfig(): HitokotoConfig {
   return loadConfig().hitokoto;
+}
+
+/**
+ * 获取 Spine Live2D 配置
+ */
+export function getSpineConfig(): SpineConfig {
+  const config = loadConfig();
+  return config.spine || { enable: false, voiceLang: "zh" };
 }
 
 // 默认导出完整配置

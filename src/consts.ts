@@ -96,3 +96,10 @@ export const FEATURE_READING_TIME = featuresConfig.readingTime;
 const hitokotoConfig = getHitokotoConfig();
 export const HITOKOTO_ENABLE = hitokotoConfig.enable;
 export const HITOKOTO_LIST: string[] = hitokotoConfig.list;
+
+// Spine Live2D 配置
+import { getSpineConfig, type SpineCharactersConfig } from "./config";
+const spineConfig = getSpineConfig();
+export const SPINE_ENABLE = spineConfig.enable;
+export const SPINE_VOICE_LANG = spineConfig.voiceLang;
+export const SPINE_CHARACTERS: SpineCharactersConfig = spineConfig.characters;

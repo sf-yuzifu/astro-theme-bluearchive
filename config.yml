@@ -140,6 +140,77 @@ features:
   # 阅读时间估算
   readingTime: true
 
+# Spine Live2D 配置
+spine:
+  # 是否启用 Spine Live2D
+  enable: true
+  # 语音语言: zh (中文) 或 jp (日语)
+  voiceLang: "zh"
+  # 角色配置，这里亮色就使用 arona，暗色就使用 plana
+  characters:
+    arona:
+      # 资源路径
+      skelUrl: "/spine_assets/aris/aris_spr.skel"
+      atlasUrl: "/spine_assets/aris/aris_spr.atlas"
+      # 动画名称
+      idleAnimationName: "Idle_01"
+      eyeCloseAnimationName: "Eye_Close_01"
+      # 骨骼名称（只有 arona、plana 有）
+      rightEyeBone: "R_Eye_01"
+      leftEyeBone: "L_Eye_01"
+      frontHeadBone: "Head_01"
+      backHeadBone: "Head_Back"
+      # 眼睛旋转角度（只有 arona、plana 有）
+      eyeRotationAngle: 76.307
+      # 语音配置列表
+      voiceConfig:
+        - audio: "/spine_assets/aris/audio/aris_01.ogg"
+          animation: "10"
+          text: "唔——肚子饿了。\n咦……？ \n爱丽丝不吃电池的！"
+        - audio: "/spine_assets/aris/audio/aris_02.ogg"
+          animation: "00"
+          text: "勇者啊，愿光与你同在。"
+        - audio: "/spine_assets/aris/audio/aris_03.ogg"
+          animation: "07"
+          text: "爱丽丝也想要提升老师的好感度。"
+        - audio: "/spine_assets/aris/audio/aris_04.ogg"
+          animation: "05"
+          text: "以这不可动摇的意志……光啊！"
+        - audio: "/spine_assets/aris/audio/aris_05.ogg"
+          animation: "04"
+          text: "老师？怎么了？"
+    plana:
+      # 资源路径
+      skelUrl: "/spine_assets/kei/CH0335_spr.skel"
+      atlasUrl: "/spine_assets/kei/CH0335_spr.atlas"
+      # 动画名称
+      idleAnimationName: "Idle_01"
+      eyeCloseAnimationName: "Eye_Close_01"
+      # 骨骼名称（只有 arona、plana 有）
+      rightEyeBone: "R_Eye_01"
+      leftEyeBone: "L_Eye_01"
+      frontHeadBone: "Head_Rot"
+      backHeadBone: "Head_Back"
+      # 眼睛旋转角度（只有 arona、plana 有）
+      eyeRotationAngle: 97.331
+      # 语音配置列表
+      voiceConfig:
+        - audio: "/spine_assets/kei/audio/kei_01.ogg"
+          animation: "17"
+          text: "请别说我可爱啦！"
+        - audio: "/spine_assets/kei/audio/kei_02.ogg"
+          animation: "29"
+          text: "……我还没幼稚到那种地步。"
+        - audio: "/spine_assets/kei/audio/kei_03.ogg"
+          animation: "03"
+          text: "什么事？如果没事的话请不要叫我。"
+        - audio: "/spine_assets/kei/audio/kei_04.ogg"
+          animation: "99"
+          text: "工作要适度，不过偷懒也得适可而止。"
+        - audio: "/spine_assets/kei/audio/kei_05.ogg"
+          animation: "25"
+          text: "刚才笑了吧！？\n绝对是笑了对吧！？\n我可全都看到了！"
+
 # 一言/座右铭配置
 hitokoto:
   # 是否启用一言
