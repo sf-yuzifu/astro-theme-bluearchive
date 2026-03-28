@@ -10,6 +10,7 @@ import {
   FEATURE_READING_TIME,
   COMMENTS_ENABLE,
   COMMENTS_TYPE,
+  SITE_TITLE,
 } from "../consts";
 
 type Props = CollectionEntry<"blog">["data"] & {
@@ -38,7 +39,7 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
 ---
 
 <BaseLayout
-  title={title}
+  title={`${title} | ${SITE_TITLE}`}
   description={description}
   isPost={true}
   coverImage={heroImage}
