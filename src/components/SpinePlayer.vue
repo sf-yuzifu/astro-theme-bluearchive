@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, computed, onUnmounted } from "vue";
+import { onMounted, ref, watch, computed, onUnmounted, nextTick } from "vue";
 import { Application, Assets } from "pixi.js";
 import { Spine } from "@esotericsoftware/spine-pixi-v8";
 import {
@@ -233,20 +233,45 @@ const handleScroll = () => {
   if (!clientReady.value || !playerContainer.value) return;
   const bottomReached =
     window.innerHeight + window.scrollY + 1 >= document.body.offsetHeight;
-  const chatDialog = document.querySelector(
-    ".chatdialog",
-  ) as HTMLElement | null;
 
   if (isMobileDevice()) {
     if (bottomReached) {
       playerContainer.value.style.left = "-50%";
-      if (chatDialog) {
-        chatDialog.style.left = "-50%";
-      }
     } else {
       playerContainer.value.style.left = "0%";
     }
   }
+};
+
+// 更新对话框位置，使其居中于 playerContainer
+const updateChatDialogPosition = () => {
+  if (!clientReady.value || !playerContainer.value) return;
+
+  const chatDialogContainer = document.querySelector(
+    ".chatdialog-container",
+  ) as HTMLElement | null;
+
+  if (!chatDialogContainer) return;
+
+  const containerRect = playerContainer.value.getBoundingClientRect();
+  const dialogWidth = chatDialogContainer.offsetWidth;
+  const dialogHeight = chatDialogContainer.offsetHeight;
+
+  // 计算水平居中位置：容器中心 - 对话框宽度的一半
+  const centerPositionX =
+    containerRect.left + containerRect.width / 2 - dialogWidth / 2;
+  // 计算垂直居中位置：容器中心 - 对话框高度的一半
+  const centerPositionY =
+    containerRect.top + containerRect.height / 2 - dialogHeight / 2;
+
+  // 确保不会超出屏幕边界
+  const minLeft = 10;
+  const finalLeft = Math.max(minLeft, centerPositionX);
+  const finalTop = Math.max(10, centerPositionY);
+
+  chatDialogContainer.style.left = `${finalLeft}px`;
+  chatDialogContainer.style.top = `${finalTop}px`;
+  chatDialogContainer.style.bottom = "auto"; // 清除 bottom 定位
 };
 
 const isMobileDevice = () => {
@@ -296,7 +321,7 @@ const handlePlayerClick = debounce(async (event: MouseEvent | TouchEvent) => {
     if (!spineAssets.value) return;
     const currentConfig = spineAssets.value[currentCharacter.value].voiceConfig;
     if (!currentConfig || currentConfig.length === 0) return;
-    
+
     let randomIndex: number;
     do {
       randomIndex = Math.floor(Math.random() * currentConfig.length);
@@ -311,6 +336,11 @@ const handlePlayerClick = debounce(async (event: MouseEvent | TouchEvent) => {
 
       currentDialog.value = selectedPair.text;
       showDialog.value = true;
+
+      // 更新对话框位置使其居中
+      nextTick(() => {
+        updateChatDialogPosition();
+      });
 
       // 播放动画
       if (spineInstance && selectedPair.animation) {
@@ -441,19 +471,27 @@ const initializeSpinePlayer = async (assets: SpineAssets) => {
           const newHeight = entry.contentRect.height;
           const newWidth = newHeight * currentSkeletonAspectRatio;
           playerContainer.value!.style.width = `${newWidth}px`;
-          
+
           // 重新调整 Pixi canvas 大小
           if (app && spineInstance) {
             const scaleFactor = 2;
-            app.renderer.resize(newWidth * scaleFactor, newHeight * scaleFactor);
-            
+            app.renderer.resize(
+              newWidth * scaleFactor,
+              newHeight * scaleFactor,
+            );
+
             // 重新计算缩放和位置
             const newScale = newHeight / skeletonHeight;
             spineInstance.scale.set(newScale * scaleFactor);
             spineInstance.position.set(
               -bounds.x * newScale * scaleFactor, // 水平靠左对齐
-              (newHeight - (bounds.y + bounds.height) * newScale) * scaleFactor // 底部对齐
+              (newHeight - (bounds.y + bounds.height) * newScale) * scaleFactor, // 底部对齐
             );
+          }
+
+          // 如果对话框正在显示，更新其位置
+          if (showDialog.value) {
+            updateChatDialogPosition();
           }
         }
       });
@@ -648,7 +686,9 @@ const initializeSpinePlayer = async (assets: SpineAssets) => {
 const enabled = computed(() => props.enabled !== false);
 const spineVoiceLang = computed(() => props.spineVoiceLang || "zh");
 const spineAssets = computed(() => getSpineAssets(spineVoiceLang.value));
-const currentAssets = computed(() => spineAssets.value?.[currentCharacter.value]);
+const currentAssets = computed(
+  () => spineAssets.value?.[currentCharacter.value],
+);
 
 // 事件委托
 const handleEvents = (event: Event) => {
@@ -775,17 +815,17 @@ onUnmounted(() => {
 
 .chatdialog-container {
   position: fixed;
-  bottom: 10vw;
-  left: 2vw;
+  top: 50%; /* 初始位置，会被 JS 动态覆盖 */
+  left: 20px; /* 初始位置，会被 JS 动态覆盖 */
   z-index: 101;
-  transition: all 1s; /* 禁用过渡动画 */
+  transition: opacity 0.3s ease; /* 只保留透明度过渡 */
   pointer-events: none;
   filter: drop-shadow(0 0 3px rgba(36, 36, 36, 0.6));
 }
 
 .chatdialog-triangle {
   position: absolute;
-  left: 2vw;
+  left: 60px;
   top: -10px;
   width: 0;
   height: 0;
@@ -803,7 +843,7 @@ onUnmounted(() => {
   white-space: pre-wrap;
   line-height: 1.4;
   color: #000000;
-  font-size: 0.8vw;
+  font-size: 20px;
   user-select: none;
   pointer-events: auto;
 }
@@ -822,24 +862,24 @@ onUnmounted(() => {
   .playerContainer {
     height: 35vh; /* 移动端稍微小一点 */
     min-height: 200px;
-    max-height: 350px;
     bottom: 10px;
   }
 
   .chatdialog-container {
-    left: 2vh;
-    bottom: 10vh;
+    left: 10px; /* 初始位置，会被 JS 动态覆盖 */
+    top: 50%; /* 初始位置，会被 JS 动态覆盖 */
   }
 
   .chatdialog {
-    min-width: auto;
-    padding: 12px 20px;
-    font-size: 1vh;
+    min-width: 150px;
+    max-width: 250px;
+    padding: 10px 16px;
+    font-size: 16px;
     border-radius: 20px;
   }
 
   .chatdialog-triangle {
-    left: 35px;
+    left: 40px;
     border-width: 8px;
     top: -8px;
   }
