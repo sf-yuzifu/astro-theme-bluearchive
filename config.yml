@@ -97,11 +97,11 @@ sponsor:
   description: "如果我的文章对你有帮助，欢迎赞赏支持"
   methods:
     - name: "微信"
-      image: "/src/assets/donate/donate.png"
+      image: "/donate/donate.png"
       icon: "ph:wechat-logo-bold"
       color: "#07c160"
     - name: "支付宝"
-      image: "/src/assets/donate/donate.png"
+      image: "/donate/donate.png"
       icon: "ph:wallet-bold"
       color: "#1677ff"
     - name: "爱发电"
