@@ -3,97 +3,120 @@
 ---
 
 <script is:inline>
-  (function() {
-    // 配置
-    const CONFIG = {
-      fadeDuration: 500, // 淡入淡出时长(ms)
-    };
-
+  (function () {
     // 获取当前页面类型
     function getPageType(pathname) {
-      const path = pathname.replace(/\/$/, '') || '/';
-      if (path === '/') return 'home';
-      if (path === '/tags' || path.startsWith('/tags/')) return 'tags';
-      if (path.startsWith('/blog/')) return 'post';
-      return 'other';
+      const path = pathname.replace(/\/$/, "") || "/";
+      if (path === "/") return "home";
+      if (path === "/tags" || path.startsWith("/tags/")) return "tags";
+      if (path.startsWith("/blog/")) return "post";
+      return "other";
     }
 
-    // 在页面切换前执行
-    document.addEventListener('astro:before-swap', (event) => {
-      const fromType = getPageType(event.from?.pathname || window.location.pathname);
-      const toType = getPageType(event.to?.pathname || '');
-      
-      // 保存当前页面类型到sessionStorage，用于判断是否需要动画
-      sessionStorage.setItem('fromPageType', fromType);
-      sessionStorage.setItem('toPageType', toType);
+    // 在页面切换前执行 - 开始渐隐动画
+    document.addEventListener("astro:before-preparation", (event) => {
+      const fromType = getPageType(window.location.pathname);
+      const toType = getPageType(event.to?.pathname || "");
+
+      // 保存页面类型
+      sessionStorage.setItem("fromPageType", fromType);
+      sessionStorage.setItem("toPageType", toType);
+
+      // 开始渐隐动画
+      fadeOutContent(fromType, toType);
     });
 
-    // 在页面切换后执行
-    document.addEventListener('astro:after-swap', (event) => {
-      const fromType = sessionStorage.getItem('fromPageType');
-      const toType = sessionStorage.getItem('toPageType');
-      
-      // 触发内容区域动画
-      animateContentTransition(fromType, toType);
+    // 在页面切换后执行 - 开始渐显动画
+    document.addEventListener("astro:after-swap", (event) => {
+      const fromType = sessionStorage.getItem("fromPageType");
+      const toType = sessionStorage.getItem("toPageType");
+
+      // 开始渐显动画
+      fadeInContent(fromType, toType);
     });
 
-    // 内容区域动画
-    function animateContentTransition(fromType, toType) {
-      const mainContent = document.getElementById('main-content');
-      const bannerContent = document.getElementById('banner-content');
-      
+    // 渐隐 - 在切换前执行
+    function fadeOutContent(fromType, toType) {
+      const mainContent = document.getElementById("main-content");
+      const bannerContent = document.getElementById("banner-content");
+
       if (mainContent) {
-        // 先隐藏
-        mainContent.style.opacity = '0';
-        mainContent.style.transition = `opacity ${CONFIG.fadeDuration}ms ease-in-out`;
-        
-        // 再显示（使用requestAnimationFrame确保浏览器渲染）
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            mainContent.style.opacity = '1';
-          });
-        });
+        mainContent.style.transition = ``;
+        mainContent.style.opacity = "0";
       }
-      
+
       // Banner内容区域也需要动画（除非是Tags页面间切换）
-      if (bannerContent && !(fromType === 'tags' && toType === 'tags')) {
-        bannerContent.style.opacity = '0';
-        bannerContent.style.transition = `opacity ${CONFIG.fadeDuration}ms ease-in-out`;
-        
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            bannerContent.style.opacity = '1';
-          });
-        });
+      if (bannerContent && !(fromType === "tags" && toType === "tags")) {
+        bannerContent.style.transition = ``;
+        bannerContent.style.opacity = "0";
+      }
+    }
+
+    // 渐显 - 在切换后执行
+    function fadeInContent(fromType, toType) {
+      const mainContent = document.getElementById("main-content");
+      const bannerContent = document.getElementById("banner-content");
+
+      if (mainContent) {
+        // 先设置为0（无动画），确保从隐藏状态开始
+        mainContent.style.transition = "none";
+        mainContent.style.opacity = "0";
+
+        // 强制重绘
+        void mainContent.offsetHeight;
+
+        // 恢复transition并渐显
+        mainContent.style.transition = ``;
+        mainContent.style.opacity = "1";
+      }
+
+      // Banner内容区域也需要动画（除非是Tags页面间切换）
+      if (bannerContent && !(fromType === "tags" && toType === "tags")) {
+        // 先设置为0（无动画），确保从隐藏状态开始
+        bannerContent.style.transition = "none";
+        bannerContent.style.opacity = "0";
+
+        // 强制重绘
+        void bannerContent.offsetHeight;
+
+        // 恢复transition并渐显
+        bannerContent.style.transition = ``;
+        bannerContent.style.opacity = "1";
       }
     }
 
     // 相同路由守卫
-    document.addEventListener('click', (event) => {
-      if (event.defaultPrevented) return;
-      if (event.button !== 0) return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    document.addEventListener(
+      "click",
+      (event) => {
+        if (event.defaultPrevented) return;
+        if (event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+          return;
 
-      const anchor = event.target.closest('a[href]');
-      if (!anchor) return;
-      if (anchor.target && anchor.target !== '_self') return;
-      if (anchor.hasAttribute('download')) return;
+        const anchor = event.target.closest("a[href]");
+        if (!anchor) return;
+        if (anchor.target && anchor.target !== "_self") return;
+        if (anchor.hasAttribute("download")) return;
 
-      const targetUrl = new URL(anchor.href, window.location.origin);
-      if (targetUrl.origin !== window.location.origin) return;
+        const targetUrl = new URL(anchor.href, window.location.origin);
+        if (targetUrl.origin !== window.location.origin) return;
 
-      const normalizePath = (path) => path?.replace(/\/$/, '') || '/';
-      const currentPath = normalizePath(window.location.pathname);
-      const targetPath = normalizePath(targetUrl.pathname);
-      
-      const samePath = currentPath === targetPath;
-      const sameSearch = window.location.search === targetUrl.search;
-      const hasHashJump = targetUrl.hash && targetUrl.hash !== window.location.hash;
+        const normalizePath = (path) => path?.replace(/\/$/, "") || "/";
+        const currentPath = normalizePath(window.location.pathname);
+        const targetPath = normalizePath(targetUrl.pathname);
 
-      if (samePath && sameSearch && !hasHashJump) {
-        event.preventDefault();
-      }
-    }, true);
+        const samePath = currentPath === targetPath;
+        const sameSearch = window.location.search === targetUrl.search;
+        const hasHashJump =
+          targetUrl.hash && targetUrl.hash !== window.location.hash;
+
+        if (samePath && sameSearch && !hasHashJump) {
+          event.preventDefault();
+        }
+      },
+      true,
+    );
   })();
 </script>
 
