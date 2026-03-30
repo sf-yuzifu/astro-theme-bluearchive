@@ -3,6 +3,7 @@
     <div
       ref="playerContainer"
       class="playerContainer"
+      :style="playerContainerStyle"
       @click="handlePlayerClick"
       @touchstart="handlePlayerClick"
     ></div>
@@ -46,6 +47,10 @@ interface SpineAssets {
     audio?: string;
     animation: string;
     text: string;
+  };
+  offset?: {
+    left?: string;
+    bottom?: string;
   };
 }
 
@@ -150,6 +155,8 @@ const getSpineAssets = (lang: string): SpineAssetsMap | null => {
               : undefined,
           }
         : undefined,
+      // 传递位置偏移配置
+      offset: chars.arona.offset,
     },
     plana: {
       ...chars.plana,
@@ -166,6 +173,8 @@ const getSpineAssets = (lang: string): SpineAssetsMap | null => {
               : undefined,
           }
         : undefined,
+      // 传递位置偏移配置
+      offset: chars.plana.offset,
     },
   };
 };
@@ -819,6 +828,21 @@ const currentAssets = computed(
   () => spineAssets.value?.[currentCharacter.value],
 );
 
+// 计算 playerContainer 的样式（支持位置偏移配置）
+const playerContainerStyle = computed(() => {
+  const offset = currentAssets.value?.offset;
+  if (!offset) return {};
+
+  const style: Record<string, string> = {};
+  if (offset.left !== undefined) {
+    style.left = offset.left;
+  }
+  if (offset.bottom !== undefined) {
+    style.bottom = offset.bottom;
+  }
+  return style;
+});
+
 // 事件委托
 const handleEvents = (event: Event) => {
   if (event.type === "scroll") {
@@ -938,7 +962,7 @@ onUnmounted(() => {
 .playerContainer {
   position: fixed;
   bottom: 25px;
-  left: 20px;
+  left: 3%;
   z-index: 100;
   height: 45vh; /* 固定高度 */
   width: auto; /* 宽度自适应 */

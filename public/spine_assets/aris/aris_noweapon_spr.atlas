@@ -1,89 +1,89 @@
 
-aris_spr.png
+aris_noweapon_spr.png
 size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 00_default
   rotate: true
-  xy: 687, 12
+  xy: 677, 237
   size: 121, 74
   orig: 121, 74
   offset: 0, 0
   index: -1
 01_normal
   rotate: true
-  xy: 125, 280
+  xy: 2, 163
   size: 121, 75
   orig: 121, 75
   offset: 0, 0
   index: -1
 02_respond
   rotate: true
-  xy: 534, 99
+  xy: 2, 40
   size: 121, 75
   orig: 121, 75
   offset: 0, 0
   index: -1
 03_smile
   rotate: false
-  xy: 864, 847
+  xy: 620, 612
   size: 121, 81
   orig: 121, 81
   offset: 0, 0
   index: -1
 04_embarassed
   rotate: false
-  xy: 864, 765
+  xy: 640, 360
   size: 121, 81
   orig: 121, 81
   offset: 0, 0
   index: -1
 05_serious
   rotate: true
-  xy: 611, 49
+  xy: 78, 163
   size: 121, 75
   orig: 121, 75
   offset: 0, 0
   index: -1
 06_depressed
   rotate: true
-  xy: 894, 116
+  xy: 125, 287
   size: 121, 73
   orig: 121, 73
   offset: 0, 0
   index: -1
 07
   rotate: false
-  xy: 122, 84
+  xy: 586, 528
   size: 120, 82
   orig: 120, 82
   offset: 0, 0
   index: -1
 08
   rotate: false
-  xy: 769, 930
+  xy: 518, 357
   size: 120, 83
   orig: 120, 83
   offset: 0, 0
   index: -1
 09
   rotate: true
-  xy: 883, 239
+  xy: 647, 58
   size: 121, 75
   orig: 121, 75
   offset: 0, 0
   index: -1
 10
   rotate: false
-  xy: 2, 83
+  xy: 552, 443
   size: 118, 84
   orig: 118, 84
   offset: 0, 0
   index: -1
 11
   rotate: true
-  xy: 125, 169
+  xy: 724, 4
   size: 110, 74
   orig: 110, 74
   offset: 0, 0
@@ -96,22 +96,22 @@ repeat: none
   offset: 0, 0
   index: -1
 13
-  rotate: false
-  xy: 763, 13
+  rotate: true
+  xy: 724, 115
   size: 120, 71
   orig: 120, 71
   offset: 0, 0
   index: -1
 14
-  rotate: false
-  xy: 891, 943
+  rotate: true
+  xy: 682, 695
   size: 122, 70
   orig: 122, 70
   offset: 0, 0
   index: -1
 15
-  rotate: false
-  xy: 122, 12
+  rotate: true
+  xy: 708, 489
   size: 122, 70
   orig: 122, 70
   offset: 0, 0
@@ -125,14 +125,14 @@ repeat: none
   index: -1
 17
   rotate: false
-  xy: 2, 169
+  xy: 554, 180
   size: 122, 116
   orig: 122, 116
   offset: 0, 0
   index: -1
 18
   rotate: false
-  xy: 740, 790
+  xy: 524, 63
   size: 122, 116
   orig: 122, 116
   offset: 0, 0
@@ -164,18 +164,4 @@ halo
   size: 138, 128
   orig: 142, 132
   offset: 2, 2
-  index: -1
-weapon_00
-  rotate: 180
-  xy: 594, 361
-  size: 404, 427
-  orig: 404, 427
-  offset: 0, 0
-  index: -1
-weapon_01
-  rotate: false
-  xy: 517, 85
-  size: 378, 462
-  orig: 378, 462
-  offset: 0, 0
   index: -1

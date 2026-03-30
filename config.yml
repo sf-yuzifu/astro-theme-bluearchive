@@ -150,8 +150,8 @@ spine:
   characters:
     arona:
       # 资源路径
-      skelUrl: "/spine_assets/aris/aris_spr.skel"
-      atlasUrl: "/spine_assets/aris/aris_spr.atlas"
+      skelUrl: "/spine_assets/aris/aris_noweapon_spr.skel"
+      atlasUrl: "/spine_assets/aris/aris_noweapon_spr.atlas"
       # 动画名称
       idleAnimationName: "Idle_01"
       eyeCloseAnimationName: "Eye_Close_01"
@@ -181,13 +181,17 @@ spine:
           text: "老师？怎么了？"
       # 复制事件配置（可选，不配置则禁用）
       copyConfig:
-        audio: "/spine_assets/aris/audio/aris_copy.mp3"  # 可选，不配置则无音频
+        audio: "/spine_assets/aris/audio/aris_copy.mp3" # 可选，不配置则无音频
         animation: "07"
         text: "邦邦咔邦！复制了有用的知识呢！"
+      # 位置偏移配置（可选，不配置则使用默认位置）
+      offset:
+        left: "0" # 水平位置偏移，支持 % 或 px
+      #   bottom: "20px"  # 垂直位置偏移，支持 % 或 px
     plana:
       # 资源路径
-      skelUrl: "/spine_assets/kei/CH0335_spr.skel"
-      atlasUrl: "/spine_assets/kei/CH0335_spr.atlas"
+      skelUrl: "/spine_assets/kei/CH0335_noweapon_spr.skel"
+      atlasUrl: "/spine_assets/kei/CH0335_noweapon_spr.atlas"
       # 动画名称
       idleAnimationName: "Idle_01"
       eyeCloseAnimationName: "Eye_Close_01"
@@ -217,9 +221,13 @@ spine:
           text: "刚才笑了吧！？\n绝对是笑了对吧！？\n我可全都看到了！"
       # 复制事件配置（可选，不配置则禁用）
       copyConfig:
-        audio: "/spine_assets/kei/audio/kei_copy.ogg"  # 可选，不配置则无音频
+        audio: "/spine_assets/kei/audio/kei_copy.ogg" # 可选，不配置则无音频
         animation: "07"
         text: "我能帮上忙吗？"
+      # 位置偏移配置（可选，不配置则使用默认位置）
+      # offset:
+      #   left: "5%"      # 水平位置偏移，支持 % 或 px
+      #   bottom: "20px"  # 垂直位置偏移，支持 % 或 px
 
 # 一言/座右铭配置
 hitokoto:

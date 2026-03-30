@@ -144,6 +144,11 @@ export interface SpineCharacterConfig {
   eyeRotationAngle: number;
   voiceConfig: SpineVoiceConfig[];
   copyConfig?: SpineCopyConfig;
+  // 位置偏移配置（百分比，可选）
+  offset?: {
+    left?: string;  // 例如: "5%", "10%", "-5%"
+    bottom?: string; // 例如: "20px", "5vh"
+  };
 }
 
 export interface SpineCharactersConfig {
