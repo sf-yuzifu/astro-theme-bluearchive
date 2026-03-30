@@ -18,6 +18,8 @@
 - [x] 底栏信息展示
 - [x] 优化 404 页面
 - [x] Spine 模型动画（Arona / Plana / Kei / Aris）
+  - [x] 点击语音播放
+  - [x] 复制事件提示
 - [x] 首屏加载动画
 - [x] 夜间模式切换
 - [x] RSS 订阅
@@ -81,8 +83,6 @@ site:
   social:
     - icon: "github"
       url: "https://github.com/username"
-    - icon: "twitter"
-      url: "https://twitter.com/username"
 
 # 导航菜单
 nav:
@@ -97,12 +97,103 @@ nav:
   - name: "关于"
     url: "/about/"
 
+# 友链配置
+friends:
+  enable: true
+  title: "友情链接"
+  description: "与优秀的开发者们互相连接"
+  list:
+    - name: "Astro"
+      url: "https://astro.build"
+      description: "The web framework for content-driven websites"
+      avatar: "https://astro.build/favicon.svg"
+
+# 项目展示配置
+projects:
+  enable: true
+  title: "我的项目"
+  description: "开源作品与个人项目展示"
+  list:
+    - name: "Astro Blog"
+      url: "https://github.com/withastro/astro"
+      description: "使用 Astro 构建的个人博客网站"
+      tags: ["Astro", "TypeScript"]
+      icon: "ph:rocket-launch-bold"
+
 # 评论系统
 comments:
   enable: true
-  type: "waline"
+  type: "waline"  # 支持: waline
   waline:
     serverURL: "https://your-waline-server.vercel.app"
+
+# 捐赠/赞助配置
+sponsor:
+  enable: true
+  title: "喜欢这篇文章？打赏一下作者吧"
+  description: "如果我的文章对你有帮助，欢迎赞赏支持"
+  methods:
+    - name: "微信"
+      image: "/donate/donate.png"
+      icon: "ph:wechat-logo-bold"
+      color: "#07c160"
+
+# 功能开关
+features:
+  search: true          # 搜索功能
+  backToTop: true       # 返回顶部
+  themeToggle: true     # 主题切换
+  pageTransition: true  # 页面过渡动画
+  readingTime: true     # 阅读时间估算
+
+# Spine Live2D 角色配置
+spine:
+  enable: true
+  voiceLang: "zh"  # zh (中文) 或 jp (日语)
+  characters:
+    arona:  # 亮色主题角色
+      skelUrl: "/spine_assets/aris/aris_spr.skel"
+      atlasUrl: "/spine_assets/aris/aris_spr.atlas"
+      idleAnimationName: "Idle_01"
+      eyeCloseAnimationName: "Eye_Close_01"
+      rightEyeBone: "R_Eye_01"
+      leftEyeBone: "L_Eye_01"
+      frontHeadBone: "Head_01"
+      backHeadBone: "Head_Back"
+      eyeRotationAngle: 76.307
+      voiceConfig:
+        - audio: "/spine_assets/aris/audio/aris_01.ogg"
+          animation: "10"
+          text: "唔——肚子饿了。"
+      copyConfig:  # 复制事件配置（可选）
+        audio: "/spine_assets/aris/audio/aris_copy.mp3"
+        animation: "07"
+        text: "邦邦咔邦！复制了有用的知识呢！"
+    plana:  # 暗色主题角色
+      skelUrl: "/spine_assets/kei/CH0335_spr.skel"
+      atlasUrl: "/spine_assets/kei/CH0335_spr.atlas"
+      idleAnimationName: "Idle_01"
+      eyeCloseAnimationName: "Eye_Close_01"
+      rightEyeBone: "R_Eye_01"
+      leftEyeBone: "L_Eye_01"
+      frontHeadBone: "Head_Rot"
+      backHeadBone: "Head_Back"
+      eyeRotationAngle: 97.331
+      voiceConfig:
+        - audio: "/spine_assets/kei/audio/kei_01.ogg"
+          animation: "17"
+          text: "请别说我可爱啦！"
+      copyConfig:
+        audio: "/spine_assets/kei/audio/kei_copy.ogg"
+        animation: "07"
+        text: "我能帮上忙吗？"
+
+# 一言/座右铭配置
+hitokoto:
+  enable: true
+  list:
+    - "生活不止眼前的苟且，还有诗和远方。"
+    - "Stay hungry, stay foolish."
 ```
 
 ## 文章配置
