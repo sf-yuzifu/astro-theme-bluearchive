@@ -169,6 +169,10 @@ spine:
         audio: "/spine_assets/aris/audio/aris_copy.mp3"
         animation: "07"
         text: "邦邦咔邦！复制了有用的知识呢！"
+      # 位置偏移配置（可选，不配置则使用默认位置）
+      offset:
+        left: "0" # 水平位置偏移，支持 % 或 px
+      #   bottom: "20px"  # 垂直位置偏移，支持 % 或 px
     plana:  # 暗色主题角色
       skelUrl: "/spine_assets/kei/CH0335_spr.skel"
       atlasUrl: "/spine_assets/kei/CH0335_spr.atlas"
@@ -187,6 +191,10 @@ spine:
         audio: "/spine_assets/kei/audio/kei_copy.ogg"
         animation: "07"
         text: "我能帮上忙吗？"
+      # 位置偏移配置（可选，不配置则使用默认位置）
+      # offset:
+      #   left: "5%"      # 水平位置偏移，支持 % 或 px
+      #   bottom: "20px"  # 垂直位置偏移，支持 % 或 px
 
 # 一言/座右铭配置
 hitokoto:
