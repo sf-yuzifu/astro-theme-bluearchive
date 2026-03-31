@@ -81,7 +81,7 @@ projects:
 # 评论系统配置
 comments:
   enable: true
-  # 支持: waline, giscus, twikoo
+  # 支持: waline
   type: "waline"
   waline:
     serverURL: "https://your-waline-server.vercel.app"
