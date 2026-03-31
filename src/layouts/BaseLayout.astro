@@ -10,6 +10,7 @@ import BackToTop from "../components/BackToTop.astro";
 import Cursor from "../components/Cursor.astro";
 import SearchDialog from "../components/SearchDialog.astro";
 import SpinePlayer from "../components/SpinePlayer.vue";
+import bgmMp3 from "../assets/theme/banner/bgm.mp3";
 import {
   FEATURE_BACK_TO_TOP,
   FEATURE_SEARCH,
@@ -125,7 +126,7 @@ const coverUrl = coverImage
     {
       FEATURE_MUSIC && (
         <audio id="background-music" loop transition:persist="background-music">
-          <source src="/src/assets/theme/banner/bgm.mp3" type="audio/mpeg" />
+          <source src={bgmMp3} type="audio/mpeg" />
         </audio>
       )
     }
