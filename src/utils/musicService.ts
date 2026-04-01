@@ -68,37 +68,39 @@ function stopCurrent() {
   }
 }
 
-function playSong(songUrl: string, songId: number): Promise<void> {
-  return new Promise((resolve) => {
-    stopCurrent();
-    currentSongId = songId;
-    currentHowl = new Howl({
-      src: [songUrl],
-      html5: true,
-      volume: settings?.volume ?? 0.3,
-      onplay: () => {
-        isPlaying = true;
-        isPlayingNext = false;
-        onStateChange?.(true);
-      },
-      onpause: () => {
-        isPlaying = false;
-        onStateChange?.(false);
-      },
-      onstop: () => {
-        isPlaying = false;
-        onStateChange?.(false);
-      },
-      onend: () => {
-        resolve();
-      },
-      onloaderror: () => {
-        console.warn("[Music] 加载失败");
-        resolve();
-      },
-    });
-    currentHowl.play();
+function playSong(songUrl: string, songId: number): void {
+  stopCurrent();
+  currentSongId = songId;
+  currentHowl = new Howl({
+    src: [songUrl],
+    html5: true,
+    volume: settings?.volume ?? 0.3,
+    onplay: () => {
+      isPlaying = true;
+      isPlayingNext = false;
+      onStateChange?.(true);
+    },
+    onpause: () => {
+      isPlaying = false;
+      onStateChange?.(false);
+    },
+    onstop: () => {
+      isPlaying = false;
+      onStateChange?.(false);
+    },
+    onend: () => {
+      isPlaying = false;
+      isPlayingNext = false;
+      onStateChange?.(false);
+      playNext();
+    },
+    onloaderror: () => {
+      console.warn("[Music] 加载失败");
+      isPlayingNext = false;
+      playNext();
+    },
   });
+  currentHowl.play();
 }
 
 async function playNext() {
@@ -112,7 +114,7 @@ async function playNext() {
   }
   const songUrl = await fetchSongUrl(id);
   if (songUrl) {
-    await playSong(songUrl, id);
+    playSong(songUrl, id);
   } else {
     isPlayingNext = false;
     setTimeout(playNext, 2000);
