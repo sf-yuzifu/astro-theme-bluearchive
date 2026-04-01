@@ -1,0 +1,186 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import offlineImage from "../assets/theme/NotFound.webp";
+---
+
+<BaseLayout
+  title={`离线 | ${SITE_TITLE}`}
+  description={SITE_DESCRIPTION}
+  isPost={true}
+>
+  <div slot="banner-content" class="offline-banner">
+    <h1 class="title">离线</h1>
+    <span class="status">无网络连接</span>
+  </div>
+
+  <div class="offline-container">
+    <div class="offline-content">
+      <img src={offlineImage.src} alt="离线" />
+      <span>您处于离线状态</span>
+      <span class="sub-text">请检查您的网络连接，然后重试</span>
+      <span class="band"
+        ><button onclick="window.location.reload()" class="retry-btn"
+          >重新加载</button
+        ></span
+      >
+    </div>
+  </div>
+</BaseLayout>
+
+<style lang="less">
+  .offline-banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--post-InnerBanner-color);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    transition: color 0.5s;
+
+    .title {
+      font-size: max(64px, 4.5vw);
+      margin-bottom: 50px;
+      text-align: center;
+      margin-top: 0;
+      color: var(--post-InnerBanner-color);
+      transition: color 0.5s;
+    }
+
+    .status {
+      font-size: max(20px, 1vw);
+      font-weight: bold;
+      color: var(--post-InnerBanner-color);
+      transition: color 0.5s;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 5vh;
+        margin-bottom: 30px;
+      }
+      .status {
+        font-size: 1.5vh;
+      }
+    }
+  }
+
+  .offline-container {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1200px;
+    position: relative;
+    padding: 36px;
+    border-radius: 32px;
+    border: solid 2px var(--foreground-color);
+    background: var(--foreground-color);
+    box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
+    transition:
+      opacity 0.5s ease-out,
+      transform 1s cubic-bezier(0.61, 0.15, 0.26, 1),
+      border 0.5s,
+      background 0.5s,
+      box-shadow 0.5s;
+    background-image:
+      linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, transparent 0),
+      linear-gradient(1turn, rgba(159, 219, 252, 0.15) 3%, transparent 0);
+    background-size: 20px 20px;
+    background-position: 50%;
+
+    html[theme="dark"] & {
+      background-image:
+        linear-gradient(90deg, rgba(207, 198, 254, 0.08) 3%, transparent 0),
+        linear-gradient(1turn, rgba(207, 198, 254, 0.08) 3%, transparent 0);
+    }
+  }
+
+  .offline-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 25vw;
+      max-width: 300px;
+      height: auto;
+    }
+
+    span {
+      font-style: italic;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+      font-size: 30px;
+      color: #fbfbfb;
+      margin-bottom: 8px;
+
+      &.sub-text {
+        font-size: 18px;
+        color: #ccc;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .retry-btn {
+    color: #74d8f9;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+
+    &:hover {
+      color: #a8e8ff;
+    }
+  }
+
+  .band {
+    display: flex;
+    justify-content: center;
+    width: 30vw;
+    max-width: 400px;
+    border-top: 2px solid #5e87b4;
+    border-bottom: 2px solid #5e87b4;
+    background-color: #1a2b51;
+    padding: 5px 0;
+    mask: linear-gradient(
+      to left,
+      transparent 0%,
+      #1a2b51 50%,
+      transparent 100%
+    );
+  }
+
+  @media (max-width: 768px) {
+    .offline-container {
+      padding: 24px 16px;
+      margin: 0 12px;
+    }
+
+    .offline-content {
+      img {
+        width: 50vw;
+      }
+
+      span {
+        font-size: 24px;
+
+        &.sub-text {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .band {
+      width: 60vw;
+    }
+
+    .retry-btn {
+      font-size: 16px;
+    }
+  }
+</style>

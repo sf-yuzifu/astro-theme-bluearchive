@@ -21,7 +21,7 @@ import {
 import { ClientRouter } from "astro:transitions";
 import PageTransition from "./PageTransition.astro";
 
-console.log(fontBold, fontMedium);
+// console.log(fontBold, fontMedium);
 
 interface Props {
   title: string;
@@ -46,6 +46,12 @@ const finalImage = image || ogImageUrl;
 {SEO_KEYWORDS && <meta name="keywords" content={SEO_KEYWORDS.join(", ")} />}
 <link rel="icon" href={SITE_FAVICON || "/favicon.ico"} />
 <link rel="icon" type="image/svg+xml" href={SITE_FAVICON || "/favicon.svg"} />
+{import.meta.env.PROD && (
+  <>
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+  </>
+)}
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
@@ -111,6 +117,38 @@ const finalImage = image || ogImageUrl;
     },
   })}
 />
+
+{import.meta.env.PROD && (
+  <script is:inline>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+            
+            // 检测 Service Worker 更新
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('New content is available, please refresh.');
+                }
+              });
+            });
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+          
+        // 检测 Service Worker 是否已激活并控制页面
+        navigator.serviceWorker.ready.then((registration) => {
+          console.log('SW is active and controlling the page');
+        });
+      });
+    }
+  </script>
+)}
 
 <script is:inline>
   (() => {
