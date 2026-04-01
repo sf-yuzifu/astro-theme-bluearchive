@@ -36,7 +36,8 @@
 - [x] Open Graph / SEO 优化
 - [x] 文章置顶功能（在 frontmatter 中设置 `pinned` 数值）
 - [x] 图片懒加载
-- [x] 文章滑动进度条
+- [x] 文章阅读进度条
+- [x] 路由跳转进度条（NProgress）
 
 ## 技术栈
 
