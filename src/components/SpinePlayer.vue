@@ -1,5 +1,5 @@
 <template>
-  <template v-if="enabled && hasConfig && spineVisible">
+  <div v-if="enabled && hasConfig && spineVisible" class="spine-player-wrapper">
     <div
       ref="playerContainer"
       class="playerContainer"
@@ -13,7 +13,7 @@
         <div class="chatdialog">{{ currentDialog }}</div>
       </div>
     </transition>
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -1005,6 +1005,10 @@ onUnmounted(() => {
 </script>
 
 <style lang="less">
+.spine-player-wrapper {
+  /* 包裹容器，用于继承 transition:persist 属性 */
+}
+
 .playerContainer {
   position: fixed;
   bottom: 25px;
