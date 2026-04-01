@@ -11,6 +11,11 @@
     if (window.__clickEffectInitialized) return;
     window.__clickEffectInitialized = true;
 
+    // 检查是否启用鼠标特效
+    function isCursorEffectEnabled() {
+      return localStorage.getItem("cursor-effect-enabled") !== "false";
+    }
+
     // Canvas相关变量
     let canvas = null;
     let ctx = null;
@@ -299,7 +304,8 @@
     }
 
     function handleClickEvent(event) {
-      if (!canvas) return;
+      // 如果特效被禁用，不处理点击事件
+      if (!canvas || !isCursorEffectEnabled()) return;
 
       const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
@@ -354,6 +360,22 @@
       window.removeEventListener("resize", handleResize);
 
       // 注意：不取消动画和不清空 effects，让特效继续播放直到自然结束
+    });
+
+    // 监听开关切换事件
+    window.addEventListener("cursor-effect-toggle", (e) => {
+      const { enabled } = e.detail;
+      if (!enabled) {
+        // 禁用特效时清空现有特效
+        effects.length = 0;
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+        }
+        if (ctx && canvas) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
     });
   })();
 </script>

@@ -6,17 +6,15 @@ interface Props {
 const { isPost = false } = Astro.props;
 ---
 
-<div class="toggle-container">
-  <div class="theme-select">
-    <span class="label">主题</span>
-    <div class="select-wrapper">
-      <select id="theme-select">
-        <option value="light">Arona</option>
-        <option value="dark">Plana</option>
-        <option value="system">System</option>
-      </select>
-      <span class="select-arrow">▼</span>
-    </div>
+<div class="theme-select">
+  <span class="label">主题</span>
+  <div class="select-wrapper">
+    <select id="theme-select">
+      <option value="light">Arona</option>
+      <option value="dark">Plana</option>
+      <option value="system">System</option>
+    </select>
+    <span class="select-arrow">▼</span>
   </div>
 </div>
 
@@ -95,12 +93,6 @@ const { isPost = false } = Astro.props;
 </script>
 
 <style lang="less">
-  .toggle-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
   .theme-select {
     display: flex;
     align-items: center;
@@ -108,16 +100,19 @@ const { isPost = false } = Astro.props;
     padding: 8px 12px;
     background: rgba(var(--blue-shadow-color), 0.05);
     border-radius: 12px;
+    width: 100%;
 
     .label {
       font-size: 15px;
       color: var(--font-color-grey);
-      font-weight: 500;
+      font-weight: bold;
     }
 
     .select-wrapper {
       position: relative;
       width: 90px;
+      align-items: center;
+      display: flex;
       margin-left: 10px;
 
       .select-arrow {
@@ -136,6 +131,7 @@ const { isPost = false } = Astro.props;
       width: 100%;
       padding: 6px 28px 6px 10px;
       font-size: 14px;
+      font-weight: bold;
       border-radius: 10px;
       border: 1px solid rgba(var(--blue-shadow-color), 0.15);
       background: var(--foreground-color);

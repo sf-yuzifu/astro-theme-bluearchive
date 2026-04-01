@@ -1,0 +1,112 @@
+---
+// 左下角小人开关组件
+---
+
+<div class="toggle-row">
+  <span class="label">学生</span>
+  <label class="switch">
+    <input type="checkbox" id="spine-toggle" checked />
+    <span class="slider"></span>
+  </label>
+</div>
+
+<script>
+  function initSpineToggle() {
+    const toggle = document.getElementById("spine-toggle") as HTMLInputElement;
+    if (!toggle) return;
+
+    // 读取保存的状态（默认开启）
+    const isEnabled = localStorage.getItem("spine-enabled") !== "false";
+    toggle.checked = isEnabled;
+
+    // 切换事件
+    toggle.addEventListener("change", () => {
+      const enabled = toggle.checked;
+      localStorage.setItem("spine-enabled", String(enabled));
+
+      // 触发自定义事件通知 SpinePlayer 组件
+      window.dispatchEvent(
+        new CustomEvent("spine-toggle", {
+          detail: { enabled },
+        }),
+      );
+    });
+  }
+
+  initSpineToggle();
+
+  // 路由切换后重新初始化
+  document.addEventListener("astro:after-swap", initSpineToggle);
+</script>
+
+<style lang="less">
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(var(--blue-shadow-color), 0.05);
+    border-radius: 12px;
+    width: 100%;
+
+    .label {
+      font-size: 15px;
+      color: var(--font-color-grey);
+      font-weight: bold;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:checked + .slider {
+          background-color: rgba(var(--blue-shadow-color), 0.6);
+        }
+
+        &:checked + .slider:before {
+          transform: translateX(20px);
+        }
+
+        &:focus + .slider {
+          box-shadow: 0 0 1px rgba(var(--blue-shadow-color), 0.6);
+        }
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(var(--blue-shadow-color), 0.15);
+        transition: 0.3s;
+        border-radius: 24px;
+
+        &:before {
+          position: absolute;
+          content: "";
+          height: 18px;
+          width: 18px;
+          left: 3px;
+          bottom: 3px;
+          background-color: white;
+          transition: 0.3s;
+          border-radius: 50%;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        &:hover {
+          background-color: rgba(var(--blue-shadow-color), 0.25);
+        }
+      }
+    }
+  }
+</style>

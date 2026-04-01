@@ -2,6 +2,8 @@
 import ThemeToggle from "./ThemeToggle.astro";
 import SearchButton from "./SearchButton.astro";
 import MusicControl from "./MusicControl.astro";
+import CursorToggle from "./CursorToggle.astro";
+import SpineToggle from "./SpineToggle.astro";
 import { FEATURE_SEARCH, FEATURE_THEME_TOGGLE, FEATURE_MUSIC } from "../consts";
 ---
 
@@ -12,6 +14,8 @@ import { FEATURE_SEARCH, FEATURE_THEME_TOGGLE, FEATURE_MUSIC } from "../consts";
       {FEATURE_SEARCH && <SearchButton />}
     </div>
     {FEATURE_THEME_TOGGLE && <ThemeToggle />}
+    <CursorToggle />
+    <SpineToggle />
   </div>
 </div>
 

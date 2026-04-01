@@ -1,5 +1,5 @@
 <template>
-  <template v-if="enabled && hasConfig">
+  <template v-if="enabled && hasConfig && spineVisible">
     <div
       ref="playerContainer"
       class="playerContainer"
@@ -96,6 +96,40 @@ if (typeof window !== "undefined") {
 
 // 监听主题变化
 const isDarkMode = ref(false);
+
+// 看板娘显示状态
+const spineVisible = ref(true);
+
+// 检查看板娘是否显示
+const checkSpineVisible = () => {
+  const visible = localStorage.getItem("spine-enabled") !== "false";
+  spineVisible.value = visible;
+  return visible;
+};
+
+// 监听 localStorage 变化
+const handleStorageChange = (e: StorageEvent) => {
+  if (e.key === "spine-enabled") {
+    const visible = e.newValue !== "false";
+    spineVisible.value = visible;
+    if (visible) {
+      debouncedInitialize();
+    } else {
+      cleanup();
+    }
+  }
+};
+
+// 监听自定义事件
+const handleSpineToggle = (e: CustomEvent) => {
+  const { enabled } = e.detail;
+  spineVisible.value = enabled;
+  if (enabled) {
+    debouncedInitialize();
+  } else {
+    cleanup();
+  }
+};
 
 const updateTheme = () => {
   const theme = document.documentElement.getAttribute("theme");
@@ -930,20 +964,30 @@ onMounted(() => {
   // 设置客户端就绪状态
   clientReady.value = true;
 
+  // 初始化看板娘显示状态
+  checkSpineVisible();
+
   const options = { passive: true } as AddEventListenerOptions;
   window.addEventListener("scroll", handleEvents, options);
   if (!isMobileDevice()) {
     window.addEventListener("mousemove", handleEvents, options);
   }
 
+  // 监听 localStorage 变化
+  window.addEventListener("storage", handleStorageChange);
+
+  // 监听自定义切换事件
+  window.addEventListener("spine-toggle", handleSpineToggle as EventListener);
+
   // 监听页面切换事件，确保在视图过渡后重新赋值全局处理器
   const handlePageSwap = () => {
     globalCopyHandler = handleCopyEvent;
+    checkSpineVisible();
   };
   document.addEventListener("astro:after-swap", handlePageSwap);
 
-  // 如果启用了Spine播放器，初始化
-  if (enabled.value) {
+  // 如果启用了Spine播放器且设置为显示，初始化
+  if (enabled.value && spineVisible.value) {
     debouncedInitialize();
   }
 
@@ -955,6 +999,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   cleanup();
+  window.removeEventListener("storage", handleStorageChange);
+  window.removeEventListener("spine-toggle", handleSpineToggle as EventListener);
 });
 </script>
 
