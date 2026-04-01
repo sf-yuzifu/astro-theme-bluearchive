@@ -10,6 +10,7 @@ import type { ImageMetadata } from "astro";
 import FallbackImage from "../assets/blog-placeholder-1.jpg";
 import {
   SITE_TITLE,
+  SITE_AUTHOR,
   SITE_FAVICON,
   SITE_LANG,
   SEO_OG_IMAGE,
@@ -93,6 +94,22 @@ const finalImage = image || ogImageUrl;
     typeof finalImage === "string" ? finalImage : finalImage.src,
     Astro.url,
   )}
+/>
+
+<!-- Structured Data - Schema.org -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_TITLE,
+    description: description,
+    url: Astro.site?.toString() || "",
+    author: {
+      "@type": "Person",
+      name: SITE_AUTHOR,
+    },
+  })}
 />
 
 <script is:inline>
