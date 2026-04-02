@@ -111,8 +111,7 @@ export default defineConfig({
         ],
         additionalManifestEntries: [
           { url: "/offline/index.html", revision: null },
-          { url: "/favicon.svg", revision: null },
-          { url: "/favicon.ico", revision: null },
+          // 注意：favicon.svg 和 favicon.ico 已由 globPatterns 自动匹配，无需手动添加
         ],
         navigateFallback: "/offline/index.html",
         navigateFallbackDenylist: [
