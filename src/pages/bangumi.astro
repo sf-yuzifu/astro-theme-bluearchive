@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/BlogPost.astro";
+import BangumiComponent from "astro-bangumi/Bangumi";
+import { getBangumiConfig } from "../config/index";
+
+const bangumiConfig = getBangumiConfig();
+---
+
+<Layout
+  pinned={0}
+  title={bangumiConfig.page.title}
+  description={bangumiConfig.page.description}
+  updatedDate={new Date()}
+  enableDonation={false}
+  enableNavigation={false}
+>
+  <BangumiComponent
+    categoryFilter={bangumiConfig.component.categoryFilter}
+    show={bangumiConfig.component.show}
+    title={bangumiConfig.component.title}
+    quote={bangumiConfig.component.quote}
+    darkSelector={bangumiConfig.component.darkSelector}
+  />
+</Layout>

@@ -264,3 +264,26 @@ music:
   volume: 0.3
   # 音乐 URL 在返回 JSON 中的字段路径，用 . 分隔层级（默认 "song_data.url"）
   urlField: "song_data.url"
+
+# 追番配置
+bangumi:
+  # 是否启用
+  enable: true
+  # 页面配置
+  page:
+    title: "我的追番"
+    description: "追番快乐！我收藏的番剧都在这里"
+  # 集成配置
+  integration:
+    vmid: "2" # Bilibili UID
+    title: "追番列表"
+    lazyload: true
+    coverMirror: "" # 图片镜像，解决403问题
+    category: [1, 2] # 1=番剧, 2=影视
+  # 组件配置
+  component:
+    categoryFilter: "all" # 'all' | '1' | '2'
+    show: 1 # 0=想看, 1=在看, 2=看过
+    title: ""
+    quote: ""
+    darkSelector: "html:not([theme='dark'])"

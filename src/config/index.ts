@@ -171,6 +171,34 @@ export interface MusicConfig {
   urlField?: string;
 }
 
+export interface BangumiPageConfig {
+  title: string;
+  description: string;
+}
+
+export interface BangumiIntegrationConfig {
+  vmid: string;
+  title: string;
+  lazyload: boolean;
+  coverMirror: string;
+  category: (1 | 2)[];
+}
+
+export interface BangumiComponentConfig {
+  categoryFilter: "all" | "1" | "2";
+  show: 0 | 1 | 2;
+  title: string;
+  quote: string;
+  darkSelector: string;
+}
+
+export interface BangumiConfig {
+  enable: boolean;
+  page: BangumiPageConfig;
+  integration: BangumiIntegrationConfig;
+  component: BangumiComponentConfig;
+}
+
 export interface Config {
   site: SiteConfig;
   nav: NavItem[];
@@ -184,6 +212,7 @@ export interface Config {
   hitokoto: HitokotoConfig;
   spine: SpineConfig;
   music: MusicConfig;
+  bangumi: BangumiConfig;
 }
 
 /**
@@ -281,6 +310,16 @@ export function getSpineConfig(): SpineConfig {
 export function getMusicConfig(): MusicConfig {
   const config = loadConfig();
   return config.music || { enable: false, api: "", songIds: [] };
+}
+
+export function getBangumiConfig(): BangumiConfig {
+  const config = loadConfig();
+  return config.bangumi || {
+    enable: false,
+    page: { title: "我的追番", description: "" },
+    integration: { vmid: "", title: "追番列表", lazyload: true, coverMirror: "", category: [1, 2] },
+    component: { categoryFilter: "all", show: 1, title: "", quote: "", darkSelector: "" }
+  };
 }
 
 // 默认导出完整配置

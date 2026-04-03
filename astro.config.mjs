@@ -15,6 +15,7 @@ import icon from "astro-icon";
 import Font from "vite-plugin-font";
 import { configReloadIntegration } from "./src/integrations/configReload.ts";
 import { loadConfig } from "./src/config/index.ts";
+import bangumi from "astro-bangumi";
 
 // 加载配置文件
 const config = loadConfig();
@@ -74,6 +75,13 @@ export default defineConfig({
     sitemap(),
     icon(),
     configReloadIntegration(),
+    bangumi({
+      vmid: config.bangumi.integration.vmid,
+      title: config.bangumi.integration.title,
+      lazyload: config.bangumi.integration.lazyload,
+      coverMirror: config.bangumi.integration.coverMirror,
+      category: config.bangumi.integration.category,
+    }),
     AstroPWA({
       registerType: "autoUpdate",
       manifest: {
@@ -304,7 +312,15 @@ export default defineConfig({
   ],
   vite: {
     optimizeDeps: {
-      include: ["@waline/client", "photoswipe/lightbox", "photoswipe"],
+      include: [
+        "@waline/client",
+        "photoswipe/lightbox",
+        "photoswipe",
+        "astro-bangumi",
+        "howler",
+        "nprogress",
+        "vue",
+      ],
     },
     plugins: [
       Font.vite({
