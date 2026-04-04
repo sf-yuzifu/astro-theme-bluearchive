@@ -324,10 +324,42 @@ const preloadAudio = async () => {
 
 const handleScroll = () => {
   if (!clientReady.value || !playerContainer.value) return;
-  const bottomReached =
-    window.innerHeight + window.scrollY + 1 >= document.body.offsetHeight;
 
+  const scrollTop = window.scrollY;
+  const windowHeight = window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight;
+
+  // 获取 footer 元素
+  const footer = document.querySelector("footer");
+  if (!footer) return;
+
+  const footerRect = footer.getBoundingClientRect();
+  const playerRect = playerContainer.value.getBoundingClientRect();
+
+  // 看板娘的底部位置（相对于视口）
+  const playerBottom = playerRect.bottom;
+  // footer 的顶部位置（相对于视口）
+  const footerTop = footerRect.top;
+
+  // 原始 bottom 值
+  const originalBottom = 25;
+
+  // 如果看板娘底部和 footer 重叠
+  if (playerBottom > footerTop) {
+    // 计算重叠量
+    const overlap = playerBottom - footerTop;
+    // 新的 bottom 值 = 原始值 + 重叠量 + 额外间距
+    const newBottom = originalBottom + overlap + 20;
+    playerContainer.value.style.bottom = `${newBottom}px`;
+  } else {
+    // 恢复原始位置
+    playerContainer.value.style.bottom = `${originalBottom}px`;
+  }
+
+  // 移动端额外处理：滚动到底部时隐藏
   if (isMobileDevice()) {
+    const distanceToBottom = docHeight - (scrollTop + windowHeight);
+    const bottomReached = distanceToBottom <= 1;
     if (bottomReached) {
       playerContainer.value.style.left = "-50%";
     } else {
@@ -891,8 +923,9 @@ const cleanup = () => {
   if (blinkInterval) clearTimeout(blinkInterval);
   if (eyeControlTimer) clearTimeout(eyeControlTimer);
 
-  // 清理监听事件
-  window.removeEventListener("scroll", handleEvents);
+  // 注意：scroll 事件监听器在 onMounted 中添加，只在 onUnmounted 中移除
+  // 不在这里移除，避免 cleanup 调用时移除事件监听器
+
   if (moveBonesHandler && !isMobileDevice()) {
     window.removeEventListener("mousemove", moveBonesHandler);
     moveBonesHandler = null;
@@ -999,8 +1032,12 @@ onMounted(() => {
 
 onUnmounted(() => {
   cleanup();
+  window.removeEventListener("scroll", handleEvents);
   window.removeEventListener("storage", handleStorageChange);
-  window.removeEventListener("spine-toggle", handleSpineToggle as EventListener);
+  window.removeEventListener(
+    "spine-toggle",
+    handleSpineToggle as EventListener,
+  );
 });
 </script>
 
@@ -1018,8 +1055,14 @@ onUnmounted(() => {
   width: auto; /* 宽度自适应 */
   min-height: 300px;
   filter: drop-shadow(0 0 3px rgba(40, 42, 44, 0.42));
-  transition: none; /* 禁用过渡动画 */
   cursor: pointer;
+  transition:
+    opacity 0.3s ease,
+    bottom 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
 
   // 让 canvas 填满容器
   canvas {
@@ -1074,30 +1117,19 @@ onUnmounted(() => {
   opacity: 0;
 }
 
+@media (max-width: 1440px) {
+  .playerContainer {
+    opacity: 0.7;
+  }
+}
+
 @media (max-width: 768px) {
   .playerContainer {
-    height: 35vh; /* 移动端稍微小一点 */
-    min-height: 200px;
-    bottom: 10px;
+    display: none; // 移动端隐藏
   }
 
   .chatdialog-container {
-    left: 10px; /* 初始位置，会被 JS 动态覆盖 */
-    top: 50%; /* 初始位置，会被 JS 动态覆盖 */
-  }
-
-  .chatdialog {
-    min-width: 150px;
-    max-width: 250px;
-    padding: 10px 16px;
-    font-size: 16px;
-    border-radius: 20px;
-  }
-
-  .chatdialog-triangle {
-    left: 40px;
-    border-width: 8px;
-    top: -8px;
+    display: none; // 移动端隐藏对话框
   }
 }
 </style>
