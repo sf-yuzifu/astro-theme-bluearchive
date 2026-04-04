@@ -117,8 +117,8 @@ footer:
   links:
     - name: "Astro"
       url: "https://astro.build/"
-    - name: "BlogArchive"
-      url: "https://github.com/sf-yuzifu/astro-theme-bluearchive"
+    - name: "AronaNote"
+      url: "https://github.com/sf-yuzifu/astro-theme-AronaNote"
 
 # SEO 相关
 seo:

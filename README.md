@@ -1,4 +1,4 @@
-# astro-theme-bluearchive
+# AronaNote
 
 ![logo](src/assets/theme/icon/footLogo.png)
 
@@ -275,6 +275,7 @@ tags:
   - 标签1
   - 标签2
 image: /blog-placeholder-1.jpg  # 封面图片
+pinned: 1  # 置顶等级，数值越大越靠前
 ---
 
 文章摘要，会显示在文章列表中
