@@ -4,6 +4,15 @@
 
 基于 Astro 构建的个人博客主题，灵感来自 Blue Archive 游戏风格。
 
+**亮色模式：**
+
+![亮色模式](images/light.png)
+
+**暗色模式：**
+
+![暗色模式](images/dark.png)
+
+
 ## 功能特性
 
 - [x] 首页横幅 Banner
