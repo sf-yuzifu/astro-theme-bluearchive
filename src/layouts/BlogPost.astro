@@ -52,38 +52,40 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
     <h1 class="title">{title}</h1>
     <span class="status">
       {
-        pubDate ? (
-          [
-            pubDate && (
-              <>
-                发布于 <FormattedDate date={pubDate} />
-              </>
-            ),
-            updatedDate && (
-              <>
-                更新于 <FormattedDate date={updatedDate} />
-              </>
-            ),
-            FEATURE_READING_TIME && wordCount && <>约 {wordCount} 字</>,
-            FEATURE_READING_TIME && minutesRead && <>{minutesRead}</>,
-          ]
-            .filter(Boolean)
-            .map((item, index, arr) => (
-              <>
-                {item}
-                {index < arr.length - 1 && " | "}
-              </>
-            ))
-        ) : description ? (
-          description
-        ) : null
+        pubDate
+          ? [
+              pubDate && (
+                <>
+                  发布于 <FormattedDate date={pubDate} />
+                </>
+              ),
+              updatedDate && (
+                <>
+                  更新于 <FormattedDate date={updatedDate} />
+                </>
+              ),
+              FEATURE_READING_TIME && wordCount && <>约 {wordCount} 字</>,
+              FEATURE_READING_TIME && minutesRead && <>{minutesRead}</>,
+            ]
+              .filter(Boolean)
+              .map((item, index, arr) => (
+                <>
+                  {item}
+                  {index < arr.length - 1 && " | "}
+                </>
+              ))
+          : description
+            ? description
+            : null
       }
       {enableWalinePageView && <WalinePageView />}
     </span>
   </div>
 
   <!-- 主内容区域 - 包含 TOC 和文章 -->
-  <div class={`post-layout ${!headings.some((h) => h.depth >= 2 && h.depth <= 3) ? 'no-toc' : ''}`}>
+  <div
+    class={`post-layout ${!headings.some((h) => h.depth >= 2 && h.depth <= 3) ? "no-toc" : ""}`}
+  >
     <!-- 主内容 - 文章内容 -->
     <article class="view-box">
       <div class="content">
@@ -145,7 +147,7 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
       transition: color 0.5s;
     }
 
-    @media (max-width: 768px) {
+    @medi5 (max-width: 768px) {
       .title {
         font-size: 5vh;
       }
@@ -577,6 +579,10 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
     .view-box {
       padding: 24px;
       border-radius: 32px;
+    }
+
+    .post-layout {
+      padding: 0 12px;
     }
   }
 

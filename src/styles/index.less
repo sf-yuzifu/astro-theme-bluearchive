@@ -448,5 +448,12 @@ html[theme="dark"] .expressive-code figure.frame .copy button:hover {
 
 .container {
   max-width: 1200px;
+  width: calc(100% - 48px); // 两侧各留 24px
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: calc(100% - 24px);
+  }
 }

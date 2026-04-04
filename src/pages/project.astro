@@ -107,6 +107,7 @@ function isExternalUrl(url: string): boolean {
     box-sizing: border-box;
     margin: 0 auto;
     max-width: 1200px;
+    width: calc(100% - 48px); // 两侧各留 24px
     position: relative;
     padding: 36px;
     border-radius: 32px;
@@ -254,6 +255,7 @@ function isExternalUrl(url: string): boolean {
 
   @media (max-width: 768px) {
     .projects-container {
+      width: calc(100% - 24px); // 两侧各留 12px
       padding: 24px 16px;
       margin: 0 12px;
     }
