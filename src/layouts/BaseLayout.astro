@@ -13,10 +13,10 @@ import SpinePlayer from "../components/SpinePlayer.vue";
 import {
   FEATURE_BACK_TO_TOP,
   FEATURE_SEARCH,
-  FEATURE_MUSIC,
   SPINE_ENABLE,
   SPINE_VOICE_LANG,
   SPINE_CHARACTERS,
+  SITE_LANG,
 } from "../consts";
 import "../styles/index.less";
 import "photoswipe/style.css";
@@ -40,7 +40,7 @@ const coverUrl = coverImage
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={SITE_LANG || "zh-CN"}>
   <head>
     <BaseHead title={title} description={description} />
     <script is:inline>
