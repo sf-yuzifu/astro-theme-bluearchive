@@ -115,7 +115,7 @@ site:
       url: "https://icp.gov.moe/"
   # 社交链接
   social:
-    - icon: "github"
+    - icon: "fa7-brands:github"
       url: "https://github.com/username"
 
 # 导航菜单

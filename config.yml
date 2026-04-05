@@ -24,13 +24,13 @@ site:
     # - text: "京ICP备12345678号"
     #   url: "https://beian.miit.gov.cn/"
   # 社交链接（用于首页欢迎框）
-  # 使用 Font Awesome 品牌图标名称（不含 fa-brands: 前缀）
+  # 使用 Font Awesome 品牌图标名称（含 fa7-brands: 前缀）
   social:
-    - icon: "github"
+    - icon: "fa7-brands:github"
       url: "https://github.com/withastro/astro"
-    - icon: "twitter"
+    - icon: "fa7-brands:twitter"
       url: "https://twitter.com/astrodotbuild"
-    - icon: "qq"
+    - icon: "fa7-brands:qq"
       url: "https://qq.qq.com/"
     # 其他常用图标：discord, youtube, bilibili, weixin, qq, telegram, instagram, etc.
 

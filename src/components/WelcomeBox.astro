@@ -61,7 +61,7 @@ const avatarSrc = isExternalAvatar ? SITE_AVATAR : null;
           social.map((item) => (
             <li>
               <a href={item.url} target="_blank" rel="noopener noreferrer">
-                <Icon name={`fa-brands:${item.icon}`} class="social" />
+                <Icon name={`${item.icon}`} class="social" />
               </a>
             </li>
           ))
