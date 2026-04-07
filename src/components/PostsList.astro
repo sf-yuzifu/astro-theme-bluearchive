@@ -133,7 +133,7 @@ const hasPagination = totalPages > 1;
   {
     hasPagination && (
       <div class="pagination" id="pagination">
-        <button class="page-btn prev-btn" id="prev-btn" disabled>
+        <button class="page-btn prev-btn" id="prev-btn" disabled aria-label="上一页">
           <Icon name="ph:caret-left-bold" class="arrow-icon" />
         </button>
 
@@ -148,7 +148,7 @@ const hasPagination = totalPages > 1;
           ))}
         </div>
 
-        <button class="page-btn next-btn" id="next-btn">
+        <button class="page-btn next-btn" id="next-btn" aria-label="下一页">
           <Icon name="ph:caret-right-bold" class="arrow-icon" />
         </button>
       </div>
