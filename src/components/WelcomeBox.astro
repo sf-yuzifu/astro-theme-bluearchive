@@ -58,13 +58,25 @@ const avatarSrc = isExternalAvatar ? SITE_AVATAR : null;
       </span>
       <ul>
         {
-          social.map((item) => (
-            <li>
-              <a href={item.url} target="_blank" rel="noopener noreferrer">
-                <Icon name={`${item.icon}`} class="social" />
-              </a>
-            </li>
-          ))
+          social.map((item) => {
+            const platformName = item.icon.split(":").pop() || item.icon;
+            return (
+              <li>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={platformName}
+                >
+                  <Icon
+                    name={`${item.icon}`}
+                    class="social"
+                    aria-hidden="true"
+                  />
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     </div>
