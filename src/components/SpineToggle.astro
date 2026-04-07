@@ -3,10 +3,17 @@
 ---
 
 <div class="toggle-row">
-  <span class="label">学生</span>
+  <span class="label" id="spine-toggle-label">学生</span>
   <label class="switch">
-    <input type="checkbox" id="spine-toggle" checked />
-    <span class="slider"></span>
+    <input
+      type="checkbox"
+      id="spine-toggle"
+      role="switch"
+      aria-labelledby="spine-toggle-label"
+      aria-label="学生开关"
+      checked
+    />
+    <span class="slider" aria-hidden="true"></span>
   </label>
 </div>
 
@@ -18,10 +25,12 @@
     // 读取保存的状态（默认开启）
     const isEnabled = localStorage.getItem("spine-enabled") !== "false";
     toggle.checked = isEnabled;
+    toggle.setAttribute("aria-checked", String(isEnabled));
 
     // 切换事件
     toggle.addEventListener("change", () => {
       const enabled = toggle.checked;
+      toggle.setAttribute("aria-checked", String(enabled));
       localStorage.setItem("spine-enabled", String(enabled));
 
       // 触发自定义事件通知 SpinePlayer 组件
