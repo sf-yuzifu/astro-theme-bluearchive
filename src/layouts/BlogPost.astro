@@ -130,6 +130,7 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     z-index: 100;
     transition: color 0.5s;
+    padding: 0 20px;
 
     .title {
       font-size: max(64px, 4.5vw);
@@ -138,6 +139,9 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
       margin-top: 0;
       color: var(--post-InnerBanner-color);
       transition: color 0.5s;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
     }
 
     .status {
@@ -145,14 +149,22 @@ const enableWalinePageView = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
       font-weight: bold;
       color: var(--post-InnerBanner-color);
       transition: color 0.5s;
+      text-align: center;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
+      line-height: 1.6;
     }
 
-    @medi5 (max-width: 768px) {
+    @media (max-width: 768px) {
+      padding: 0 16px;
+
       .title {
-        font-size: 5vh;
+        font-size: clamp(28px, 6vw, 5vh);
+        margin-bottom: 24px;
       }
       .status {
-        font-size: 1.5vh;
+        font-size: clamp(14px, 3vw, 1.5vh);
       }
     }
   }
