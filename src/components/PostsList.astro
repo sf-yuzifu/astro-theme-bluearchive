@@ -57,6 +57,7 @@ const hasPagination = totalPages > 1;
             data-page={pageNum}
             style={isVisible ? "" : "display: none;"}
           >
+            {post.data.pinned > 0 && <span class="pinned" />}
             <header class="post-header">
               {post.data.heroImage && (
                 <div class="cover-container">
@@ -73,11 +74,11 @@ const hasPagination = totalPages > 1;
                 <div class="title">
                   {!post.data.heroImage && <div class="title-dot" />}
                   <h1 class="name">
-                    {post.data.pinned ? (
+                    {post.data.pinned > 0 && (
                       <span class="pinned-badge" title="置顶文章">
                         <Icon name="ph:push-pin-fill" class="pinned-icon" />
                       </span>
-                    ) : null}
+                    )}
                     <a href={`/blog/${post.id}/`}>{post.data.title}</a>
                   </h1>
                 </div>
@@ -133,7 +134,12 @@ const hasPagination = totalPages > 1;
   {
     hasPagination && (
       <div class="pagination" id="pagination">
-        <button class="page-btn prev-btn" id="prev-btn" disabled aria-label="上一页">
+        <button
+          class="page-btn prev-btn"
+          id="prev-btn"
+          disabled
+          aria-label="上一页"
+        >
           <Icon name="ph:caret-left-bold" class="arrow-icon" />
         </button>
 
@@ -329,6 +335,7 @@ const hasPagination = totalPages > 1;
     overflow-wrap: break-word;
 
     .post {
+      position: relative;
       display: flex;
       flex-direction: column;
       margin: 0 0 50px 0;
@@ -406,19 +413,6 @@ const hasPagination = totalPages > 1;
               transition: background 0.5s;
             }
 
-            .pinned-badge {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              color: var(--color-blue, #ff6b6b);
-              margin-right: 8px;
-
-              .pinned-icon {
-                width: 20px;
-                height: 20px;
-              }
-            }
-
             .name {
               display: flex;
               align-items: center;
@@ -426,6 +420,19 @@ const hasPagination = totalPages > 1;
               font-size: 28px;
               margin-bottom: 0;
               line-height: 1.2;
+
+              .pinned-badge {
+                display: none;
+                align-items: center;
+                justify-content: center;
+                color: var(--color-blue, #ff6b6b);
+                margin-right: 8px;
+
+                .pinned-icon {
+                  width: 20px;
+                  height: 20px;
+                }
+              }
             }
 
             a {
@@ -535,6 +542,10 @@ const hasPagination = totalPages > 1;
         background-size: cover;
         border-left: solid 1.5vh var(--pot-border-left);
 
+        .pinned {
+          display: none;
+        }
+
         .post-header {
           flex-direction: column;
           gap: 16px;
@@ -552,6 +563,10 @@ const hasPagination = totalPages > 1;
               margin-bottom: 6px;
               .name {
                 font-size: 24px;
+
+                .pinned-badge {
+                  display: inline-flex;
+                }
               }
               .title-dot {
                 height: 18px;
