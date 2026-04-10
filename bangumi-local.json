@@ -1,0 +1,148 @@
+{
+  "want": [
+    {
+      "id": "local_001",
+      "title": "葬送的芙莉莲",
+      "cover": "https://picsum.photos/seed/frieren/400/600",
+      "url": "https://bgm.tv/subject/423647",
+      "status": 1,
+      "total": 28,
+      "progress": 0,
+      "score": 9.3,
+      "desc": "打倒了魔王的勇者一行人，在归途中造访了仅仅50年就会迎来更替的短命种族·半精灵的村落。",
+      "airDate": "2023-09-29",
+      "type": "TV",
+      "follow": 125000
+    },
+    {
+      "id": "local_002",
+      "title": "迷宫饭",
+      "cover": "https://picsum.photos/seed/dungeon/400/600",
+      "url": "https://bgm.tv/subject/476289",
+      "status": 1,
+      "total": 24,
+      "progress": 0,
+      "score": 8.8,
+      "desc": "在地下迷宫深处，冒险者莱俄斯一行人遭到了红龙的袭击，失去了金钱与道具，还差点丢了性命。",
+      "airDate": "2024-01-04",
+      "type": "TV",
+      "follow": 98000
+    }
+  ],
+  "watching": [
+    {
+      "id": "local_003",
+      "title": "药屋少女的呢喃",
+      "cover": "https://picsum.photos/seed/kusuriya/400/600",
+      "url": "https://bgm.tv/subject/433921",
+      "status": 2,
+      "total": 24,
+      "progress": 18,
+      "score": 8.5,
+      "desc": "在后宫中，有一位作为下女工作的少女猫猫。她原本是在花街工作的药剂师，因为某种原因而被卖到了后宫。",
+      "airDate": "2023-10-21",
+      "type": "TV",
+      "follow": 156000
+    },
+    {
+      "id": "local_004",
+      "title": "我推的孩子",
+      "cover": "https://picsum.photos/seed/oshinoko/400/600",
+      "url": "https://bgm.tv/subject/389133",
+      "status": 2,
+      "total": 11,
+      "progress": 11,
+      "score": 8.7,
+      "desc": "在乡下医院工作的妇产科医生·五郎，每天都要接待一个名叫星野爱的不可思议的患者。",
+      "airDate": "2023-04-12",
+      "type": "TV",
+      "follow": 289000
+    },
+    {
+      "id": "local_005",
+      "title": "咒术回战 第二季",
+      "cover": "https://picsum.photos/seed/jujutsu/400/600",
+      "url": "https://bgm.tv/subject/327667",
+      "status": 2,
+      "total": 23,
+      "progress": 23,
+      "score": 8.4,
+      "desc": "2018年，东京都立咒术高等专门学校。二年级学生·伏黑惠执行的任务是护卫「等离子拳」天与咒缚持有者·星浆体来栖华。",
+      "airDate": "2023-07-06",
+      "type": "TV",
+      "follow": 198000
+    }
+  ],
+  "watched": [
+    {
+      "id": "local_006",
+      "title": "进击的巨人 最终季 Part.2",
+      "cover": "https://picsum.photos/seed/aot/400/600",
+      "url": "https://bgm.tv/subject/295933",
+      "status": 3,
+      "total": 12,
+      "progress": 12,
+      "score": 9.1,
+      "desc": "在调查了马莱国的雷贝利欧收容区后，艾伦发动了地鸣，宣告要踏平岛外的一切。",
+      "airDate": "2022-01-10",
+      "type": "TV",
+      "follow": 312000
+    },
+    {
+      "id": "local_007",
+      "title": "间谍过家家",
+      "cover": "https://picsum.photos/seed/spyfamily/400/600",
+      "url": "https://bgm.tv/subject/366972",
+      "status": 3,
+      "total": 25,
+      "progress": 25,
+      "score": 8.6,
+      "desc": "黄昏为了潜入名门贵族伊甸校，组建了一个临时家庭。然而他收养的女儿阿尼亚竟然是能够读取人心的超能力者！",
+      "airDate": "2022-04-09",
+      "type": "TV",
+      "follow": 267000
+    },
+    {
+      "id": "local_008",
+      "title": "鬼灭之刃 柱训练篇",
+      "cover": "https://picsum.photos/seed/kimetsu/400/600",
+      "url": "https://bgm.tv/subject/439552",
+      "status": 3,
+      "total": 8,
+      "progress": 8,
+      "score": 8.2,
+      "desc": "在刀匠村篇之后，炭治郎等人开始了柱们的特训。为了对抗即将到来的最终决战，鬼杀队全员都在拼命提升实力。",
+      "airDate": "2024-05-12",
+      "type": "TV",
+      "follow": 178000
+    },
+    {
+      "id": "local_009",
+      "title": "孤独摇滚！",
+      "cover": "https://picsum.photos/seed/bocchi/400/600",
+      "url": "https://bgm.tv/subject/408777",
+      "status": 3,
+      "total": 12,
+      "progress": 12,
+      "score": 9.0,
+      "desc": "在初中时期因为吉他弹奏视频而受到关注的后藤一里，因为极度社恐而无法组建乐队，只能孤独地练习吉他。",
+      "airDate": "2022-10-09",
+      "type": "TV",
+      "follow": 234000
+    },
+    {
+      "id": "local_010",
+      "title": "辉夜大小姐想让我告白 -Ultra Romantic-",
+      "cover": "https://picsum.photos/seed/kaguya/400/600",
+      "url": "https://bgm.tv/subject/333766",
+      "status": 3,
+      "total": 13,
+      "progress": 13,
+      "score": 8.9,
+      "desc": "秀知院学园的学生会长白银御行与副会长四宫辉夜，两人都暗恋着对方，却因为自尊心而想让对方先告白。",
+      "airDate": "2022-04-02",
+      "type": "TV",
+      "follow": 189000
+    }
+  ]
+}
