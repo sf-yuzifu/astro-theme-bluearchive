@@ -69,6 +69,10 @@ export interface WalineConfig {
   serverURL: string;
   placeholder?: string;
   dark?: string;
+  lang?: string;
+  requiredMeta?: string[];
+  pageview?: boolean;
+  comment?: boolean;
 }
 
 export interface CommentsConfig {
@@ -323,25 +327,33 @@ export function getMusicConfig(): MusicConfig {
 
 export function getBangumiConfig(): BangumiConfig {
   const config = loadConfig();
-  return config.bangumi || {
-    enable: false,
-    page: { title: "我的追番", description: "" },
-    integration: {
-      source: "bili" as BangumiSource,
-      vmid: "",
-      title: "追番列表",
-      quote: "生命不息，追番不止！",
-      coverMirror: "",
-      category: [1, 2],
-      lazyload: true,
-      devMode: true,
-      refreshEndpoint: "/api/bangumi/refresh",
-      showMyComment: false,
-      localDataPath: undefined,
-      extraOrder: 0,
-    },
-    component: { categoryFilter: "all", show: 1, title: "", quote: "", darkSelector: "" }
-  };
+  return (
+    config.bangumi || {
+      enable: false,
+      page: { title: "我的追番", description: "" },
+      integration: {
+        source: "bili" as BangumiSource,
+        vmid: "",
+        title: "追番列表",
+        quote: "生命不息，追番不止！",
+        coverMirror: "",
+        category: [1, 2],
+        lazyload: true,
+        devMode: true,
+        refreshEndpoint: "/api/bangumi/refresh",
+        showMyComment: false,
+        localDataPath: undefined,
+        extraOrder: 0,
+      },
+      component: {
+        categoryFilter: "all",
+        show: 1,
+        title: "",
+        quote: "",
+        darkSelector: "",
+      },
+    }
+  );
 }
 
 // 默认导出完整配置

@@ -3,6 +3,7 @@ import {
   COMMENTS_ENABLE,
   COMMENTS_TYPE,
   COMMENTS_WALINE_SERVER_URL,
+  COMMENTS_WALINE_CONFIG,
 } from "../consts";
 
 interface Props {
@@ -14,6 +15,7 @@ const { path } = Astro.props;
 // 从配置文件读取评论配置
 const enable = COMMENTS_ENABLE && COMMENTS_TYPE === "waline";
 const serverURL = COMMENTS_WALINE_SERVER_URL;
+const walineConfig = COMMENTS_WALINE_CONFIG;
 ---
 
 {
@@ -23,6 +25,7 @@ const serverURL = COMMENTS_WALINE_SERVER_URL;
       class="waline-comment"
       data-path={path}
       data-server-url={serverURL}
+      data-config={JSON.stringify(walineConfig)}
     />
   )
 }
@@ -44,6 +47,9 @@ const serverURL = COMMENTS_WALINE_SERVER_URL;
 
     const path = walineContainer.dataset.path || window.location.pathname;
     const serverURL = walineContainer.dataset.serverUrl;
+    const config = walineContainer.dataset.config
+      ? JSON.parse(walineContainer.dataset.config)
+      : {};
 
     if (!serverURL) return;
 
@@ -51,11 +57,7 @@ const serverURL = COMMENTS_WALINE_SERVER_URL;
       el: "#waline",
       serverURL: serverURL,
       path: path,
-      dark: 'html[theme="dark"]',
-      lang: "zh-CN",
-      requiredMeta: ["nick", "mail"],
-      pageview: true,
-      comment: true,
+      ...config,
     });
   }
 

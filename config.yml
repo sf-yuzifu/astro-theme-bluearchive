@@ -88,10 +88,15 @@ comments:
   type: "waline"
   waline:
     serverURL: "https://your-waline-server.vercel.app"
-    # 必填，Waline 的服务端地址
-    # 其他可选配置
-    # placeholder: "欢迎评论..."
-    # dark: 'html[theme="dark"]'
+    dark: 'html[theme="dark"]'
+    lang: "zh-CN"
+    requiredMeta: ["nick", "mail"]
+    pageview: true
+    comment: true
+    # 任何其他 Waline 支持的配置...（https://waline.js.org/reference/client/props.html）
+    # 比如：
+    # emoji: ['https://unpkg.com/@waline/emojis@1.1.0/weibo']
+    # ...
 
 # 捐赠/赞助配置
 sponsor:

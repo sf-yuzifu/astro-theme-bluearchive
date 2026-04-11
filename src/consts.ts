@@ -65,6 +65,7 @@ const commentsConfig = getCommentsConfig();
 export const COMMENTS_ENABLE = commentsConfig.enable;
 export const COMMENTS_TYPE = commentsConfig.type;
 export const COMMENTS_WALINE_SERVER_URL = commentsConfig.waline?.serverURL;
+export const COMMENTS_WALINE_CONFIG = commentsConfig.waline || {};
 
 // 捐赠配置
 const sponsorConfig = getSponsorConfig();

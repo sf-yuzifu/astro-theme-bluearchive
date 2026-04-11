@@ -163,6 +163,15 @@ comments:
   type: "waline"  # 支持: waline
   waline:
     serverURL: "https://your-waline-server.vercel.app"
+    dark: 'html[theme="dark"]'
+    lang: "zh-CN"
+    requiredMeta: ["nick", "mail"]
+    pageview: true
+    comment: true
+    # 任何其他 Waline 支持的配置...（https://waline.js.org/reference/client/props.html）
+    # 比如：
+    # emoji: ['https://unpkg.com/@waline/emojis@1.1.0/weibo']
+    # ...
 
 # 捐赠/赞助配置
 sponsor:
